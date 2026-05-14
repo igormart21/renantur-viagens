@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
-import { MapPin, Star, Umbrella, Camera, Coffee, Utensils, MessageCircle, ChevronLeft } from "lucide-react";
+import { MapPin, Star, Umbrella, Camera, Coffee, MessageCircle, ChevronLeft } from "lucide-react";
 
 const destinationData: Record<string, any> = {
   "maceio": {

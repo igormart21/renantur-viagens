@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { MessageCircle, Instagram, Facebook, MapPin, Phone, Mail } from "lucide-react";
+import { Instagram, Facebook, MapPin, Phone, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const cities = ["Volta Redonda", "Barra Mansa", "Resende", "Rio de Janeiro", "Nova Iguaçu", "Porto Real", "Quatis", "Piraí", "Seropédica"];

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search, Filter, Clock, MapPin, ChevronRight, Star } from "lucide-react";
+import { Search, Clock, MapPin, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 const packages = [
