@@ -28,26 +28,26 @@ export const Pacotes = () => {
       className="pt-32 pb-20 bg-background min-h-screen"
     >
       {/* Header Section */}
-      <div className="container mx-auto px-6 md:px-12 mb-20">
+      <div className="container mx-auto px-6 md:px-12 mb-12 md:20">
         <div className="max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-bold text-primary mb-8 tracking-tight">
+          <h1 className="text-4xl md:text-7xl font-bold text-primary mb-4 md:8 tracking-tight">
             Nossos <span className="text-accent italic font-medium">Pacotes</span>
           </h1>
-          <p className="text-xl text-primary/60 leading-relaxed max-w-2xl">
+          <p className="text-base md:text-xl text-primary/60 leading-relaxed max-w-2xl">
             Explore nossa seleção exclusiva de roteiros desenhados para proporcionar o máximo conforto e experiências inesquecíveis.
           </p>
         </div>
       </div>
 
       {/* Filters & Search */}
-      <div className="container mx-auto px-6 md:px-12 mb-16">
-        <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
-          <div className="flex flex-wrap gap-3">
+      <div className="container mx-auto px-6 md:px-12 mb-12 md:16">
+        <div className="flex flex-col lg:flex-row gap-6 md:8 items-center justify-between">
+          <div className="flex flex-wrap gap-2 md:3">
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
+                className={`px-5 md:8 py-2 md:3 rounded-full font-bold text-xs md:sm transition-all ${
                   activeCategory === cat 
                   ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" 
                   : "bg-white text-primary/40 hover:bg-primary/5"

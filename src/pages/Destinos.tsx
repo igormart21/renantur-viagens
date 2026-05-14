@@ -51,26 +51,26 @@ export const Destinos = () => {
         </div>
         
         <div className="container relative z-10 mx-auto px-6 pt-20">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/60 mb-12 hover:text-white transition-colors">
+          <Link to="/" className="inline-flex items-center gap-2 text-white/60 mb-8 hover:text-white transition-colors">
             <ChevronLeft size={20} />
-            Voltar para o início
+            Voltar
           </Link>
           <div className="max-w-4xl">
-            <span className="bg-accent text-white px-6 py-2 rounded-full font-bold text-xs tracking-widest uppercase mb-6 inline-block">
+            <span className="bg-accent text-white px-4 py-1.5 rounded-full font-bold text-[10px] tracking-widest uppercase mb-4 inline-block">
               {data.tagline}
             </span>
-            <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight tracking-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
               Descubra <br />
               <span className="italic font-medium text-white/80">{data.name}</span>
             </h1>
-            <div className="flex items-center gap-8 text-white/70">
+            <div className="flex items-center gap-6 text-white/70 text-sm">
               <div className="flex items-center gap-2">
-                <Star size={20} className="text-accent" fill="#FF6B57" />
+                <Star size={16} className="text-accent" fill="#FF6B57" />
                 <span className="font-bold">{data.rating} Rating</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin size={20} className="text-accent" />
-                <span className="font-bold">{data.stats.airport} Airport</span>
+                <MapPin size={16} className="text-accent" />
+                <span className="font-bold">{data.stats.airport}</span>
               </div>
             </div>
           </div>
@@ -79,23 +79,23 @@ export const Destinos = () => {
 
       {/* Stats Bar */}
       <div className="container mx-auto px-6 md:px-12 -translate-y-1/2 relative z-20">
-        <div className="bg-white rounded-[2rem] shadow-2xl p-8 md:p-12 flex flex-wrap justify-around gap-8 border border-primary/5">
+        <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] shadow-2xl p-6 md:p-12 grid grid-cols-2 md:flex md:flex-row justify-around gap-6 md:gap-8 border border-primary/5">
           <div className="text-center">
-            <div className="text-accent mb-2 flex justify-center"><Umbrella size={32} /></div>
-            <div className="text-3xl font-bold text-primary">{data.stats.temp}</div>
-            <div className="text-xs font-bold text-primary/30 uppercase tracking-widest">Temperatura Média</div>
+            <div className="text-accent mb-2 flex justify-center"><Umbrella size={24} className="md:w-8 md:h-8" /></div>
+            <div className="text-2xl md:text-3xl font-bold text-primary">{data.stats.temp}</div>
+            <div className="text-[10px] font-bold text-primary/30 uppercase tracking-widest">Clima</div>
           </div>
-          <div className="h-16 w-px bg-primary/10 hidden md:block" />
+          <div className="h-12 w-px bg-primary/10 hidden md:block" />
           <div className="text-center">
-            <div className="text-accent mb-2 flex justify-center"><Camera size={32} /></div>
-            <div className="text-3xl font-bold text-primary">12+</div>
-            <div className="text-xs font-bold text-primary/30 uppercase tracking-widest">Pontos Turísticos</div>
+            <div className="text-accent mb-2 flex justify-center"><Camera size={24} className="md:w-8 md:h-8" /></div>
+            <div className="text-2xl md:text-3xl font-bold text-primary">12+</div>
+            <div className="text-[10px] font-bold text-primary/30 uppercase tracking-widest">Atrações</div>
           </div>
-          <div className="h-16 w-px bg-primary/10 hidden md:block" />
-          <div className="text-center">
-            <div className="text-accent mb-2 flex justify-center"><Coffee size={32} /></div>
-            <div className="text-3xl font-bold text-primary">Premium</div>
-            <div className="text-xs font-bold text-primary/30 uppercase tracking-widest">Hospedagens</div>
+          <div className="h-12 w-px bg-primary/10 hidden md:block" />
+          <div className="text-center col-span-2 md:col-span-1 border-t border-primary/5 pt-4 md:pt-0 md:border-none">
+            <div className="text-accent mb-2 flex justify-center"><Coffee size={24} className="md:w-8 md:h-8" /></div>
+            <div className="text-2xl md:text-3xl font-bold text-primary">Premium</div>
+            <div className="text-[10px] font-bold text-primary/30 uppercase tracking-widest">Padrão</div>
           </div>
         </div>
       </div>

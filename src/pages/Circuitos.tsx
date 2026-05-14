@@ -37,13 +37,13 @@ export const Circuitos = () => {
       className="pt-32 pb-20 bg-primary min-h-screen"
     >
       <div className="container mx-auto px-6 md:px-12">
-        <div className="max-w-4xl mb-24">
-          <span className="text-accent font-bold tracking-[0.3em] uppercase text-xs mb-6 block">Road Trips & Expedições</span>
-          <h1 className="text-5xl md:text-8xl font-bold text-white mb-8 tracking-tight leading-tight">
+        <div className="max-w-4xl mb-16 md:24">
+          <span className="text-accent font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:xs mb-4 md:6 block">Road Trips & Expedições</span>
+          <h1 className="text-4xl md:text-8xl font-bold text-white mb-6 md:8 tracking-tight leading-tight">
             Circuitos <br />
             <span className="italic font-medium text-white/40">Rodoviários.</span>
           </h1>
-          <p className="text-xl text-white/50 leading-relaxed max-w-2xl">
+          <p className="text-base md:text-xl text-white/50 leading-relaxed max-w-2xl">
             Acreditamos que a estrada é parte fundamental da experiência. Nossos circuitos terrestres oferecem conforto absoluto e vistas cinematográficas.
           </p>
         </div>

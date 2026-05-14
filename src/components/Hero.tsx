@@ -23,16 +23,16 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl mb-12"
+          className="max-w-4xl mb-8 md:mb-12"
         >
-          <span className="inline-block text-accent font-bold tracking-[0.3em] uppercase text-xs mb-6">
+          <span className="inline-block text-accent font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:text-xs mb-4 md:mb-6">
             Renantur Viagens Premium
           </span>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[0.9] tracking-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 md:mb-8 leading-[1] md:leading-[0.9] tracking-tight">
             Transformamos destinos em <br className="hidden md:block" />
             <span className="text-white/90 italic font-medium">experiências inesquecíveis.</span>
           </h1>
-          <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-xl text-white/80 mb-8 md:mb-10 max-w-xl mx-auto leading-relaxed">
             Pacotes rodoviários, aéreos, cruzeiros e experiências exclusivas pelo Brasil e América do Sul.
           </p>
         </motion.div>
