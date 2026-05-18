@@ -1,31 +1,55 @@
 import { motion } from "framer-motion";
-import { Compass, Map, ChevronRight, Info } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 
 const circuits = [
   {
     id: 1,
-    title: "Circuito Andino",
-    subtitle: "Chile & Argentina",
-    desc: "Uma jornada épica cruzando as cordilheiras, passando por vinícolas e paisagens vulcânicas deslumbrantes.",
-    img: "https://images.unsplash.com/photo-1589410115091-a968987cc91e?auto=format&fit=crop&q=80&w=1200",
-    stops: ["Santiago", "Mendoza", "Bariloche", "Puerto Varas"]
+    region: "Nordeste",
+    title: "Circuito Nordeste",
+    subtitle: "Maceió · Maragogi · Porto de Galinhas",
+    desc: "Das piscinas naturais de Maragogi às falésias coloridas de Porto de Galinhas, passando pelas praias urbanas de Maceió. O nordeste em sua melhor versão.",
+    img: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Maceió", "Maragogi", "Porto de Galinhas"],
+    days: "7 a 10 dias",
+    from: "2.490",
+    accent: "#FF6B57",
   },
   {
     id: 2,
-    title: "Patagônia Selvagem",
-    subtitle: "El Calafate & Torres del Paine",
-    desc: "A vastidão do fim do mundo em um roteiro que combina geleiras milenares com hotéis boutique de luxo.",
-    img: "https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&q=80&w=1200",
-    stops: ["El Calafate", "Torres del Paine", "Ushuaia"]
+    region: "Sul",
+    title: "Circuito Sul",
+    subtitle: "Gramado · Curitiba · Florianópolis · Balneário",
+    desc: "Da arquitetura europeia de Gramado às praias de águas esverdeadas de Florianópolis. Um roteiro que mistura gastronomia, natureza e praias deslumbrantes.",
+    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Gramado", "Canela", "Curitiba", "Florianópolis", "Balneário Camboriú"],
+    days: "8 a 12 dias",
+    from: "2.100",
+    accent: "#3BB273",
   },
   {
     id: 3,
-    title: "Serra Gaúcha Premium",
-    subtitle: "Rio Grande do Sul, Brasil",
-    desc: "O melhor da cultura europeia no Brasil, com foco em enogastronomia e hospitalidade de alto padrão.",
-    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1200",
-    stops: ["Gramado", "Canela", "Bento Gonçalves"]
-  }
+    region: "Sudeste",
+    title: "Circuito Rio–Minas",
+    subtitle: "Rio de Janeiro · Angra · Ouro Preto · Tiradentes",
+    desc: "Do Cristo Redentor às igrejas barrocas de Ouro Preto. Com parada nas enseadas de Angra dos Reis e nas ruas de pedra de Tiradentes — um roteiro histórico e cinematográfico.",
+    img: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Rio de Janeiro", "Angra dos Reis", "Arraial do Cabo", "Ouro Preto", "Tiradentes"],
+    days: "6 a 9 dias",
+    from: "1.690",
+    accent: "#0F6D7A",
+  },
+  {
+    id: 4,
+    region: "Centro-Oeste & Norte",
+    title: "Circuito Pantanal & Bonito",
+    subtitle: "Campo Grande · Bonito · Miranda · Pantanal",
+    desc: "Das grutas cristalinas de Bonito à imensidão do Pantanal. Um roteiro para quem busca natureza selvagem, mergulho em rios transparentes e contemplação total.",
+    img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Campo Grande", "Bonito", "Miranda", "Pantanal"],
+    days: "6 a 8 dias",
+    from: "3.200",
+    accent: "#FF6B57",
+  },
 ];
 
 export const Circuitos = () => {
@@ -34,77 +58,143 @@ export const Circuitos = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="pt-32 pb-20 bg-primary min-h-screen"
+      className="min-h-screen bg-primary"
     >
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="max-w-4xl mb-16 md:24">
-          <span className="text-accent font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:xs mb-4 md:6 block">Road Trips & Expedições</span>
-          <h1 className="text-4xl md:text-8xl font-bold text-white mb-6 md:8 tracking-tight leading-tight">
-            Circuitos <br />
-            <span className="italic font-medium text-white/40">Rodoviários.</span>
-          </h1>
-          <p className="text-base md:text-xl text-white/50 leading-relaxed max-w-2xl">
-            Acreditamos que a estrada é parte fundamental da experiência. Nossos circuitos terrestres oferecem conforto absoluto e vistas cinematográficas.
-          </p>
-        </div>
+      {/* Page Header */}
+      <div className="pt-36 pb-12 container mx-auto px-6 xl:px-12">
+        <p className="editorial-label text-accent mb-3">Road Trips & Expedições</p>
+        <h1
+          className="text-5xl md:text-8xl font-bold text-white leading-tight mb-6"
+          style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+        >
+          Circuito Rodoviário
+          <br />
+          <em className="text-white/35 font-semibold">pelo Brasil.</em>
+        </h1>
+        <p className="text-white/50 text-base md:text-lg max-w-2xl leading-relaxed">
+          Acreditamos que a estrada é parte fundamental da experiência. Ônibus modernos, guia especializado e paradas que valem a viagem.
+        </p>
+      </div>
 
-        <div className="flex flex-col gap-32">
-          {circuits.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              viewport={{ once: true }}
-              className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-12 lg:gap-24`}
-            >
-              <div className="w-full lg:w-3/5 relative group">
-                <div className="aspect-[16/9] rounded-[3.5rem] overflow-hidden shadow-2xl">
-                  <img 
-                    src={item.img} 
-                    alt={item.title} 
-                    className="h-full w-full object-cover transition-transform duration-[3s] group-hover:scale-110" 
-                  />
-                </div>
-                <div className="absolute -bottom-10 -right-10 bg-accent p-8 rounded-full shadow-2xl hidden md:block group-hover:rotate-12 transition-transform">
-                  <Compass size={48} className="text-white" />
-                </div>
+      {/* Circuits */}
+      <div className="container mx-auto px-6 xl:px-12 pb-24 flex flex-col gap-20 md:gap-28">
+        {circuits.map((circuit, i) => (
+          <motion.div
+            key={circuit.id}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-80px" }}
+            className={`flex flex-col gap-10 lg:gap-16 ${
+              i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+            } items-center`}
+          >
+            {/* Image */}
+            <div className="w-full lg:w-3/5 relative group">
+              <div className="overflow-hidden rounded-2xl shadow-2xl shadow-black/30">
+                <img
+                  src={circuit.img}
+                  alt={circuit.title}
+                  className="w-full aspect-[16/10] object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+                />
               </div>
-              
-              <div className="w-full lg:w-2/5">
-                <span className="text-accent font-bold text-sm tracking-widest uppercase mb-4 block">{item.subtitle}</span>
-                <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">{item.title}</h2>
-                <p className="text-white/60 text-lg md:text-xl mb-10 leading-relaxed italic">
-                  "{item.desc}"
+              {/* Badge */}
+              <div className="absolute top-4 left-4 flex gap-2">
+                <span
+                  className="px-4 py-2 rounded-full text-white text-[10px] font-bold uppercase tracking-widest shadow-lg"
+                  style={{ backgroundColor: circuit.accent }}
+                >
+                  {circuit.region}
+                </span>
+              </div>
+              <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full">
+                <span className="text-white text-xs font-bold">{circuit.days}</span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="w-full lg:w-2/5">
+              <p className="editorial-label mb-3" style={{ color: circuit.accent }}>
+                {circuit.subtitle}
+              </p>
+              <h2
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight"
+                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+              >
+                {circuit.title}
+              </h2>
+              <p className="text-white/55 text-sm md:text-base leading-relaxed mb-8">
+                {circuit.desc}
+              </p>
+
+              {/* Stops */}
+              <div className="mb-8">
+                <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <MapPin size={12} />
+                  Paradas do Roteiro
                 </p>
-                
-                <div className="mb-12">
-                  <div className="text-xs font-bold text-white/30 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                    <Map size={16} />
-                    Principais Paradas
-                  </div>
-                  <div className="flex flex-wrap gap-3">
-                    {item.stops.map(stop => (
-                      <span key={stop} className="px-5 py-2 bg-white/5 rounded-full text-white/80 text-sm border border-white/10 font-medium">
+                <div className="flex flex-wrap gap-2">
+                  {circuit.stops.map((stop, si) => (
+                    <span key={stop} className="flex items-center gap-1.5">
+                      <span className="px-3 py-1.5 bg-white/8 border border-white/12 rounded-full text-white/75 text-xs font-medium">
                         {stop}
                       </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-6">
-                  <button className="bg-white text-primary px-10 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
-                    Ver Itinerário
-                    <ChevronRight size={20} />
-                  </button>
-                  <button className="border border-white/20 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-                    <Info size={20} />
-                    Saiba Mais
-                  </button>
+                      {si < circuit.stops.length - 1 && (
+                        <span className="text-white/20 text-xs">→</span>
+                      )}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </motion.div>
-          ))}
+
+              {/* Price + CTA */}
+              <div className="flex items-center gap-6">
+                <div>
+                  <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest">A partir de</p>
+                  <p
+                    className="text-white text-3xl font-bold"
+                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                  >
+                    R$ {circuit.from}
+                  </p>
+                </div>
+                <a
+                  href="https://wa.me/55"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm text-white transition-all hover:scale-105"
+                  style={{ backgroundColor: circuit.accent }}
+                >
+                  <Phone size={14} />
+                  Reservar
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div className="container mx-auto px-6 xl:px-12 pb-24">
+        <div className="bg-white/8 border border-white/12 rounded-3xl p-10 md:p-16 text-center">
+          <h2
+            className="text-3xl md:text-4xl font-bold text-white mb-4"
+            style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+          >
+            Quer um circuito personalizado?
+          </h2>
+          <p className="text-white/50 text-sm mb-8 max-w-md mx-auto">
+            Monte seu próprio roteiro rodoviário com as paradas que você mais quer conhecer.
+          </p>
+          <a
+            href="https://wa.me/55"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent text-white px-10 py-4 rounded-full font-bold text-sm shadow-xl shadow-accent/20 hover:scale-105 transition-transform"
+          >
+            <Phone size={16} />
+            Falar com especialista
+          </a>
         </div>
       </div>
     </motion.div>

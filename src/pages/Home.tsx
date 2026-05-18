@@ -4,6 +4,7 @@ import { PackageSection } from "../components/PackageSection";
 import { RoadTripSection } from "../components/RoadTripSection";
 import { DestinationGrid } from "../components/DestinationGrid";
 import { WhyUsSection } from "../components/WhyUsSection";
+import { TestimonialsSection } from "../components/TestimonialsSection";
 import { motion } from "framer-motion";
 
 export const Home = () => {
@@ -20,6 +21,7 @@ export const Home = () => {
       <RoadTripSection />
       <DestinationGrid />
       <WhyUsSection />
+      <TestimonialsSection />
     </motion.div>
   );
 };

@@ -7,7 +7,7 @@ const destinationData: Record<string, any> = {
     name: "Maceió",
     tagline: "O Caribe Brasileiro",
     desc: "Maceió encanta por suas águas mornas e cristalinas, cercadas por vastos coqueirais e piscinas naturais formadas por arrecifes.",
-    hero: "https://images.unsplash.com/photo-1544984243-75a62ecd23c8?auto=format&fit=crop&q=80&w=2000",
+    hero: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=2000",
     rating: 4.9,
     highlights: ["Piscinas Naturais de Pajuçara", "Praia do Francês", "Gastronomia Regional", "Artesanato Local"],
     stats: { temp: "28°C", people: "1M+", airport: "MCZ" }

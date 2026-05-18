@@ -1,116 +1,225 @@
-import { motion } from "framer-motion";
-import { Star, Clock, MapPin, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Clock, ArrowRight } from "lucide-react";
+
+type Category = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
 
 const packages = [
   {
+    id: 1,
     name: "Maceió & Maragogi",
-    location: "Alagoas, Brasil",
-    duration: "7 Dias",
+    location: "Alagoas, Nordeste",
+    duration: "7 dias",
     price: "2.490",
-    img: "https://images.unsplash.com/photo-1544984243-75a62ecd23c8?auto=format&fit=crop&q=80&w=1200",
-    tag: "Nordeste",
-    rating: 4.9
+    img: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=1000",
+    category: "Aéreos" as Category,
+    tag: "Mais vendido",
   },
   {
-    name: "Gramado Inesquecível",
-    location: "Rio Grande do Sul, Brasil",
-    duration: "4 Dias",
-    price: "1.850",
-    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1200",
-    tag: "Serra Gaúcha",
-    rating: 4.8
+    id: 2,
+    name: "Porto de Galinhas",
+    location: "Pernambuco, Nordeste",
+    duration: "5 dias",
+    price: "2.890",
+    img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1000",
+    category: "Aéreos" as Category,
+    tag: "Destaque",
   },
   {
+    id: 3,
     name: "Fernando de Noronha",
     location: "Pernambuco, Brasil",
-    duration: "6 Dias",
+    duration: "6 dias",
     price: "4.900",
-    img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1200",
+    img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000",
+    category: "Aéreos" as Category,
     tag: "Exclusivo",
-    rating: 5.0
   },
   {
+    id: 4,
+    name: "Gramado Premium",
+    location: "Rio Grande do Sul, Sul",
+    duration: "4 dias",
+    price: "1.850",
+    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1000",
+    category: "Rodoviários" as Category,
+    tag: "Inverno",
+  },
+  {
+    id: 5,
+    name: "Cruzeiro Costa Sul",
+    location: "Brasil & Uruguai",
+    duration: "5 noites",
+    price: "3.200",
+    img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1000",
+    category: "Cruzeiros" as Category,
+    tag: "Oferta",
+  },
+  {
+    id: 6,
     name: "Machu Picchu",
     location: "Cusco, Peru",
-    duration: "8 Dias",
+    duration: "8 dias",
     price: "5.200",
-    img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1200",
+    img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1000",
+    category: "Internacional" as Category,
     tag: "Internacional",
-    rating: 4.9
-  }
+  },
+  {
+    id: 7,
+    name: "Salvador & Costa do Sauípe",
+    location: "Bahia, Nordeste",
+    duration: "6 dias",
+    price: "2.650",
+    img: "https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?auto=format&fit=crop&q=80&w=1000",
+    category: "Aéreos" as Category,
+    tag: "Nordeste",
+  },
+  {
+    id: 8,
+    name: "Florianópolis & Balneário",
+    location: "Santa Catarina, Sul",
+    duration: "5 dias",
+    price: "2.100",
+    img: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&q=80&w=1000",
+    category: "Rodoviários" as Category,
+    tag: "Praias",
+  },
 ];
 
+const categories: Category[] = ["Todos", "Aéreos", "Rodoviários", "Cruzeiros", "Internacional"];
+
 export const PackageSection = () => {
+  const [active, setActive] = useState<Category>("Todos");
+
+  const filtered =
+    active === "Todos" ? packages.slice(0, 8) : packages.filter((p) => p.category === active);
+
   return (
-    <section id="pacotes" className="py-32 bg-background">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="max-w-2xl">
-            <span className="text-accent font-bold tracking-[0.2em] uppercase text-xs mb-4 block">Destaques</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-primary leading-tight">
-              Os roteiros mais <br />
-              <span className="italic font-medium text-primary/60">desejados do momento.</span>
+    <section className="py-24 md:py-32 bg-background overflow-hidden">
+      <div className="container mx-auto px-6 xl:px-12">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+          <div>
+            <p className="editorial-label text-accent mb-3">Vitrine de Passeios</p>
+            <h2
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight"
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+            >
+              Roteiros que
+              <br />
+              <em className="font-semibold text-primary/50">encantam.</em>
             </h2>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActive(cat)}
+                className={`px-5 py-2 rounded-full text-xs font-bold transition-all duration-200 ${
+                  active === cat
+                    ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105"
+                    : "bg-white text-primary/50 hover:bg-primary/6 border border-primary/8"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {packages.map((pkg, i) => (
-            <motion.div
-              key={pkg.name}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-[2.5rem] overflow-hidden shadow-premium group cursor-pointer"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <img
-                  src={pkg.img}
-                  alt={pkg.name}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute top-6 left-6">
-                  <span className="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">
-                    {pkg.tag}
-                  </span>
-                </div>
-                <div className="absolute top-6 right-6">
-                  <div className="bg-primary/80 backdrop-blur-md text-white p-2 rounded-full">
-                    <Star size={14} fill="white" />
+        {/* Package Grid */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+        >
+          <AnimatePresence mode="popLayout">
+            {filtered.map((pkg, i) => (
+              <motion.article
+                layout
+                key={pkg.id}
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.94 }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+                className="bg-white rounded-2xl overflow-hidden shadow-card group cursor-pointer border border-primary/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-400"
+              >
+                {/* Image */}
+                <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                  <img
+                    src={pkg.img}
+                    alt={pkg.name}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  {/* Tags */}
+                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
+                    <span className="bg-white/92 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                      {pkg.category}
+                    </span>
+                    <span className="bg-accent text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                      {pkg.tag}
+                    </span>
                   </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-              
-              <div className="p-8">
-                <div className="flex items-center gap-2 text-primary/50 text-xs mb-3 font-medium">
-                  <MapPin size={14} className="text-accent" />
-                  {pkg.location}
-                </div>
-                <h3 className="text-2xl font-bold text-primary mb-4 group-hover:text-accent transition-colors">
-                  {pkg.name}
-                </h3>
-                
-                <div className="flex items-center justify-between mb-8 border-y border-primary/5 py-4">
-                  <div className="flex items-center gap-2 text-primary/60">
-                    <Clock size={16} />
-                    <span className="text-sm font-medium">{pkg.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs text-primary/40 font-medium">A partir de</span>
-                    <span className="text-xl font-bold text-primary">R$ {pkg.price}</span>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                 </div>
 
-                <button className="w-full flex items-center justify-center gap-2 text-primary font-bold py-2 group/btn">
-                  Explorar Roteiro
-                  <ChevronRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                {/* Content */}
+                <div className="p-5">
+                  <div className="flex items-center gap-1.5 text-primary/40 text-[10px] mb-2 font-medium uppercase tracking-wider">
+                    <MapPin size={11} className="text-accent" />
+                    {pkg.location}
+                  </div>
+
+                  <h3
+                    className="text-xl font-bold text-primary mb-3 leading-tight group-hover:text-accent transition-colors"
+                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                  >
+                    {pkg.name}
+                  </h3>
+
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-primary/6">
+                    <div className="flex items-center gap-1.5 text-primary/50">
+                      <Clock size={13} />
+                      <span className="text-xs font-medium">{pkg.duration}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-[9px] text-primary/30 font-bold uppercase tracking-wider">a partir de</span>
+                      <span
+                        className="text-lg font-bold text-primary"
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                      >
+                        R$ {pkg.price}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button className="w-full flex items-center justify-center gap-2 text-sm font-semibold text-primary/60 hover:text-accent transition-colors group/btn py-1">
+                    Ver roteiro
+                    <ArrowRight size={15} className="transition-transform group-hover/btn:translate-x-1" />
+                  </button>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-14"
+        >
+          <a
+            href="/pacotes"
+            className="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-full font-bold text-sm tracking-wide hover:bg-primary/90 hover:scale-105 transition-all shadow-xl shadow-primary/20"
+          >
+            Ver todos os pacotes
+            <ArrowRight size={16} />
+          </a>
+        </motion.div>
       </div>
     </section>
   );

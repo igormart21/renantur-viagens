@@ -1,144 +1,163 @@
-import { motion } from "framer-motion";
-import { Search, Clock, MapPin, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Clock, MapPin, ArrowRight, Phone } from "lucide-react";
 import { useState } from "react";
 
+type Cat = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
+
 const packages = [
-  { id: 1, name: "Maceió & Maragogi", location: "Alagoas, Brasil", duration: "7 Dias", price: "2.490", img: "https://images.unsplash.com/photo-1544984243-75a62ecd23c8?auto=format&fit=crop&q=80&w=1200", category: "Aéreos", tag: "Popular" },
-  { id: 2, name: "Gramado Premium", location: "RS, Brasil", duration: "4 Dias", price: "1.850", img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1200", category: "Rodoviários", tag: "Inverno" },
-  { id: 3, name: "Noronha Experience", location: "PE, Brasil", duration: "6 Dias", price: "4.900", img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1200", category: "Aéreos", tag: "Exclusivo" },
-  { id: 4, name: "Cruzeiro Costa Sul", location: "Brasil & Uruguai", duration: "5 Dias", price: "3.200", img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200", category: "Cruzeiros", tag: "Lazer" },
-  { id: 5, name: "Machu Picchu", location: "Cusco, Peru", duration: "8 Dias", price: "5.200", img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1200", category: "Internacionais", tag: "Aventura" },
-  { id: 6, name: "Santiago & Atacama", location: "Chile", duration: "10 Dias", price: "6.800", img: "https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&q=80&w=1200", category: "Internacionais", tag: "Deserto" }
+  { id: 1,  name: "Maceió & Maragogi",          location: "Alagoas, Nordeste",       duration: "7 dias",    price: "2.490", img: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Mais vendido" },
+  { id: 2,  name: "Porto de Galinhas",           location: "Pernambuco, Nordeste",    duration: "5 dias",    price: "2.890", img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Destaque" },
+  { id: 3,  name: "Fernando de Noronha",         location: "Pernambuco, Brasil",      duration: "6 dias",    price: "4.900", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Exclusivo" },
+  { id: 4,  name: "Salvador & Costa do Sauípe",  location: "Bahia, Nordeste",         duration: "6 dias",    price: "2.650", img: "https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Nordeste" },
+  { id: 5,  name: "Natal & Lençóis Maranhenses", location: "RN & MA, Nordeste",       duration: "8 dias",    price: "3.400", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Paisagens" },
+  { id: 6,  name: "Gramado & Serra Gaúcha",      location: "Rio Grande do Sul",       duration: "4 dias",    price: "1.850", img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,    tag: "Inverno" },
+  { id: 7,  name: "Florianópolis & Balneário",   location: "Santa Catarina, Sul",     duration: "5 dias",    price: "2.100", img: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,    tag: "Praias" },
+  { id: 8,  name: "Angra dos Reis & Arraial",    location: "Rio de Janeiro",          duration: "4 dias",    price: "1.690", img: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,    tag: "Costa Verde" },
+  { id: 9,  name: "Cruzeiro Costa Sul",          location: "Brasil & Uruguai",        duration: "5 noites",  price: "3.200", img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1000", category: "Cruzeiros" as Cat,      tag: "Oferta" },
+  { id: 10, name: "Cruzeiro Nordeste",           location: "Brasil, Caribe",          duration: "7 noites",  price: "4.100", img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1000", category: "Cruzeiros" as Cat,      tag: "Premium" },
+  { id: 11, name: "Machu Picchu",                location: "Cusco, Peru",             duration: "8 dias",    price: "5.200", img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "América do Sul" },
+  { id: 12, name: "Santiago & Atacama",          location: "Chile",                   duration: "10 dias",   price: "6.800", img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "Deserto" },
 ];
 
-const categories = ["Todos", "Aéreos", "Rodoviários", "Cruzeiros", "Internacionais"];
+const categories: Cat[] = ["Todos", "Aéreos", "Rodoviários", "Cruzeiros", "Internacional"];
 
 export const Pacotes = () => {
-  const [activeCategory, setActiveCategory] = useState("Todos");
+  const [active, setActive] = useState<Cat>("Todos");
 
-  const filteredPackages = activeCategory === "Todos" 
-    ? packages 
-    : packages.filter(pkg => pkg.category === activeCategory);
+  const filtered = active === "Todos" ? packages : packages.filter((p) => p.category === active);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="pt-32 pb-20 bg-background min-h-screen"
+      className="min-h-screen bg-background"
     >
-      {/* Header Section */}
-      <div className="container mx-auto px-6 md:px-12 mb-12 md:20">
-        <div className="max-w-4xl">
-          <h1 className="text-4xl md:text-7xl font-bold text-primary mb-4 md:8 tracking-tight">
-            Nossos <span className="text-accent italic font-medium">Pacotes</span>
-          </h1>
-          <p className="text-base md:text-xl text-primary/60 leading-relaxed max-w-2xl">
-            Explore nossa seleção exclusiva de roteiros desenhados para proporcionar o máximo conforto e experiências inesquecíveis.
-          </p>
-        </div>
+      {/* Page Header */}
+      <div className="pt-36 pb-12 container mx-auto px-6 xl:px-12">
+        <p className="editorial-label text-accent mb-3">Vitrine de Passeios</p>
+        <h1
+          className="text-5xl md:text-7xl font-bold text-primary leading-tight mb-4"
+          style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+        >
+          Nossos
+          <br />
+          <em className="text-primary/50 font-semibold">Pacotes.</em>
+        </h1>
+        <p className="text-foreground/50 text-base md:text-lg max-w-xl leading-relaxed">
+          Aéreos, rodoviários, cruzeiros e internacionais — encontre o roteiro perfeito para você e sua família.
+        </p>
       </div>
 
-      {/* Filters & Search */}
-      <div className="container mx-auto px-6 md:px-12 mb-12 md:16">
-        <div className="flex flex-col lg:flex-row gap-6 md:8 items-center justify-between">
-          <div className="flex flex-wrap gap-2 md:3">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-5 md:8 py-2 md:3 rounded-full font-bold text-xs md:sm transition-all ${
-                  activeCategory === cat 
-                  ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" 
-                  : "bg-white text-primary/40 hover:bg-primary/5"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          
-          <div className="relative w-full lg:w-96">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/20" size={20} />
-            <input 
-              type="text" 
-              placeholder="Buscar destino..." 
-              className="w-full bg-white border border-primary/5 rounded-full py-4 pl-14 pr-8 focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all font-medium"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Packages Grid */}
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {filteredPackages.map((pkg, i) => (
-            <motion.div
-              layout
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white rounded-[2.5rem] overflow-hidden shadow-premium group cursor-pointer border border-primary/5"
+      {/* Filters */}
+      <div className="container mx-auto px-6 xl:px-12 mb-10">
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActive(cat)}
+              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-200 ${
+                active === cat
+                  ? "bg-primary text-white shadow-lg shadow-primary/20"
+                  : "bg-white text-primary/50 hover:bg-primary/6 border border-primary/8"
+              }`}
             >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={pkg.img}
-                  alt={pkg.name}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute top-6 left-6 flex gap-2">
-                  <span className="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">
-                    {pkg.category}
-                  </span>
-                  <span className="bg-accent text-white text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">
-                    {pkg.tag}
-                  </span>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-              
-              <div className="p-8">
-                <div className="flex items-center gap-2 text-primary/40 text-xs mb-3 font-medium uppercase tracking-wider">
-                  <MapPin size={14} className="text-accent" />
-                  {pkg.location}
-                </div>
-                <h3 className="text-2xl font-bold text-primary mb-4 group-hover:text-accent transition-colors">
-                  {pkg.name}
-                </h3>
-                
-                <div className="flex items-center justify-between mb-8 border-y border-primary/5 py-4">
-                  <div className="flex items-center gap-2 text-primary/60">
-                    <Clock size={16} />
-                    <span className="text-sm font-semibold">{pkg.duration}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="block text-[10px] text-primary/30 font-bold uppercase">A partir de</span>
-                    <span className="text-2xl font-bold text-primary tracking-tight">R$ {pkg.price}</span>
-                  </div>
-                </div>
-
-                <button className="w-full flex items-center justify-center gap-2 bg-primary/5 text-primary font-bold py-5 rounded-2xl transition-all group-hover:bg-primary group-hover:text-white group-hover:shadow-xl group-hover:shadow-primary/20">
-                  Ver Detalhes
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-            </motion.div>
+              {cat}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className="container mx-auto px-6 md:px-12 mt-32">
-        <div className="bg-primary rounded-[3rem] p-12 md:p-20 relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Não encontrou o que procurava?</h2>
-            <p className="text-white/60 text-lg mb-12">Nossos especialistas podem criar um roteiro personalizado sob medida para o seu desejo.</p>
-            <button className="bg-accent text-white px-10 py-5 rounded-full font-bold text-lg hover:scale-105 transition-transform">
-              Fale com um Especialista
-            </button>
+      {/* Grid */}
+      <div className="container mx-auto px-6 xl:px-12 pb-20">
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((pkg, i) => (
+              <motion.article
+                layout
+                key={pkg.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ delay: i * 0.06, duration: 0.4 }}
+                className="bg-white rounded-2xl overflow-hidden border border-primary/6 shadow-card group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-400"
+              >
+                <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                  <img src={pkg.img} alt={pkg.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute top-3 left-3 right-3 flex gap-2">
+                    <span className="bg-white/92 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                      {pkg.category}
+                    </span>
+                    <span className="bg-accent text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                      {pkg.tag}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-5 md:p-6">
+                  <div className="flex items-center gap-1.5 text-primary/40 text-[10px] mb-2 font-medium uppercase tracking-wider">
+                    <MapPin size={11} className="text-accent" />
+                    {pkg.location}
+                  </div>
+                  <h3
+                    className="text-xl md:text-2xl font-bold text-primary mb-4 leading-tight group-hover:text-accent transition-colors"
+                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                  >
+                    {pkg.name}
+                  </h3>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-primary/6">
+                    <div className="flex items-center gap-1.5 text-primary/50">
+                      <Clock size={13} />
+                      <span className="text-xs font-medium">{pkg.duration}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-[9px] text-primary/30 font-bold uppercase">a partir de</span>
+                      <span
+                        className="text-xl font-bold text-primary"
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                      >
+                        R$ {pkg.price}
+                      </span>
+                    </div>
+                  </div>
+                  <button className="w-full flex items-center justify-center gap-2 bg-primary/5 text-primary font-bold text-sm py-3 rounded-xl transition-all group-hover:bg-primary group-hover:text-white">
+                    Ver Detalhes
+                    <ArrowRight size={15} />
+                  </button>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </div>
+
+      {/* CTA Banner */}
+      <div className="container mx-auto px-6 xl:px-12 pb-24">
+        <div className="bg-primary rounded-3xl p-10 md:p-16 relative overflow-hidden">
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div>
+              <h2
+                className="text-3xl md:text-4xl font-bold text-white mb-3"
+                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+              >
+                Não encontrou o roteiro ideal?
+              </h2>
+              <p className="text-white/50 text-sm leading-relaxed max-w-md">
+                Criamos roteiros personalizados sob medida. Fale com nosso especialista e monte o seu.
+              </p>
+            </div>
+            <a
+              href="https://wa.me/55"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 flex items-center gap-2 bg-accent text-white px-8 py-4 rounded-full font-bold text-sm shadow-xl shadow-accent/20 hover:scale-105 transition-transform"
+            >
+              <Phone size={16} />
+              Falar com especialista
+            </a>
           </div>
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-12 translate-x-20" />
+          <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/4 rounded-full" />
+          <div className="absolute -bottom-8 -right-4 w-60 h-60 bg-accent/8 rounded-full" />
         </div>
       </div>
     </motion.div>

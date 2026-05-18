@@ -1,96 +1,183 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin } from "lucide-react";
+
+const slides = [
+  {
+    img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=85&w=2560",
+    headline: "Descubra o Brasil",
+    sub: "com quem entende.",
+    place: "Fernando de Noronha, PE",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=85&w=2560",
+    headline: "Rio de Janeiro",
+    sub: "inesquecível.",
+    place: "Rio de Janeiro, RJ",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=85&w=2560",
+    headline: "Nordeste paradisíaco",
+    sub: "te espera.",
+    place: "Maceió, AL",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=85&w=2560",
+    headline: "Gramado & Serra",
+    sub: "encantadores.",
+    place: "Gramado, RS",
+  },
+];
 
 export const Hero = () => {
+  const [current, setCurrent] = useState(0);
+  const beflyRef = useRef<HTMLDivElement>(null);
+
+  // Auto-advance slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Inject befly widget — script loaded on-demand so the element
+  // is guaranteed to be in the DOM when the script runs
+  useEffect(() => {
+    const container = beflyRef.current;
+    if (!container) return;
+
+    const mountWidget = () => {
+      container.innerHTML = "";
+      const widget = document.createElement("befly-widget");
+      widget.setAttribute("language", "pt-br");
+      widget.setAttribute("new-tab", "true");
+      container.appendChild(widget);
+    };
+
+    // Already loaded from a previous mount (e.g. HMR)
+    if (document.getElementById("befly-script")) {
+      mountWidget();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "befly-script";
+    script.type = "text/javascript";
+    script.src =
+      "https://static.onertravel.com/widget/search/production/widget-befly.js";
+    script.onload = () => {
+      // Tiny delay so the custom element has time to register
+      setTimeout(mountWidget, 80);
+    };
+    script.onerror = () => {
+      console.warn("Befly widget script failed to load");
+    };
+    document.head.appendChild(script);
+  }, []);
+
+  const slide = slides[current];
+
   return (
-    <section className="relative h-screen min-h-[800px] w-full flex items-center justify-center overflow-hidden">
-      {/* Background Media */}
-      <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="h-full w-full object-cover"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
-        />
-        <div className="absolute inset-0 bg-black/40 cinematic-overlay" />
-      </div>
+    <section className="relative min-h-screen w-full flex flex-col justify-end overflow-hidden">
+      {/* Slideshow */}
+      {slides.map((s, i) => (
+        <div
+          key={i}
+          className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+          style={{ opacity: i === current ? 1 : 0, zIndex: 0 }}
+        >
+          <img
+            src={s.img}
+            alt={s.place}
+            className="h-full w-full object-cover"
+            loading={i === 0 ? "eager" : "lazy"}
+          />
+        </div>
+      ))}
 
-      {/* Content */}
-      <div className="container relative z-10 mx-auto px-6 pt-20 flex flex-col items-center text-center">
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/30 via-black/15 to-black/75" />
+
+      {/* ─── Main Content ─── */}
+      <div className="relative z-20 container mx-auto px-6 xl:px-12 pt-28 pb-10 flex flex-col items-center">
+
+        {/* Location pill */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current + "-loc"}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mb-5 flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/15"
+          >
+            <MapPin size={11} className="text-accent" />
+            <span className="text-white/75 text-[10px] font-bold tracking-[0.22em] uppercase">
+              {slide.place}
+            </span>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Headline */}
+        <div className="text-center mb-4 max-w-5xl">
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={current + "-h"}
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              className="text-white leading-[0.9] tracking-tight"
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+            >
+              <span className="block font-bold"
+                style={{ fontSize: "clamp(3rem, 8.5vw, 7.5rem)" }}>
+                {slide.headline}
+              </span>
+              <span className="block font-semibold italic text-white/60"
+                style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}>
+                {slide.sub}
+              </span>
+            </motion.h1>
+          </AnimatePresence>
+        </div>
+
+        {/* Subtitle */}
+        <p className="text-white/55 text-sm md:text-base max-w-sm text-center mb-8 leading-relaxed font-light">
+          Pacotes aéreos, rodoviários, cruzeiros e transfer —<br className="hidden sm:block" />
+          do Sul Fluminense para o mundo.
+        </p>
+
+        {/* ─── BEFLY WIDGET ─── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl mb-8 md:mb-12"
+          transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-5xl mb-8"
         >
-          <span className="inline-block text-accent font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:text-xs mb-4 md:mb-6">
-            Renantur Viagens Premium
-          </span>
-          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 md:mb-8 leading-[1] md:leading-[0.9] tracking-tight">
-            Transformamos destinos em <br className="hidden md:block" />
-            <span className="text-white/90 italic font-medium">experiências inesquecíveis.</span>
-          </h1>
-          <p className="text-base md:text-xl text-white/80 mb-8 md:mb-10 max-w-xl mx-auto leading-relaxed">
-            Pacotes rodoviários, aéreos, cruzeiros e experiências exclusivas pelo Brasil e América do Sul.
-          </p>
-        </motion.div>
-
-        {/* Search Widget Container (The Centerpiece) */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-5xl mb-16"
-        >
-          <div className="glass-dark p-3 rounded-[3rem] shadow-glass border border-white/10 overflow-hidden">
-            <div className="bg-white/95 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 shadow-2xl">
-              <div className="flex-1 w-full text-left">
-                <div className="text-xs font-bold text-primary/40 uppercase tracking-widest mb-3">Reserve seu sonho</div>
-                <div className="flex items-center gap-4 text-2xl md:text-3xl font-bold text-primary tracking-tight">
-                  <Search size={32} className="text-accent" />
-                  Para onde vamos?
-                </div>
-              </div>
-              <div className="hidden lg:block h-16 w-px bg-primary/10 mx-4" />
-              <div className="flex-1 w-full hidden md:flex items-center gap-5 opacity-40">
-                <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center text-2xl">🏝️</div>
-                <div className="text-left">
-                  <div className="text-xs font-bold text-primary/40 uppercase">Temporada</div>
-                  <div className="text-sm font-semibold text-primary">Selecione as datas</div>
-                </div>
-              </div>
-              <button className="w-full md:w-auto bg-primary text-white px-14 py-6 rounded-[1.5rem] font-bold text-lg transition-all hover:bg-primary/90 hover:scale-105 active:scale-95 shadow-xl shadow-primary/20">
-                Pesquisar
-              </button>
-            </div>
+          {/* White card that hosts the widget */}
+          <div className="bg-white rounded-2xl overflow-hidden shadow-2xl shadow-black/25">
+            {/* Widget container — injected via useEffect */}
+            <div ref={beflyRef} style={{ minHeight: 72 }} />
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6"
-        >
-          <button className="text-white font-bold flex items-center gap-3 group">
-            <span className="w-10 h-10 rounded-full bg-accent flex items-center justify-center transition-transform group-hover:scale-110">
-              <ArrowRight size={20} />
-            </span>
-            Fale com um especialista
-          </button>
-        </motion.div>
+        {/* Slide dots */}
+        <div className="flex gap-2 mt-8">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === current
+                  ? "w-6 h-1.5 bg-accent"
+                  : "w-1.5 h-1.5 bg-white/30 hover:bg-white/60"
+              }`}
+            />
+          ))}
+        </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <div className="w-[1px] h-12 bg-gradient-to-b from-white/0 to-white/60" />
-      </motion.div>
     </section>
   );
 };

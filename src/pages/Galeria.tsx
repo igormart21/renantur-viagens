@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Camera, Instagram, Heart, Share2 } from "lucide-react";
 
 const photos = [
-  { url: "https://images.unsplash.com/photo-1544984243-75a62ecd23c8?auto=format&fit=crop&q=80&w=800", size: "large" },
+  { url: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=800", size: "large" },
   { url: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=800", size: "medium" },
   { url: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=800", size: "small" },
   { url: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=800", size: "medium" },
