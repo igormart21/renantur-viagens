@@ -4,35 +4,35 @@ import { ArrowRight, MapPin } from "lucide-react";
 const circuits = [
   {
     id: 1,
-    region: "Nordeste",
-    title: "Circuito Nordeste",
-    subtitle: "Praias de águas cristalinas e paisagens únicas",
-    desc: "Das piscinas naturais de Maragogi às falésias de Porto de Galinhas, um roteiro completo pelo melhor do litoral nordestino.",
-    img: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=1400",
-    stops: ["Maceió", "Maragogi", "Porto de Galinhas"],
-    days: "7 a 10 dias",
+    region: "Argentina · Chile · Bolívia",
+    title: "Circuito Andino",
+    subtitle: "A cordilheira como você nunca viu",
+    desc: "Um roteiro épico pela espinha dorsal da América do Sul. De Mendoza às salinas bolivianas, passando pelas vinícolas argentinas e o deserto do Atacama.",
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Mendoza", "Santiago", "Atacama", "Salta", "Salar de Uyuni"],
+    days: "12 a 15 dias",
     color: "#FF6B57",
   },
   {
     id: 2,
-    region: "Sul",
-    title: "Circuito Sul",
-    subtitle: "Enogastronomia, neve e praias deslumbrantes",
-    desc: "Da magia europeia de Gramado às praias urbanas de Balneário Camboriú, passando pelas curitibanas charmosas e a ilha da magia.",
-    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=1400",
-    stops: ["Gramado", "Curitiba", "Florianópolis", "Balneário Camboriú"],
-    days: "8 a 12 dias",
+    region: "Argentina · Chile",
+    title: "Circuito Patagônia",
+    subtitle: "Fim do mundo, começo de tudo",
+    desc: "Das Torres del Paine às geleiras de El Calafate. Um roteiro entre dois países onde a natureza selvagem toma conta de tudo e cada paisagem parece pintada.",
+    img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Puerto Natales", "Torres del Paine", "El Calafate", "Ushuaia"],
+    days: "10 a 14 dias",
     color: "#3BB273",
   },
   {
     id: 3,
-    region: "Sudeste",
-    title: "Circuito Rio–Minas",
-    subtitle: "História, natureza e o melhor da costa verde",
-    desc: "Do Cristo Redentor às igrejas barrocas de Ouro Preto, com parada obrigatória nas enseadas de Angra dos Reis e Arraial do Cabo.",
-    img: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=80&w=1400",
-    stops: ["Rio de Janeiro", "Angra dos Reis", "Ouro Preto", "Tiradentes"],
-    days: "6 a 9 dias",
+    region: "Argentina",
+    title: "Circuito Inverno Argentina",
+    subtitle: "Neve, chocolate e paisagens alpinas",
+    desc: "Bariloche no inverno é um cartão-postal de outro mundo. Neve nas montanhas, lagos azuis e a culinária alemã que encantou gerações de viajantes.",
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1400",
+    stops: ["Buenos Aires", "Bariloche", "Villa La Angostura", "San Martín de los Andes"],
+    days: "8 a 10 dias",
     color: "#0F6D7A",
   },
 ];
@@ -44,7 +44,7 @@ export const RoadTripSection = () => {
       <div className="container mx-auto px-6 xl:px-12 pt-24 md:pt-32 pb-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <p className="editorial-label text-accent mb-3">Circuito Rodoviário pelo Brasil</p>
+            <p className="editorial-label text-accent mb-3">Circuito Rodoviário pela América do Sul</p>
             <h2
               className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight"
               style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}

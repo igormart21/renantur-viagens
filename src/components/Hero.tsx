@@ -4,28 +4,28 @@ import { MapPin } from "lucide-react";
 
 const slides = [
   {
-    img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=85&w=2560",
-    headline: "Descubra o Brasil",
-    sub: "com quem entende.",
-    place: "Fernando de Noronha, PE",
+    img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=85&w=2560",
+    headline: "Patagônia Argentina",
+    sub: "selvagem e deslumbrante.",
+    place: "Patagônia, Argentina",
   },
   {
-    img: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=85&w=2560",
-    headline: "Rio de Janeiro",
-    sub: "inesquecível.",
-    place: "Rio de Janeiro, RJ",
+    img: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=85&w=2560",
+    headline: "Torres del Paine",
+    sub: "natureza no limite.",
+    place: "Chile, América do Sul",
   },
   {
-    img: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=85&w=2560",
-    headline: "Nordeste paradisíaco",
-    sub: "te espera.",
-    place: "Maceió, AL",
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=85&w=2560",
+    headline: "Bariloche no inverno",
+    sub: "neve e chocolate.",
+    place: "Bariloche, Argentina",
   },
   {
-    img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=85&w=2560",
-    headline: "Gramado & Serra",
-    sub: "encantadores.",
-    place: "Gramado, RS",
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=85&w=2560",
+    headline: "Circuito Andino",
+    sub: "Argentina · Chile · Bolívia.",
+    place: "Cordilheira dos Andes",
   },
 ];
 

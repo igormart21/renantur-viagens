@@ -2,36 +2,36 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-type Region = "Nordeste" | "Sul" | "Sudeste";
+type Region = "Argentina" | "Chile" | "Peru & Bolívia";
 
 const destinations: Record<Region, { name: string; img: string; size: "lg" | "sm" }[]> = {
-  Nordeste: [
-    { name: "Maceió",              img: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=900",  size: "lg" },
-    { name: "Maragogi",            img: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Porto de Galinhas",   img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Salvador",            img: "https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?auto=format&fit=crop&q=80&w=900",  size: "lg" },
-    { name: "Fernando de Noronha", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Natal",               img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+  Argentina: [
+    { name: "Patagônia",           img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=900",  size: "lg" },
+    { name: "Bariloche",           img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Buenos Aires",        img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Ushuaia",             img: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?auto=format&fit=crop&q=80&w=900",  size: "lg" },
+    { name: "Mendoza",             img: "https://images.unsplash.com/photo-1624138784614-87fd1b6528f8?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Salta",               img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&q=80&w=900",  size: "sm" },
   ],
-  Sul: [
-    { name: "Gramado",             img: "https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?auto=format&fit=crop&q=80&w=900",  size: "lg" },
-    { name: "Florianópolis",       img: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Curitiba",            img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Balneário Camboriú",  img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=900",  size: "lg" },
-    { name: "Canela",              img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Foz do Iguaçu",       img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+  Chile: [
+    { name: "Torres del Paine",    img: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=900",  size: "lg" },
+    { name: "Atacama",             img: "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Valparaíso",          img: "https://images.unsplash.com/photo-1553697388-94e804e2f0f6?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Santiago",            img: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?auto=format&fit=crop&q=80&w=900",  size: "lg" },
+    { name: "Pucón",               img: "https://images.unsplash.com/photo-1592609931041-40265b692757?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Puerto Varas",        img: "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&q=80&w=900",  size: "sm" },
   ],
-  Sudeste: [
-    { name: "Rio de Janeiro",      img: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=80&w=900",  size: "lg" },
-    { name: "Angra dos Reis",      img: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Arraial do Cabo",     img: "https://images.unsplash.com/photo-1589556264800-08ae9e129a8c?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Ouro Preto",          img: "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&q=80&w=900",  size: "lg" },
-    { name: "Tiradentes",          img: "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=900",  size: "sm" },
-    { name: "Capitólio",           img: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+  "Peru & Bolívia": [
+    { name: "Machu Picchu",        img: "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&q=80&w=900",  size: "lg" },
+    { name: "Salar de Uyuni",      img: "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Cusco",               img: "https://images.unsplash.com/photo-1612294037637-ec328d0e075e?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Lago Titicaca",       img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=900",  size: "lg" },
+    { name: "La Paz",              img: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?auto=format&fit=crop&q=80&w=900",  size: "sm" },
+    { name: "Lima",                img: "https://images.unsplash.com/photo-1531968455001-5c5272a41129?auto=format&fit=crop&q=80&w=900",  size: "sm" },
   ],
 };
 
-const regions: Region[] = ["Nordeste", "Sul", "Sudeste"];
+const regions: Region[] = ["Argentina", "Chile", "Peru & Bolívia"];
 
 export const DestinationGrid = () => {
   const [activeRegion, setActiveRegion] = useState<Region>("Nordeste");
