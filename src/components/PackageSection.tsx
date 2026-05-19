@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Clock, ArrowRight } from "lucide-react";
+import { Clock, MapPin, ArrowRight } from "lucide-react";
 
 type Category = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
 
@@ -8,96 +8,160 @@ const packages = [
   {
     id: 1,
     name: "Circuito Andino",
+    flag: "🇦🇷🇨🇱🇧🇴",
     location: "Argentina · Chile · Bolívia",
+    subtitle: "Aventura pela Cordilheira",
+    includes: "Ônibus + Hotel + Passeios + Guia local + Transfer",
     duration: "12 dias",
-    price: "2.360",
-    img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=1000",
+    type: "Turismo de aventura",
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000",
     category: "Rodoviários" as Category,
     tag: "Mais vendido",
+    entry: "100,00",
+    installments: 12,
+    monthly: "188",
+    total: "2.360",
   },
   {
     id: 2,
     name: "Circuito Patagônia",
+    flag: "🇦🇷🇨🇱",
     location: "Argentina · Chile",
+    subtitle: "Natureza selvagem no fim do mundo",
+    includes: "Ônibus + Hotel + Passeios + Guia local + Transfer",
     duration: "10 dias",
-    price: "2.833",
-    img: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=1000",
+    type: "Ecoturismo",
+    img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=1000",
     category: "Rodoviários" as Category,
     tag: "Destaque",
+    entry: "100,00",
+    installments: 12,
+    monthly: "228",
+    total: "2.833",
   },
   {
     id: 3,
     name: "Circuito Inverno Argentina",
+    flag: "🇦🇷",
     location: "Bariloche · Mendoza",
+    subtitle: "Neve, chocolate e lagos alpinos",
+    includes: "Ônibus + Hotel + Passeios + Guia local + Transfer",
     duration: "8 dias",
-    price: "1.747",
+    type: "Turismo de inverno",
     img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1000",
     category: "Rodoviários" as Category,
     tag: "Inverno",
+    entry: "100,00",
+    installments: 12,
+    monthly: "137",
+    total: "1.747",
   },
   {
     id: 4,
     name: "Buenos Aires",
+    flag: "🇦🇷",
     location: "Argentina",
+    subtitle: "Tango, cultura e gastronomia",
+    includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",
     duration: "5 dias",
-    price: "1.890",
+    type: "Pacote Aéreo",
     img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80&w=1000",
     category: "Aéreos" as Category,
     tag: "Cidade",
+    entry: "100,00",
+    installments: 12,
+    monthly: "149",
+    total: "1.890",
   },
   {
     id: 5,
     name: "Cruzeiro América do Sul",
+    flag: "🇧🇷🇺🇾🇦🇷",
     location: "Brasil · Uruguai · Argentina",
+    subtitle: "Imersão no litoral sul-americano",
+    includes: "Cruzeiro + Cabine + Pensão completa + Entretenimento",
     duration: "7 noites",
-    price: "3.200",
+    type: "Cruzeiro marítimo",
     img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1000",
     category: "Cruzeiros" as Category,
     tag: "Oferta",
+    entry: "100,00",
+    installments: 12,
+    monthly: "258",
+    total: "3.200",
   },
   {
     id: 6,
     name: "Machu Picchu & Cusco",
+    flag: "🇵🇪",
     location: "Peru",
+    subtitle: "A maravilha do mundo inca",
+    includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",
     duration: "8 dias",
-    price: "5.200",
+    type: "Pacote Aéreo",
     img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1000",
     category: "Internacional" as Category,
     tag: "Exclusivo",
+    entry: "100,00",
+    installments: 12,
+    monthly: "425",
+    total: "5.200",
   },
   {
     id: 7,
-    name: "Atacama & Santiago",
-    location: "Chile",
-    duration: "7 dias",
-    price: "4.100",
+    name: "Deserto Atacama",
+    flag: "🇨🇱",
+    location: "Norte do Chile",
+    subtitle: "Imersão no deserto mais árido",
+    includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",
+    duration: "6 dias",
+    type: "Turismo de aventura",
     img: "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&q=80&w=1000",
     category: "Internacional" as Category,
-    tag: "Chile",
+    tag: "Paisagens",
+    entry: "100,00",
+    installments: 12,
+    monthly: "308",
+    total: "3.800",
   },
   {
     id: 8,
     name: "Salar de Uyuni",
+    flag: "🇧🇴",
     location: "Bolívia",
+    subtitle: "O maior espelho do mundo",
+    includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",
     duration: "6 dias",
-    price: "3.800",
+    type: "Turismo de aventura",
     img: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?auto=format&fit=crop&q=80&w=1000",
     category: "Internacional" as Category,
     tag: "Paisagens",
+    entry: "100,00",
+    installments: 12,
+    monthly: "275",
+    total: "3.400",
   },
 ];
 
 const categories: Category[] = ["Todos", "Aéreos", "Rodoviários", "Cruzeiros", "Internacional"];
 
+const categoryIcon: Record<string, string> = {
+  Aéreos: "✈️",
+  Rodoviários: "🚌",
+  Cruzeiros: "🚢",
+  Internacional: "🌎",
+};
+
 export const PackageSection = () => {
   const [active, setActive] = useState<Category>("Todos");
 
   const filtered =
-    active === "Todos" ? packages.slice(0, 8) : packages.filter((p) => p.category === active);
+    active === "Todos" ? packages : packages.filter((p) => p.category === active);
 
   return (
     <section className="py-24 md:py-32 bg-background overflow-hidden">
       <div className="container mx-auto px-6 xl:px-12">
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div>
@@ -131,10 +195,7 @@ export const PackageSection = () => {
         </div>
 
         {/* Package Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
-        >
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
           <AnimatePresence mode="popLayout">
             {filtered.map((pkg, i) => (
               <motion.article
@@ -144,7 +205,7 @@ export const PackageSection = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.94 }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-card group cursor-pointer border border-primary/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-400"
+                className="rounded-2xl overflow-hidden shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-400 cursor-pointer group flex flex-col"
               >
                 {/* Image */}
                 <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
@@ -153,52 +214,96 @@ export const PackageSection = () => {
                     alt={pkg.name}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* Tags */}
-                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-                    <span className="bg-white/92 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                      {pkg.category}
+                  {/* Category badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className="flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                      <span>{categoryIcon[pkg.category] ?? "🌐"}</span>
+                      {pkg.category === "Rodoviários" ? "Pacote Rodoviário" : pkg.type}
                     </span>
+                  </div>
+                  {/* Tag */}
+                  <div className="absolute top-3 right-3">
                     <span className="bg-accent text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
                       {pkg.tag}
                     </span>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                  {/* Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
+
+                  {/* Duration + type pills over gradient */}
+                  <div className="absolute bottom-3 left-3 flex gap-1.5">
+                    <span className="flex items-center gap-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold px-2.5 py-1 rounded-full">
+                      <Clock size={9} />
+                      {pkg.duration}
+                    </span>
+                    <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold px-2.5 py-1 rounded-full">
+                      {pkg.type}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-5">
-                  <div className="flex items-center gap-1.5 text-primary/40 text-[10px] mb-2 font-medium uppercase tracking-wider">
-                    <MapPin size={11} className="text-accent" />
+                {/* Dark info panel */}
+                <div className="bg-primary flex-1 p-5 flex flex-col gap-3">
+                  {/* Destination + flag */}
+                  <div>
+                    <h3
+                      className="text-white font-bold text-xl leading-tight"
+                      style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                    >
+                      {pkg.name} <span className="text-base">{pkg.flag}</span>
+                    </h3>
+                    <p className="text-white/55 text-xs font-medium mt-0.5">{pkg.subtitle}</p>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-1 text-white/40 text-[10px] font-medium">
+                    <MapPin size={10} className="text-accent" />
                     {pkg.location}
                   </div>
 
-                  <h3
-                    className="text-xl font-bold text-primary mb-3 leading-tight group-hover:text-accent transition-colors"
-                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-                  >
-                    {pkg.name}
-                  </h3>
+                  {/* Includes */}
+                  <p className="text-white/45 text-[10px] leading-relaxed border-t border-white/10 pt-3">
+                    {pkg.includes}
+                  </p>
 
-                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-primary/6">
-                    <div className="flex items-center gap-1.5 text-primary/50">
-                      <Clock size={13} />
-                      <span className="text-xs font-medium">{pkg.duration}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="block text-[9px] text-primary/30 font-bold uppercase tracking-wider">a partir de</span>
-                      <span
-                        className="text-lg font-bold text-primary"
-                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-                      >
-                        R$ {pkg.price}
+                  {/* Pricing */}
+                  <div className="mt-auto pt-2">
+                    <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mb-2">A partir de</p>
+
+                    {/* Entry pill */}
+                    <div className="inline-flex items-center bg-accent/20 border border-accent/40 rounded-full px-3 py-1 mb-2">
+                      <span className="text-accent text-[10px] font-bold">
+                        Entrada de R$ {pkg.entry} mais
                       </span>
                     </div>
+
+                    {/* Installments */}
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-white/60 text-sm font-bold">{pkg.installments}x de</span>
+                      <span
+                        className="text-white font-bold leading-none"
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.6rem,3vw,2rem)" }}
+                      >
+                        R$ {pkg.monthly}
+                      </span>
+                    </div>
+
+                    {/* À vista */}
+                    <p className="text-white/35 text-[10px] mt-1">
+                      Ou R$ {pkg.total} à vista
+                    </p>
                   </div>
 
-                  <button className="w-full flex items-center justify-center gap-2 text-sm font-semibold text-primary/60 hover:text-accent transition-colors group/btn py-1">
-                    Ver roteiro
-                    <ArrowRight size={15} className="transition-transform group-hover/btn:translate-x-1" />
-                  </button>
+                  {/* CTA */}
+                  <a
+                    href="https://wa.me/5524999999999"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 w-full flex items-center justify-center gap-2 bg-accent text-white text-xs font-bold py-3 rounded-xl hover:bg-accent/90 transition-colors"
+                  >
+                    Reservar agora
+                    <ArrowRight size={13} />
+                  </a>
                 </div>
               </motion.article>
             ))}

@@ -5,21 +5,28 @@ import { useState } from "react";
 type Cat = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
 
 const packages = [
-  { id: 1,  name: "Circuito Andino",              location: "Argentina · Chile · Bolívia", duration: "12 dias",   price: "2.360", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,    tag: "Mais vendido" },
-  { id: 2,  name: "Circuito Patagônia",          location: "Argentina · Chile",           duration: "10 dias",   price: "2.833", img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,    tag: "Destaque" },
-  { id: 3,  name: "Circuito Inverno Argentina",  location: "Bariloche · Mendoza",         duration: "8 dias",    price: "1.747", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,    tag: "Inverno" },
-  { id: 4,  name: "Buenos Aires",                location: "Argentina",                   duration: "5 dias",    price: "1.890", img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Cidade" },
-  { id: 5,  name: "Santiago & Valparaíso",       location: "Chile",                       duration: "5 dias",    price: "2.100", img: "https://images.unsplash.com/photo-1553697388-94e804e2f0f6?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,         tag: "Chile" },
-  { id: 6,  name: "Machu Picchu & Cusco",        location: "Peru",                        duration: "8 dias",    price: "5.200", img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "Exclusivo" },
-  { id: 7,  name: "Atacama",                     location: "Norte do Chile",              duration: "6 dias",    price: "3.800", img: "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "Paisagens" },
-  { id: 8,  name: "Salar de Uyuni",              location: "Bolívia",                     duration: "6 dias",    price: "3.400", img: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "Deserto" },
-  { id: 9,  name: "Cruzeiro América do Sul",     location: "Brasil · Uruguai · Argentina",duration: "7 noites",  price: "3.200", img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1000", category: "Cruzeiros" as Cat,      tag: "Oferta" },
-  { id: 10, name: "Cruzeiro Patagônia",          location: "Chile · Argentina",           duration: "10 noites", price: "5.900", img: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&q=80&w=1000", category: "Cruzeiros" as Cat,      tag: "Premium" },
-  { id: 11, name: "Torres del Paine",            location: "Patagônia, Chile",            duration: "7 dias",    price: "4.100", img: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "Natureza" },
-  { id: 12, name: "Circuito Andino Norte",       location: "Peru · Bolívia",              duration: "10 dias",   price: "3.900", img: "https://images.unsplash.com/photo-1612294037637-ec328d0e075e?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat,  tag: "América do Sul" },
+  { id: 1,  name: "Circuito Andino",             flag: "🇦🇷🇨🇱🇧🇴", location: "Argentina · Chile · Bolívia", subtitle: "Aventura pela Cordilheira",           includes: "Ônibus + Hotel + Passeios + Guia local + Transfer", duration: "12 dias",   type: "Turismo de aventura",    entry: "100,00", installments: 12, monthly: "188", total: "2.360", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,   tag: "Mais vendido" },
+  { id: 2,  name: "Circuito Patagônia",          flag: "🇦🇷🇨🇱",    location: "Argentina · Chile",           subtitle: "Natureza selvagem no fim do mundo",   includes: "Ônibus + Hotel + Passeios + Guia local + Transfer", duration: "10 dias",   type: "Ecoturismo",             entry: "100,00", installments: 12, monthly: "228", total: "2.833", img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,   tag: "Destaque" },
+  { id: 3,  name: "Inverno Argentina",           flag: "🇦🇷",       location: "Bariloche · Mendoza",         subtitle: "Neve, chocolate e lagos alpinos",     includes: "Ônibus + Hotel + Passeios + Guia local + Transfer", duration: "8 dias",    type: "Turismo de inverno",     entry: "100,00", installments: 12, monthly: "137", total: "1.747", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,   tag: "Inverno" },
+  { id: 4,  name: "Buenos Aires",                flag: "🇦🇷",       location: "Argentina",                   subtitle: "Tango, cultura e gastronomia",        includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "5 dias",    type: "Pacote Aéreo",           entry: "100,00", installments: 12, monthly: "149", total: "1.890", img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,        tag: "Cidade" },
+  { id: 5,  name: "Santiago & Valparaíso",       flag: "🇨🇱",       location: "Chile",                       subtitle: "Arte, vinho e arquitetura colonial",  includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "5 dias",    type: "Pacote Aéreo",           entry: "100,00", installments: 12, monthly: "166", total: "2.100", img: "https://images.unsplash.com/photo-1553697388-94e804e2f0f6?auto=format&fit=crop&q=80&w=1000", category: "Aéreos" as Cat,        tag: "Chile" },
+  { id: 6,  name: "Machu Picchu & Cusco",        flag: "🇵🇪",       location: "Peru",                        subtitle: "A maravilha do mundo inca",           includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "8 dias",    type: "Pacote Aéreo",           entry: "100,00", installments: 12, monthly: "425", total: "5.200", img: "https://images.unsplash.com/photo-1587547131116-a0655a526190?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat, tag: "Exclusivo" },
+  { id: 7,  name: "Deserto Atacama",             flag: "🇨🇱",       location: "Norte do Chile",              subtitle: "Imersão no deserto mais árido",       includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "6 dias",    type: "Turismo de aventura",    entry: "100,00", installments: 12, monthly: "308", total: "3.800", img: "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat, tag: "Paisagens" },
+  { id: 8,  name: "Salar de Uyuni",              flag: "🇧🇴",       location: "Bolívia",                     subtitle: "O maior espelho do mundo",            includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "6 dias",    type: "Turismo de aventura",    entry: "100,00", installments: 12, monthly: "275", total: "3.400", img: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat, tag: "Deserto" },
+  { id: 9,  name: "Cruzeiro América do Sul",     flag: "🇧🇷🇺🇾🇦🇷", location: "Brasil · Uruguai · Argentina", subtitle: "Litoral sul-americano a bordo",       includes: "Cruzeiro + Cabine + Pensão completa + Entretenimento", duration: "7 noites", type: "Cruzeiro marítimo",     entry: "100,00", installments: 12, monthly: "258", total: "3.200", img: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1000", category: "Cruzeiros" as Cat,     tag: "Oferta" },
+  { id: 10, name: "Cruzeiro Patagônia",          flag: "🇨🇱🇦🇷",    location: "Chile · Argentina",           subtitle: "Fjords e geleiras do fim do mundo",   includes: "Cruzeiro + Cabine + Pensão completa + Entretenimento", duration: "10 noites",type: "Cruzeiro marítimo",     entry: "100,00", installments: 12, monthly: "491", total: "5.900", img: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&q=80&w=1000", category: "Cruzeiros" as Cat,     tag: "Premium" },
+  { id: 11, name: "Torres del Paine",            flag: "🇨🇱",       location: "Patagônia, Chile",            subtitle: "O parque mais selvagem do Chile",     includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "7 dias",    type: "Ecoturismo",             entry: "100,00", installments: 12, monthly: "333", total: "4.100", img: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat, tag: "Natureza" },
+  { id: 12, name: "Circuito Andino Norte",       flag: "🇵🇪🇧🇴",    location: "Peru · Bolívia",              subtitle: "Incas, Titicaca e Salar de Uyuni",    includes: "Aéreo + Hotel + Passeios + Guia local + Transfer",  duration: "10 dias",   type: "Turismo cultural",       entry: "100,00", installments: 12, monthly: "316", total: "3.900", img: "https://images.unsplash.com/photo-1612294037637-ec328d0e075e?auto=format&fit=crop&q=80&w=1000", category: "Internacional" as Cat, tag: "América do Sul" },
 ];
 
 const categories: Cat[] = ["Todos", "Aéreos", "Rodoviários", "Cruzeiros", "Internacional"];
+
+const categoryIcon: Record<string, string> = {
+  Aéreos: "✈️",
+  Rodoviários: "🚌",
+  Cruzeiros: "🚢",
+  Internacional: "🌎",
+};
 
 export const Pacotes = () => {
   const [active, setActive] = useState<Cat>("Todos");
@@ -80,50 +87,97 @@ export const Pacotes = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="bg-white rounded-2xl overflow-hidden border border-primary/6 shadow-card group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-400"
+                className="rounded-2xl overflow-hidden shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-400 cursor-pointer group flex flex-col"
               >
+                {/* Image */}
                 <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
                   <img src={pkg.img} alt={pkg.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute top-3 left-3 right-3 flex gap-2">
-                    <span className="bg-white/92 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                      {pkg.category}
+
+                  {/* Category badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className="flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                      {categoryIcon[pkg.category] ?? "🌐"} {pkg.category === "Rodoviários" ? "Pacote Rodoviário" : pkg.type}
                     </span>
+                  </div>
+                  <div className="absolute top-3 right-3">
                     <span className="bg-accent text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
                       {pkg.tag}
                     </span>
                   </div>
+
+                  {/* Gradient to dark */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent" />
+
+                  {/* Duration + type pills */}
+                  <div className="absolute bottom-3 left-3 flex gap-1.5 flex-wrap">
+                    <span className="flex items-center gap-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold px-2.5 py-1 rounded-full">
+                      <Clock size={9} /> {pkg.duration}
+                    </span>
+                    <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold px-2.5 py-1 rounded-full">
+                      {pkg.type}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="p-5 md:p-6">
-                  <div className="flex items-center gap-1.5 text-primary/40 text-[10px] mb-2 font-medium uppercase tracking-wider">
-                    <MapPin size={11} className="text-accent" />
+                {/* Dark info panel */}
+                <div className="bg-primary flex-1 p-6 flex flex-col gap-3">
+                  {/* Destination */}
+                  <div>
+                    <h3
+                      className="text-white font-bold text-2xl leading-tight"
+                      style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                    >
+                      {pkg.name} <span className="text-lg">{pkg.flag}</span>
+                    </h3>
+                    <p className="text-white/55 text-xs font-medium mt-0.5">{pkg.subtitle}</p>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-1 text-white/40 text-[10px] font-medium">
+                    <MapPin size={10} className="text-accent" />
                     {pkg.location}
                   </div>
-                  <h3
-                    className="text-xl md:text-2xl font-bold text-primary mb-4 leading-tight group-hover:text-accent transition-colors"
-                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-                  >
-                    {pkg.name}
-                  </h3>
-                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-primary/6">
-                    <div className="flex items-center gap-1.5 text-primary/50">
-                      <Clock size={13} />
-                      <span className="text-xs font-medium">{pkg.duration}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="block text-[9px] text-primary/30 font-bold uppercase">a partir de</span>
-                      <span
-                        className="text-xl font-bold text-primary"
-                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-                      >
-                        R$ {pkg.price}
+
+                  {/* Includes */}
+                  <p className="text-white/40 text-[10px] leading-relaxed border-t border-white/10 pt-3">
+                    {pkg.includes}
+                  </p>
+
+                  {/* Pricing */}
+                  <div className="mt-auto pt-2">
+                    <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mb-2">A partir de</p>
+
+                    <div className="inline-flex items-center bg-accent/20 border border-accent/40 rounded-full px-3 py-1 mb-3">
+                      <span className="text-accent text-[10px] font-bold">
+                        Entrada de R$ {pkg.entry} mais
                       </span>
                     </div>
+
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-white/60 text-sm font-bold">{pkg.installments}x de</span>
+                      <span
+                        className="text-white font-bold"
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "2.2rem", lineHeight: 1 }}
+                      >
+                        R$ {pkg.monthly}
+                      </span>
+                    </div>
+
+                    <p className="text-white/35 text-[10px] mt-1.5">
+                      Ou R$ {pkg.total} à vista
+                    </p>
                   </div>
-                  <button className="w-full flex items-center justify-center gap-2 bg-primary/5 text-primary font-bold text-sm py-3 rounded-xl transition-all group-hover:bg-primary group-hover:text-white">
-                    Ver Detalhes
-                    <ArrowRight size={15} />
-                  </button>
+
+                  {/* CTA */}
+                  <a
+                    href="https://wa.me/5524999999999"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 w-full flex items-center justify-center gap-2 bg-accent text-white text-xs font-bold py-3 rounded-xl hover:bg-accent/90 transition-colors"
+                  >
+                    Reservar agora
+                    <ArrowRight size={13} />
+                  </a>
                 </div>
               </motion.article>
             ))}
@@ -147,7 +201,7 @@ export const Pacotes = () => {
               </p>
             </div>
             <a
-              href="https://wa.me/55"
+              href="https://wa.me/5524999999999"
               target="_blank"
               rel="noopener noreferrer"
               className="shrink-0 flex items-center gap-2 bg-accent text-white px-8 py-4 rounded-full font-bold text-sm shadow-xl shadow-accent/20 hover:scale-105 transition-transform"
