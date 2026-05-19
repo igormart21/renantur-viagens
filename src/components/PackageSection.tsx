@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, MapPin, ArrowRight } from "lucide-react";
+import { Clock, MapPin, ArrowRight, Bus, Plane, Ship, Globe } from "lucide-react";
 
 type Category = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
 
@@ -152,10 +152,12 @@ const categoryIcon: Record<string, string> = {
   Internacional: "🌎",
 };
 
-const transportImg: Record<string, string> = {
-  Rodoviários: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=300",
-  Aéreos: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=300",
-  Internacional: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=300",
+const TransportIcon = ({ category }: { category: string }) => {
+  const cls = "text-primary";
+  if (category === "Rodoviários") return <Bus size={22} className={cls} />;
+  if (category === "Aéreos") return <Plane size={22} className={cls} />;
+  if (category === "Cruzeiros") return <Ship size={22} className={cls} />;
+  return <Globe size={22} className={cls} />;
 };
 
 export const PackageSection = () => {
@@ -201,7 +203,7 @@ export const PackageSection = () => {
         </div>
 
         {/* Package Grid */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           <AnimatePresence mode="popLayout">
             {filtered.map((pkg, i) => (
               <motion.article
@@ -222,14 +224,14 @@ export const PackageSection = () => {
                   />
                   {/* Category badge */}
                   <div className="absolute top-3 left-3">
-                    <span className="flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                    <span className="flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-primary text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
                       <span>{categoryIcon[pkg.category] ?? "🌐"}</span>
-                      {pkg.category === "Rodoviários" ? "Pacote Rodoviário" : pkg.type}
+                      {pkg.category === "Rodoviários" ? "Rodoviário" : pkg.category}
                     </span>
                   </div>
                   {/* Tag */}
                   <div className="absolute top-3 right-3">
-                    <span className="bg-accent text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                    <span className="bg-accent text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
                       {pkg.tag}
                     </span>
                   </div>
@@ -238,25 +240,19 @@ export const PackageSection = () => {
 
                   {/* Duration + type pills over gradient */}
                   <div className="absolute bottom-3 left-3 flex gap-1.5">
-                    <span className="flex items-center gap-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold px-2.5 py-1 rounded-full">
-                      <Clock size={9} />
+                    <span className="flex items-center gap-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                      <Clock size={11} />
                       {pkg.duration}
                     </span>
-                    <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold px-2.5 py-1 rounded-full">
+                    <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-full">
                       {pkg.type}
                     </span>
                   </div>
 
-                  {/* Transport inset photo */}
-                  {transportImg[pkg.category] && (
-                    <div className="absolute bottom-3 right-3 w-16 h-11 rounded-lg overflow-hidden border-2 border-white shadow-lg">
-                      <img
-                        src={transportImg[pkg.category]}
-                        alt="transporte"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  )}
+                  {/* Transport icon badge */}
+                  <div className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center">
+                    <TransportIcon category={pkg.category} />
+                  </div>
                 </div>
 
                 {/* Dark info panel */}
@@ -264,49 +260,49 @@ export const PackageSection = () => {
                   {/* Destination + flag */}
                   <div>
                     <h3
-                      className="text-white font-bold text-xl leading-tight"
+                      className="text-white font-bold text-2xl leading-tight"
                       style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
                     >
-                      {pkg.name} <span className="text-base">{pkg.flag}</span>
+                      {pkg.name} <span className="text-lg">{pkg.flag}</span>
                     </h3>
-                    <p className="text-white/55 text-xs font-medium mt-0.5">{pkg.subtitle}</p>
+                    <p className="text-white/55 text-sm font-medium mt-0.5">{pkg.subtitle}</p>
                   </div>
 
                   {/* Location */}
-                  <div className="flex items-center gap-1 text-white/40 text-[10px] font-medium">
-                    <MapPin size={10} className="text-accent" />
+                  <div className="flex items-center gap-1.5 text-white/40 text-xs font-medium">
+                    <MapPin size={11} className="text-accent" />
                     {pkg.location}
                   </div>
 
                   {/* Includes */}
-                  <p className="text-white/45 text-[10px] leading-relaxed border-t border-white/10 pt-3">
+                  <p className="text-white/45 text-xs leading-relaxed border-t border-white/10 pt-3">
                     {pkg.includes}
                   </p>
 
                   {/* Pricing */}
                   <div className="mt-auto pt-2">
-                    <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mb-2">A partir de</p>
+                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-2">A partir de</p>
 
                     {/* Entry pill */}
-                    <div className="inline-flex items-center bg-accent/20 border border-accent/40 rounded-full px-3 py-1 mb-2">
-                      <span className="text-accent text-[10px] font-bold">
+                    <div className="inline-flex items-center bg-accent/20 border border-accent/40 rounded-full px-3 py-1.5 mb-2">
+                      <span className="text-accent text-xs font-bold">
                         Entrada de R$ {pkg.entry} mais
                       </span>
                     </div>
 
                     {/* Installments */}
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-white/60 text-sm font-bold">{pkg.installments}x de</span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-white/60 text-base font-bold">{pkg.installments}x de</span>
                       <span
                         className="text-white font-bold leading-none"
-                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.6rem,3vw,2rem)" }}
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "2.2rem" }}
                       >
                         R$ {pkg.monthly}
                       </span>
                     </div>
 
                     {/* À vista */}
-                    <p className="text-white/35 text-[10px] mt-1">
+                    <p className="text-white/35 text-xs mt-1">
                       Ou R$ {pkg.total} à vista
                     </p>
                   </div>
@@ -316,10 +312,10 @@ export const PackageSection = () => {
                     href="https://wa.me/5524999999999"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 w-full flex items-center justify-center gap-2 bg-accent text-white text-xs font-bold py-3 rounded-xl hover:bg-accent/90 transition-colors"
+                    className="mt-1 w-full flex items-center justify-center gap-2 bg-accent text-white text-sm font-bold py-3 rounded-xl hover:bg-accent/90 transition-colors"
                   >
                     Reservar agora
-                    <ArrowRight size={13} />
+                    <ArrowRight size={14} />
                   </a>
                 </div>
               </motion.article>

@@ -70,7 +70,7 @@ export const Navbar = () => {
             >
               <Link
                 to={link.href}
-                className="flex items-center gap-1 text-[11px] font-medium tracking-wide transition-colors hover:text-accent text-foreground/60"
+                className="flex items-center gap-1 text-sm font-semibold tracking-wide transition-colors hover:text-accent text-foreground/70"
               >
                 {link.name}
                 {link.dropdown && (
@@ -99,7 +99,7 @@ export const Navbar = () => {
                               ? "/pacotes"
                               : `/destinos/${item.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ /g, "-")}`
                           }
-                          className="block px-5 py-2.5 text-sm text-foreground/60 hover:text-accent hover:bg-primary/4 transition-colors font-medium"
+                          className="block px-5 py-2.5 text-sm text-foreground/70 hover:text-accent hover:bg-primary/4 transition-colors font-semibold"
                         >
                           {item}
                         </Link>
