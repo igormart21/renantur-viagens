@@ -34,7 +34,7 @@ const destinations: Record<Region, { name: string; img: string; size: "lg" | "sm
 const regions: Region[] = ["Argentina", "Chile", "Peru & Bolívia"];
 
 export const DestinationGrid = () => {
-  const [activeRegion, setActiveRegion] = useState<Region>("Nordeste");
+  const [activeRegion, setActiveRegion] = useState<Region>("Argentina");
 
   return (
     <section className="py-24 md:py-32 bg-white overflow-hidden">
