@@ -28,6 +28,12 @@ const categoryIcon: Record<string, string> = {
   Internacional: "🌎",
 };
 
+const transportImg: Record<string, string> = {
+  Rodoviários: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=300",
+  Aéreos: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=300",
+  Internacional: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=300",
+};
+
 export const Pacotes = () => {
   const [active, setActive] = useState<Cat>("Todos");
 
@@ -117,6 +123,17 @@ export const Pacotes = () => {
                       {pkg.type}
                     </span>
                   </div>
+
+                  {/* Transport inset photo */}
+                  {transportImg[pkg.category] && (
+                    <div className="absolute bottom-3 right-3 w-20 h-14 rounded-xl overflow-hidden border-2 border-white shadow-xl">
+                      <img
+                        src={transportImg[pkg.category]}
+                        alt="transporte"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Dark info panel */}
