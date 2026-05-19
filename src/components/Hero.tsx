@@ -1,4 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "befly-widget": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        language?: string;
+        "new-tab"?: string;
+      };
+    }
+  }
+}
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin } from "lucide-react";
 
@@ -31,49 +42,12 @@ const slides = [
 
 export const Hero = () => {
   const [current, setCurrent] = useState(0);
-  const beflyRef = useRef<HTMLDivElement>(null);
 
-  // Auto-advance slides
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
-
-  // Inject befly widget — script loaded on-demand so the element
-  // is guaranteed to be in the DOM when the script runs
-  useEffect(() => {
-    const container = beflyRef.current;
-    if (!container) return;
-
-    const mountWidget = () => {
-      container.innerHTML = "";
-      const widget = document.createElement("befly-widget");
-      widget.setAttribute("language", "pt-br");
-      widget.setAttribute("new-tab", "true");
-      container.appendChild(widget);
-    };
-
-    // Already loaded from a previous mount (e.g. HMR)
-    if (document.getElementById("befly-script")) {
-      mountWidget();
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = "befly-script";
-    script.type = "text/javascript";
-    script.src =
-      "https://static.onertravel.com/widget/search/production/widget-befly.js";
-    script.onload = () => {
-      // Tiny delay so the custom element has time to register
-      setTimeout(mountWidget, 80);
-    };
-    script.onerror = () => {
-      console.warn("Befly widget script failed to load");
-    };
-    document.head.appendChild(script);
   }, []);
 
   const slide = slides[current];
@@ -156,10 +130,8 @@ export const Hero = () => {
           transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-5xl mb-8"
         >
-          {/* White card that hosts the widget */}
-          <div className="bg-white rounded-2xl overflow-hidden shadow-2xl shadow-black/25">
-            {/* Widget container — injected via useEffect */}
-            <div ref={beflyRef} style={{ minHeight: 72 }} />
+          <div id="wrapper" className="bg-white rounded-2xl overflow-hidden shadow-2xl shadow-black/25">
+            <befly-widget language="pt-br" new-tab="true" />
           </div>
         </motion.div>
 
