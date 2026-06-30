@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, Bell } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { AdminMobileNav } from "@/components/admin/admin-mobile-nav";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
@@ -37,8 +38,9 @@ export default async function PanelLayout({
       {/* Conteúdo */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Topbar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-black/5 bg-[#f4f1ea]/80 px-6 backdrop-blur-md lg:px-8">
-          <div className="md:hidden">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-black/5 bg-[#f4f1ea]/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 md:hidden">
+            <AdminMobileNav novasCotacoes={novasCotacoes} />
             <span
               className="font-display text-xl font-bold text-primary"
               style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
@@ -47,7 +49,7 @@ export default async function PanelLayout({
             </span>
           </div>
           <div className="hidden md:block" />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link
               href="/"
               target="_blank"
