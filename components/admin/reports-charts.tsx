@@ -13,7 +13,7 @@ import {
   YAxis,
 } from "recharts";
 
-const COLORS = ["#0F6D7A", "#FF6B57", "#3BB273", "#94a3b8"];
+const COLORS = ["#0a2d57", "#f7941d", "#3bb273", "#94a3b8"];
 
 export function MonthlyContractsChart({
   data,
@@ -27,7 +27,7 @@ export function MonthlyContractsChart({
         <XAxis dataKey="month" fontSize={12} />
         <YAxis allowDecimals={false} fontSize={12} />
         <Tooltip />
-        <Bar dataKey="contratos" fill="#0F6D7A" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="contratos" fill="#0a2d57" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

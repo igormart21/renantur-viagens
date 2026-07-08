@@ -8,13 +8,13 @@ import {
 
 const styles = StyleSheet.create({
   page: { padding: 48, fontSize: 11, fontFamily: "Helvetica", color: "#2B2B2B", lineHeight: 1.5 },
-  header: { borderBottom: "2 solid #0F6D7A", paddingBottom: 12, marginBottom: 20 },
-  brand: { fontSize: 20, fontFamily: "Helvetica-Bold", color: "#0F6D7A" },
+  header: { borderBottom: "2 solid #0a2d57", paddingBottom: 12, marginBottom: 20 },
+  brand: { fontSize: 20, fontFamily: "Helvetica-Bold", color: "#0a2d57" },
   tagline: { fontSize: 9, color: "#666" },
   title: { fontSize: 15, fontFamily: "Helvetica-Bold", marginBottom: 4 },
   sub: { fontSize: 9, color: "#888", marginBottom: 16 },
   section: { marginBottom: 14 },
-  sectionTitle: { fontSize: 11, fontFamily: "Helvetica-Bold", color: "#0F6D7A", marginBottom: 6, textTransform: "uppercase" },
+  sectionTitle: { fontSize: 11, fontFamily: "Helvetica-Bold", color: "#0a2d57", marginBottom: 6, textTransform: "uppercase" },
   row: { flexDirection: "row", marginBottom: 3 },
   label: { width: 130, color: "#666" },
   value: { flex: 1, fontFamily: "Helvetica-Bold" },

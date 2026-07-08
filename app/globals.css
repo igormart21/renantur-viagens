@@ -135,6 +135,9 @@
 @theme {
   --color-success: #3bb273;
   --color-coral: #ff6b57;
+  --color-navy: #0a2d57;
+  --color-orange: #f7941d;
+  --color-wa: #00a88c;
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-body: "DM Sans", system-ui, sans-serif;
   --shadow-premium: 0 20px 40px -10px rgba(15, 109, 122, 0.08), 0 8px 16px -8px rgba(0, 0, 0, 0.04);
@@ -146,12 +149,17 @@
    como no index.css original do Vite. O admin (fora deste escopo)
    mantém o tema neutro do preset shadcn. */
 .theme-site {
-  --background: #f8f3ec;
-  --foreground: #2b2b2b;
-  --primary: #0f6d7a;
+  /* Nova identidade Renantur: azul-marinho + laranja + branco */
+  --background: #ffffff;
+  --foreground: #3d4a5d;
+  --primary: #0a2d57;
   --primary-foreground: #ffffff;
-  --accent: #ff6b57;
+  --accent: #f7941d;
   --accent-foreground: #ffffff;
+
+  /* Tipografia: Poppins (títulos) + Inter (texto) */
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
 
   min-height: 100vh;
   background-color: var(--background);
@@ -159,6 +167,11 @@
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Slogan / detalhes manuscritos */
+.font-script {
+  font-family: "Satisfy", cursive;
 }
 
 .theme-site h1,
@@ -180,7 +193,7 @@ html {
 }
 
 ::selection {
-  background: #0f6d7a;
+  background: #0a2d57;
   color: white;
 }
 
@@ -188,10 +201,10 @@ html {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f8f3ec;
+  background: #eef1f5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #0f6d7a;
+  background: #0a2d57;
   border-radius: 3px;
 }
 
@@ -281,53 +294,53 @@ html {
    ============================================================ */
 .theme-admin {
   --background: #ffffff;
-  --foreground: #2b2b2b;
+  --foreground: #3d4a5d;
   --card: #ffffff;
-  --card-foreground: #2b2b2b;
+  --card-foreground: #3d4a5d;
   --popover: #ffffff;
-  --popover-foreground: #2b2b2b;
+  --popover-foreground: #3d4a5d;
 
-  --primary: #0f6d7a;
+  --primary: #0a2d57;
   --primary-foreground: #ffffff;
 
-  --secondary: #eef4f4;
-  --secondary-foreground: #0f6d7a;
+  --secondary: #eef3f9;
+  --secondary-foreground: #0a2d57;
 
-  --muted: #f5f1ea;
-  --muted-foreground: #6b7280;
+  --muted: #f4f6f9;
+  --muted-foreground: #64748b;
 
-  --accent: #eef4f4;
-  --accent-foreground: #0f6d7a;
+  --accent: #fbeedb;
+  --accent-foreground: #f7941d;
 
   --destructive: #e5484d;
 
-  --border: #e7e1d8;
-  --input: #e7e1d8;
-  --ring: #0f6d7a;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0a2d57;
 
-  --chart-1: #0f6d7a;
-  --chart-2: #ff6b57;
+  --chart-1: #0a2d57;
+  --chart-2: #f7941d;
   --chart-3: #3bb273;
   --chart-4: #e0a458;
   --chart-5: #94a3b8;
 
-  --sidebar: #fdfcfa;
-  --sidebar-foreground: #2b2b2b;
-  --sidebar-primary: #0f6d7a;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #3d4a5d;
+  --sidebar-primary: #0a2d57;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f5f1ea;
-  --sidebar-accent-foreground: #0f6d7a;
-  --sidebar-border: #e7e1d8;
-  --sidebar-ring: #0f6d7a;
+  --sidebar-accent: #fef4e8;
+  --sidebar-accent-foreground: #f7941d;
+  --sidebar-border: #f1f5f9;
+  --sidebar-ring: #0a2d57;
 
   /* tipografia da marca no painel */
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Tom de fundo quente do app shell do admin */
+/* Tom de fundo do app shell do admin */
 .theme-admin .admin-shell {
-  background-color: #f4f1ea;
+  background-color: #f1f5f9;
 }
 
 /* Títulos em serifada (Cormorant) no painel */

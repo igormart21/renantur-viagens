@@ -35,16 +35,16 @@ function NavLink({
           : "text-white/65 hover:bg-white/10 hover:text-white",
       )}
     >
-      {/* indicador coral no item ativo */}
+      {/* indicador laranja no item ativo */}
       {active && (
-        <span className="absolute -left-3 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-[#ff6b57]" />
+        <span className="absolute -left-3 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-[#f7941d]" />
       )}
       <span className={cn("transition-colors", active ? "text-primary" : "text-white/55 group-hover:text-white")}>
         {icon}
       </span>
       <span className="truncate">{label}</span>
       {badge != null && badge > 0 && (
-        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ff6b57] px-1.5 text-[11px] font-bold text-white">
+        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#f7941d] px-1.5 text-[11px] font-bold text-white">
           {badge}
         </span>
       )}
@@ -75,7 +75,7 @@ export function AdminNav({ novasCotacoes = 0 }: { novasCotacoes?: number }) {
         >
           Renantur
         </p>
-        <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#ff6b57]">
+        <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#f7941d]">
           Painel
         </p>
       </div>

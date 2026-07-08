@@ -26,7 +26,7 @@ export function AdminMobileNav({ novasCotacoes = 0 }: { novasCotacoes?: number }
           <Menu className="size-5" />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-72 border-0 bg-[#0c5763] p-0 text-white [&>button]:text-white/70 [&>button]:hover:text-white">
+      <SheetContent side="left" className="w-72 border-0 bg-[#0a2d57] p-0 text-white [&>button]:text-white/70 [&>button]:hover:text-white">
         <SheetTitle className="sr-only">Menu do painel</SheetTitle>
         <AdminNav novasCotacoes={novasCotacoes} />
       </SheetContent>

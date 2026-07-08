@@ -31,14 +31,14 @@ export default async function PanelLayout({
   return (
     <div className="admin-shell flex min-h-screen">
       {/* Sidebar */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 bg-[#0c5763] md:block">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 bg-[#0a2d57] md:block">
         <AdminNav novasCotacoes={novasCotacoes} />
       </aside>
 
       {/* Conteúdo */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Topbar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-black/5 bg-[#f4f1ea]/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-black/5 bg-[#f1f5f9]/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 md:hidden">
             <AdminMobileNav novasCotacoes={novasCotacoes} />
             <span
