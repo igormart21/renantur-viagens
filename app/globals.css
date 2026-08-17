@@ -361,3 +361,29 @@ html {
 .admin-sidebar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Impressão isolada do roteiro (ver PackageDetail.tsx) */
+@media print {
+  body.print-roteiro-only * {
+    visibility: hidden;
+  }
+  body.print-roteiro-only #roteiro-imprimir,
+  body.print-roteiro-only #roteiro-imprimir * {
+    visibility: visible;
+  }
+  body.print-roteiro-only #roteiro-imprimir {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: #fff !important;
+    color: #000 !important;
+    padding: 24px;
+  }
+  body.print-roteiro-only #roteiro-imprimir * {
+    color: inherit !important;
+    background: transparent !important;
+  }
+  body.print-roteiro-only .no-print {
+    display: none !important;
+  }
+}

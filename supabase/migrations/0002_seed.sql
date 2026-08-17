@@ -90,7 +90,7 @@ insert into public.company_values (title, icon, description, sort) values
 -- Configurações do site --------------------------------------
 insert into public.site_settings (id, brand_name, brand_tagline, whatsapp, phone, email, location, google_reviews_url, about_title, about_text)
 values (
-  1,'Renantur','Viagens & Turismo','https://wa.me/55','(24) 99999-9999','contato@renantur.com.br','Sul Fluminense, RJ','https://share.google/JXGU2F8MGWyswp9ln',
+  1,'Renantur','Viagens & Turismo','https://wa.me/5524981266819','(24) 3026-4973','contato@renantur.com.br','Av. Getúlio Vargas, nº 767, sala 603 – Galeria Kennedy (ao lado do antigo Detran) – Volta Redonda, RJ','https://share.google/JXGU2F8MGWyswp9ln',
   'Especialistas em curadoria de destinos.',
   'A Renantur Viagens nasceu de um desejo profundo de elevar o padrão do turismo no Brasil. Não somos apenas uma agência; somos arquitetos de memórias. Nossa equipe é formada por viajantes experientes que entendem que o luxo não está apenas no valor, mas na autenticidade da experiência, no atendimento personalizado e na segurança de cada passo. Com sede no Sul Fluminense, servimos orgulhosamente cidades como Volta Redonda, Barra Mansa e Resende, conectando nossa região aos destinos mais deslumbrantes do planeta.'
 )

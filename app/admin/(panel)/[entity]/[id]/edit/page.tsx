@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Download } from "lucide-react";
 import { getEntity } from "@/lib/admin/entities";
 import { saveEntityRow } from "@/lib/admin/actions";
 import { createClient } from "@/lib/supabase/server";
@@ -38,9 +38,21 @@ export default async function EditEntityPage({
       >
         <ChevronLeft className="size-4" /> {entity.labelPlural}
       </Link>
-      <h1 className="mb-6 font-display text-[34px] font-bold leading-none text-primary">
-        Editar {entity.label}
-      </h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <h1 className="font-display text-[34px] font-bold leading-none text-primary">
+          Editar {entity.label}
+        </h1>
+        {entity.key === "pacotes" && typeof record.slug === "string" && record.slug && (
+          <a
+            href={`/pacotes/${record.slug}/pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-105"
+          >
+            <Download className="size-4" /> Baixar roteiro em PDF
+          </a>
+        )}
+      </div>
       <Card>
         <CardContent className="p-6 lg:p-8">
           <EntityForm

@@ -30,6 +30,8 @@ import {
   Lock,
   Users,
   CheckCircle2,
+  Printer,
+  Download,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -111,6 +113,7 @@ export function PackageDetail({
   testimonials: Testimonial[];
 }) {
   const name = s(pkg.name);
+  const slug = s(pkg.slug);
   const includesList =
     arr(pkg.highlights).length > 0
       ? arr(pkg.highlights)
@@ -163,6 +166,17 @@ export function PackageDetail({
     } catch {
       setStatus("error");
     }
+  }
+
+  function handlePrintRoteiro() {
+    if (typeof document === "undefined") return;
+    document.body.classList.add("print-roteiro-only");
+    const cleanup = () => {
+      document.body.classList.remove("print-roteiro-only");
+      window.removeEventListener("afterprint", cleanup);
+    };
+    window.addEventListener("afterprint", cleanup);
+    window.print();
   }
 
   const fieldCls =
@@ -369,7 +383,7 @@ export function PackageDetail({
       </section>
 
       {/* ════════ ROTEIRO ════════ */}
-      <section className="bg-primary py-20">
+      <section id="roteiro-imprimir" className="bg-primary py-20">
         <div className="container mx-auto px-6 xl:px-12">
           <div className="text-center mb-14">
             <p className="editorial-label text-accent mb-3">Dia a dia</p>
@@ -377,6 +391,26 @@ export function PackageDetail({
               Conheça o roteiro da <span className="italic font-medium text-white/70">sua viagem</span>
             </h2>
             <p className="mt-4 text-white/55">{s(pkg.duration) && `${s(pkg.duration)} · `}{local}</p>
+
+            <div className="no-print mt-7 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={handlePrintRoteiro}
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-[13px] font-bold text-white ring-1 ring-white/20 transition-colors hover:bg-white/20"
+              >
+                <Printer size={16} /> Imprimir roteiro
+              </button>
+              {slug && (
+                <a
+                  href={`/pacotes/${slug}/pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[13px] font-bold text-white transition-transform hover:scale-105"
+                >
+                  <Download size={16} /> Baixar em PDF
+                </a>
+              )}
+            </div>
           </div>
           <div className="max-w-3xl mx-auto relative border-l-2 border-white/15 pl-8 space-y-12">
             {roteiro.map((d, i) => (

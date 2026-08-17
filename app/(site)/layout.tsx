@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Navbar } from "@/components/site/home/navbar";
 import { Footer } from "@/components/site/home/footer";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
@@ -11,7 +12,9 @@ export default async function SiteLayout({
 
   return (
     <div className="theme-site relative overflow-x-hidden">
-      <Navbar settings={settings} />
+      <Suspense fallback={null}>
+        <Navbar settings={settings} />
+      </Suspense>
       {children}
       
       {/* Banner decorativo acima do rodapé */}

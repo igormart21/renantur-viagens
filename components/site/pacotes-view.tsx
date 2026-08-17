@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, MapPin, ArrowRight, Phone, Bus, Plane, Ship, Globe } from "lucide-react";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Cat = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
 
@@ -51,7 +52,10 @@ const TransportIcon = ({ category }: { category: string }) => {
 export type PackageItem = (typeof defaultPackages)[number];
 
 export function PacotesView({ items }: { items?: PackageItem[] }) {
-  const [active, setActive] = useState<Cat>("Todos");
+  const searchParams = useSearchParams();
+  const categoriaParam = searchParams.get("categoria");
+  const initialCat: Cat = categories.includes(categoriaParam as Cat) ? (categoriaParam as Cat) : "Todos";
+  const [active, setActive] = useState<Cat>(initialCat);
   const packages = items ?? defaultPackages;
 
   const filtered = active === "Todos" ? packages : packages.filter((p) => p.category === active);
@@ -227,7 +231,7 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
               </p>
             </div>
             <a
-              href="https://wa.me/5524999999999"
+              href="https://wa.me/5524981266819"
               target="_blank"
               rel="noopener noreferrer"
               className="shrink-0 flex items-center gap-2 bg-accent text-white px-8 py-4 rounded-full font-bold text-sm shadow-xl shadow-accent/20 hover:scale-105 transition-transform"

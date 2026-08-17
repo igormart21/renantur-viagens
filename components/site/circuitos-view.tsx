@@ -164,7 +164,7 @@ export const Circuitos = ({ items }: { items?: CircuitItem[] }) => {
                   </p>
                 </div>
                 <a
-                  href="https://wa.me/55"
+                  href="https://wa.me/5524981266819"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm text-white transition-all hover:scale-105"
@@ -192,7 +192,7 @@ export const Circuitos = ({ items }: { items?: CircuitItem[] }) => {
             Monte seu próprio roteiro rodoviário com as paradas que você mais quer conhecer.
           </p>
           <a
-            href="https://wa.me/55"
+            href="https://wa.me/5524981266819"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-accent text-white px-10 py-4 rounded-full font-bold text-sm shadow-xl shadow-accent/20 hover:scale-105 transition-transform"

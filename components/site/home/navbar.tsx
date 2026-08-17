@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { Link, useLocation } from "@/components/site/router-shim";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 import { DEFAULT_SETTINGS, type SiteSettings } from "@/lib/site-settings";
@@ -10,8 +11,8 @@ const LINKS = [
   { label: "Início", href: "/" },
   { label: "Pacotes", href: "/pacotes" },
   { label: "Excursões", href: "/circuitos" },
-  { label: "Internacionais", href: "/pacotes" },
-  { label: "Cruzeiros", href: "/pacotes" },
+  { label: "Internacionais", href: "/pacotes?categoria=Internacional" },
+  { label: "Cruzeiros", href: "/pacotes?categoria=Cruzeiros" },
   { label: "Aluguel de Ônibus", href: "/transfer" },
   { label: "Quem Somos", href: "/quem-somos" },
   { label: "Contato", href: "/contato" },
@@ -21,6 +22,7 @@ export const Navbar = ({ settings = DEFAULT_SETTINGS }: { settings?: SiteSetting
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -28,8 +30,13 @@ export const Navbar = ({ settings = DEFAULT_SETTINGS }: { settings?: SiteSetting
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = (href: string) => {
+    const [hrefPath, hrefQuery] = href.split("?");
+    if (hrefPath === "/") return pathname === "/";
+    if (pathname !== hrefPath) return false;
+    const hrefCategoria = new URLSearchParams(hrefQuery).get("categoria");
+    return hrefCategoria ? searchParams.get("categoria") === hrefCategoria : !searchParams.get("categoria");
+  };
 
   return (
     <header

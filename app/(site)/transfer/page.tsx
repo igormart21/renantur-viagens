@@ -74,10 +74,15 @@ export const Transfer = () => {
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-10">Precisa de um orçamento personalizado?</h2>
             <p className="text-white/60 text-lg mb-12 italic">Fale diretamente com nossa central de reservas e garanta seu transporte com exclusividade.</p>
-            <button className="bg-success text-white px-12 py-6 rounded-full font-bold text-xl flex items-center gap-3 mx-auto transition-transform hover:scale-105 shadow-2xl shadow-success/30">
+            <a
+              href="https://wa.me/5524981266819"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-success text-white px-12 py-6 rounded-full font-bold text-xl flex items-center gap-3 mx-auto w-fit transition-transform hover:scale-105 shadow-2xl shadow-success/30"
+            >
               <PhoneCall size={24} />
-              (24) 99999-9999
-            </button>
+              (24) 98126-6819
+            </a>
           </div>
           <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-transparent to-transparent" />
         </div>

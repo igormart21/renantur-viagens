@@ -20,10 +20,10 @@ export type SiteSettings = {
 export const DEFAULT_SETTINGS: SiteSettings = {
   brand_name: "Renantur",
   brand_tagline: "Viagens & Turismo",
-  whatsapp: "https://wa.me/55",
-  phone: "(24) 99999-9999",
+  whatsapp: "https://wa.me/5524981266819",
+  phone: "(24) 3026-4973",
   email: "contato@renantur.com.br",
-  location: "Sul Fluminense, RJ",
+  location: "Av. Getúlio Vargas, nº 767, sala 603 – Galeria Kennedy (ao lado do antigo Detran) – Volta Redonda, RJ",
   instagram: "https://www.instagram.com/renanturviagens",
   facebook: "https://www.facebook.com/share/1BFz6hnAYm/",
   google_reviews_url: "https://share.google/JXGU2F8MGWyswp9ln",

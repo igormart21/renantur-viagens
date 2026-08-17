@@ -30,7 +30,7 @@ export const Contato = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-primary/30 uppercase tracking-widest mb-2">Telefone</h3>
-                  <p className="text-2xl font-bold text-primary">(24) 99999-9999</p>
+                  <p className="text-2xl font-bold text-primary">(24) 3026-4973</p>
                   <p className="text-primary/40 font-medium">Segunda a Sexta, 09h às 18h</p>
                 </div>
               </div>
@@ -41,10 +41,15 @@ export const Contato = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-primary/30 uppercase tracking-widest mb-2">WhatsApp</h3>
-                  <p className="text-2xl font-bold text-primary">Atendimento Imediato</p>
-                  <button className="mt-4 bg-success text-white px-8 py-3 rounded-full font-bold text-sm shadow-lg shadow-success/20">
+                  <p className="text-2xl font-bold text-primary">(24) 98126-6819</p>
+                  <a
+                    href="https://wa.me/5524981266819"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-block bg-success text-white px-8 py-3 rounded-full font-bold text-sm shadow-lg shadow-success/20"
+                  >
                     Iniciar Conversa
-                  </button>
+                  </a>
                 </div>
               </div>
 
@@ -64,8 +69,8 @@ export const Contato = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-primary/30 uppercase tracking-widest mb-2">Localização</h3>
-                  <p className="text-2xl font-bold text-primary">Sul Fluminense, RJ</p>
-                  <p className="text-primary/40 font-medium">Atendimento Digital & Presencial sob Agendamento</p>
+                  <p className="text-2xl font-bold text-primary">Av. Getúlio Vargas, nº 767, sala 603</p>
+                  <p className="text-primary/40 font-medium">Galeria Kennedy, ao lado do antigo Detran — Volta Redonda, RJ</p>
                 </div>
               </div>
             </div>
