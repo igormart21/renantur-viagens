@@ -1,6 +1,5 @@
 import { Hero } from "@/components/site/home/hero";
 import { Categorias } from "@/components/site/home/categorias";
-import { Diferenciais } from "@/components/site/home/diferenciais";
 import { ProximasViagens } from "@/components/site/home/proximas-viagens";
 import { Stats } from "@/components/site/home/stats";
 import { Embarques } from "@/components/site/home/embarques";
@@ -44,7 +43,6 @@ export default async function HomePage() {
     <PageFade>
       <Hero settings={settings} slides={heroSlides} />
       <Categorias />
-      <Diferenciais />
       {packages.length > 0 && <ProximasViagens items={packages} />}
       <Stats />
       <Embarques />

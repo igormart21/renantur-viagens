@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Heart, Award, Users, MapPin, Target, Sparkles } from "lucide-react";
+import { Diferenciais } from "@/components/site/home/diferenciais";
 
 const values = [
   { title: "Paixão por Viajar", icon: Heart, desc: "Não apenas vendemos pacotes, compartilhamos o amor por descobrir o novo." },
@@ -73,6 +74,11 @@ export const QuemSomos = () => {
           </div>
         </div>
       </section>
+
+      {/* Por que escolher a Renantur */}
+      <div className="py-20 bg-white">
+        <Diferenciais />
+      </div>
 
       {/* Values Section */}
       <section className="py-32 bg-primary">
