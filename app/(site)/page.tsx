@@ -1,7 +1,6 @@
 import { Hero } from "@/components/site/home/hero";
 import { Categorias } from "@/components/site/home/categorias";
 import { ProximasViagens } from "@/components/site/home/proximas-viagens";
-import { Stats } from "@/components/site/home/stats";
 import { Embarques } from "@/components/site/home/embarques";
 import { Depoimentos } from "@/components/site/home/depoimentos";
 import { InstagramRow } from "@/components/site/home/instagram";
@@ -44,7 +43,6 @@ export default async function HomePage() {
       <Hero settings={settings} slides={heroSlides} />
       <Categorias />
       {packages.length > 0 && <ProximasViagens items={packages} />}
-      <Stats />
       <Embarques />
       <Depoimentos items={testimonials} />
       <InstagramRow photos={photos} url={settings.instagram} />
