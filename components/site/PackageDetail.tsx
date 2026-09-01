@@ -34,6 +34,7 @@ import {
   Download,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { DEFAULT_SETTINGS } from "@/lib/site-settings";
 
 type IconType = ComponentType<{ size?: number; className?: string }>;
 type Pkg = Record<string, unknown>;
@@ -108,9 +109,11 @@ const PASSOS = [
 export function PackageDetail({
   pkg,
   testimonials,
+  whatsapp,
 }: {
   pkg: Pkg;
   testimonials: Testimonial[];
+  whatsapp?: string;
 }) {
   const name = s(pkg.name);
   const slug = s(pkg.slug);
@@ -144,7 +147,7 @@ export function PackageDetail({
 
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", quando: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
-  const emailOk = /\S+@\S+\.\S+/.test(form.email);
+  const emailOk = form.email.trim() === "" || /\S+@\S+\.\S+/.test(form.email);
   const valid = form.nome.trim().length > 1 && emailOk && form.telefone.trim().length >= 8;
 
   async function submitQuote() {
@@ -163,6 +166,21 @@ export function PackageDetail({
       });
       if (error) throw error;
       setStatus("ok");
+
+      // Encaminha o lead para o WhatsApp da agência com uma mensagem pronta.
+      const linhas = [
+        `Olá! Vim do site da Renantur e quero um orçamento para o pacote *${name}*.`,
+        "",
+        `Nome: ${form.nome.trim()}`,
+      ];
+      if (form.email.trim()) linhas.push(`E-mail: ${form.email.trim()}`);
+      linhas.push(`WhatsApp: ${form.telefone.trim()}`);
+      if (form.quando) linhas.push(`Quando pretende viajar: ${form.quando}`);
+      const texto = linhas.join("\n");
+
+      const base = whatsapp || DEFAULT_SETTINGS.whatsapp;
+      const sep = base.includes("?") ? "&" : "?";
+      window.location.href = `${base}${sep}text=${encodeURIComponent(texto)}`;
     } catch {
       setStatus("error");
     }
@@ -293,7 +311,7 @@ export function PackageDetail({
                 </h3>
                 <div className="mt-4 space-y-3">
                   <input className={fieldCls} placeholder="Nome completo *" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-                  <input className={fieldCls} type="email" placeholder="E-mail *" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                  <input className={fieldCls} type="email" placeholder="E-mail (opcional)" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                   <input className={fieldCls} placeholder="WhatsApp *" value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} />
                   <select className={fieldCls} value={form.quando} onChange={(e) => setForm({ ...form, quando: e.target.value })}>
                     <option value="">Quando pretende viajar?</option>
@@ -312,7 +330,7 @@ export function PackageDetail({
                   </button>
                   {!valid && (
                     <p className="text-center text-[11px] text-white/50">
-                      Preencha nome, e-mail e WhatsApp para enviar.
+                      Preencha nome e WhatsApp para enviar.
                     </p>
                   )}
                   {status === "error" && (
