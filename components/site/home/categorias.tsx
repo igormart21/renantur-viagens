@@ -2,30 +2,22 @@ import {
   Plane,
   Bus,
   Ship,
-  Palmtree,
-  Snowflake,
-  FerrisWheel,
-  Heart,
-  Users,
+  Globe,
 } from "lucide-react";
 import { Link } from "@/components/site/router-shim";
 import { Reveal } from "./reveal";
 
 const CATS = [
-  { icon: Plane, label: "Internacionais", href: "/pacotes" },
-  { icon: Bus, label: "Excursões", href: "/circuitos" },
-  { icon: Ship, label: "Cruzeiros", href: "/pacotes" },
-  { icon: Palmtree, label: "Praia", href: "/pacotes" },
-  { icon: Snowflake, label: "Neve", href: "/pacotes" },
-  { icon: FerrisWheel, label: "Parques", href: "/pacotes" },
-  { icon: Heart, label: "Lua de Mel", href: "/pacotes" },
-  { icon: Users, label: "Família", href: "/pacotes" },
+  { icon: Bus, label: "Excursões Rodoviário", href: "/pacotes?categoria=Rodoviários" },
+  { icon: Globe, label: "Aéreo Internacional", href: "/pacotes?categoria=Internacional" },
+  { icon: Plane, label: "Aéreo Nacional", href: "/pacotes?categoria=Aéreos" },
+  { icon: Ship, label: "Cruzeiros", href: "/pacotes?categoria=Cruzeiros" },
 ];
 
 export const Categorias = () => {
   return (
     <section className="container mx-auto px-5 py-14 xl:px-10">
-      <div className="grid grid-cols-4 gap-3 md:gap-4 lg:grid-cols-8">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 sm:grid-cols-4">
         {CATS.map((c, i) => (
           <Reveal key={c.label} delay={i * 0.04}>
             <Link
