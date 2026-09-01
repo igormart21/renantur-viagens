@@ -65,13 +65,13 @@ export function ProximasViagens({ items }: { items: Pkg[] }) {
 
       <div
         ref={scroller}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="grid grid-flow-col grid-rows-2 snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((pkg) => (
           <Link
             key={s(pkg.id) || s(pkg.name)}
             to={`/pacotes/${slugify(pkg)}`}
-            className="group w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+            className="group w-[220px] snap-start overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
           >
             {/* imagem */}
             <div className="relative h-40 overflow-hidden">
