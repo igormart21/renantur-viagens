@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type ComponentType } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, type ComponentType } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
   MapPin,
@@ -128,6 +128,7 @@ export function PackageDetail({
   const faqRaw = (Array.isArray(pkg.faq) ? pkg.faq : []) as Faq[];
   const faq = faqRaw.length > 0 ? faqRaw : DEFAULT_FAQ;
   const gallery = arr(pkg.gallery);
+  const heroImages = Array.from(new Set([s(pkg.img), ...gallery].filter(Boolean)));
   const categoryLabel = CATEGORY_LABEL[s(pkg.category)] ?? "Pacote";
   const CatIcon = categoryIcon(s(pkg.category));
   const composition = includesList.slice(0, 3).join(" + ").toUpperCase();
@@ -144,6 +145,15 @@ export function PackageDetail({
           { day: "DURANTE A VIAGEM", title: "Passeios e experiências", place: local, description: `Roteiro completo com ${includesList.slice(0, 3).join(", ").toLowerCase() || "os passeios inclusos"} e acompanhamento de guia, aproveitando o melhor de cada lugar.` },
           { day: "ÚLTIMO DIA", title: "Despedida e retorno", place: local, description: "Tempo livre para os últimos momentos e transfer de retorno, levando na bagagem memórias inesquecíveis." },
         ];
+
+  const [heroIndex, setHeroIndex] = useState(0);
+  useEffect(() => {
+    if (heroImages.length < 2) return;
+    const timer = setInterval(() => {
+      setHeroIndex((i) => (i + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
 
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", quando: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
@@ -206,12 +216,22 @@ export function PackageDetail({
     <div className="bg-background">
       {/* ════════ HERO + INCLUSOS — card único ocupa as 2 linhas (sem buraco) ════════ */}
       <section className="relative">
-        {/* faixa de imagem no topo */}
+        {/* faixa de imagem no topo — slide com todas as fotos do pacote */}
         <div className="absolute inset-x-0 top-0 z-0 h-[540px] overflow-hidden">
-          {s(pkg.img) && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={s(pkg.img)} alt={name} className="h-full w-full object-cover object-center" />
-          )}
+          <AnimatePresence mode="sync">
+            {heroImages.length > 0 && (
+              <motion.img
+                key={heroImages[heroIndex]}
+                src={heroImages[heroIndex]}
+                alt={name}
+                initial={{ opacity: 0, scale: 1.06 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ opacity: { duration: 1 }, scale: { duration: 5, ease: "linear" } }}
+                className="absolute inset-0 h-full w-full object-cover object-center"
+              />
+            )}
+          </AnimatePresence>
           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/55 to-primary/25" />
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background to-transparent" />
         </div>
@@ -229,6 +249,22 @@ export function PackageDetail({
               <span className="text-white/75 font-bold">de um jeito único</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg text-white/85 leading-relaxed">{description}</p>
+
+            {heroImages.length > 1 && (
+              <div className="mt-8 flex items-center gap-2">
+                {heroImages.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setHeroIndex(i)}
+                    aria-label={`Ver foto ${i + 1} de ${heroImages.length}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === heroIndex ? "w-8 bg-accent" : "w-1.5 bg-white/40 hover:bg-white/70"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* CARD — col2 / ocupa row1 + row2 (fica ao lado do headline E dos inclusos) */}
