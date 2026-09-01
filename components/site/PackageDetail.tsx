@@ -296,9 +296,14 @@ export function PackageDetail({
             {/* preço */}
             <div className="mt-5 flex flex-col items-center gap-2.5">
               {s(pkg.entry) && (
-                <span className="rounded-md bg-accent px-3 py-1 text-[13px] font-bold">
-                  Entrada de R$ {s(pkg.entry)} mais
-                </span>
+                <>
+                  <span className="rounded-md bg-accent px-3 py-1 text-[13px] font-bold">
+                    Entrada de R$ {s(pkg.entry)} mais
+                  </span>
+                  <span className="text-[11px] font-medium text-white/55">
+                    Entrada no carnê ou boleto
+                  </span>
+                </>
               )}
               <div className="flex items-end gap-2">
                 <span className="mb-1 text-sm font-semibold text-white/70">{s(pkg.installments)}x de</span>
