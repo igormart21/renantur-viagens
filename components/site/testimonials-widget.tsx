@@ -22,6 +22,23 @@ const initials = (name: string) =>
 
 const isPhoto = (url: string) => /^https?:\/\//.test((url || "").trim());
 
+/**
+ * Fotos de perfil pessoais do Google (lh3.googleusercontent.com/a/...) bloqueiam
+ * requisições vindas do navegador (retornam 429). Passamos pelo nosso proxy
+ * server-side (/api/avatar) nesse caso; outras fontes de imagem seguem direto.
+ */
+function avatarSrc(url: string) {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "lh3.googleusercontent.com") {
+      return `/api/avatar?u=${encodeURIComponent(url)}`;
+    }
+  } catch {
+    // URL inválida — deixa como está, o <img> simplesmente não carrega
+  }
+  return url;
+}
+
 function GoogleIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
@@ -51,7 +68,7 @@ function ReviewCard({ t, url }: { t: Testimonial; url?: string }) {
       <div className="relative z-10 flex items-start gap-3">
         {isPhoto(t.photo) ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={t.photo} alt={t.name} className="size-11 shrink-0 rounded-full object-cover" />
+          <img src={avatarSrc(t.photo)} alt={t.name} className="size-11 shrink-0 rounded-full object-cover" />
         ) : (
           <span
             className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary font-display text-sm font-bold text-white"
