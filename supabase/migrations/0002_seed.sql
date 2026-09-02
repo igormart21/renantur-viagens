@@ -31,16 +31,9 @@ insert into public.circuits (region, title, subtitle, description, img, stops, d
 ('Argentina','Circuito Inverno Argentina','Buenos Aires · Bariloche · Villa La Angostura · San Martín','Bariloche no inverno é um cartão-postal de outro mundo. Neve nas montanhas, lagos azuis e a culinária alemã que encantou gerações — o melhor do inverno sul-americano.','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1400',array['Buenos Aires','Bariloche','Villa La Angostura','San Martín de los Andes'],'8 a 10 dias','1.747','#0F6D7A',3),
 ('Peru · Bolívia','Circuito Andino Norte','Lima · Cusco · Machu Picchu · Titicaca · La Paz','Das ruínas incas de Machu Picchu às águas místicas do Titicaca e ao Salar de Uyuni. Um roteiro entre civilizações ancestrais e paisagens que desafiam a imaginação.','https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&q=80&w=1400',array['Lima','Cusco','Machu Picchu','Lago Titicaca','La Paz'],'10 a 12 dias','3.900','#FF6B57',4);
 
--- Depoimentos (avaliações reais do Google, sincronizadas em 2026-09-02) -----
-insert into public.testimonials (name, city, stars, text, photo, sort) values
-('Elaine Carmo','Avaliação no Google',5,'A minha experiência foi a melhor possível, viagem super agradável, claro contratempos acontecem mas foi tudo conduzido da melhor maneira possível, nosso guia super atencioso. O que foi oferecido foi cumprido, hospedagem foi maravilhosa, café da manhã todos os dias maravilhoso e o atendimento também. Para minha primeira viagem eu amei. E super indico a Renantur Viagens.','',1),
-('Jeniffer Sayuri','Avaliação no Google',5,'Experiência nota 1000! Quero agradecer à Renantur por organizar tudo com tanto cuidado. Desde o primeiro contato até a volta para casa, foi tudo impecável. E um agradecimento especial ao guia Renan. Atencioso, paciente e com um conhecimento incrível sobre cada lugar. Fez toda diferença na nossa viagem! Recomendo de olhos fechados. Já estou planejando a próxima com vocês!','',2),
-('Mariane Braz','Avaliação no Google',5,'Super recomendo a Renantur Viagens pelo atendimento, responsabilidade, organização e atenção com cada um. Viagem para Foz do Iguaçu x Paraguai x Argentina foi extremamente espetacular... roteiro top.','',3),
-('Maria Lucia Soares','Avaliação no Google',5,'A viagem foi tranquila, Renan e os guias locais muito atenciosos. Todos os passeios inclusos na programação do pacote de viagem para Foz do Iguaçu foram realizados.','',4),
-('Valéria Andrade','Avaliação no Google',5,'Viagem para Sampa Sky sensacional, com visita ao Mercado Municipal e Bairro da Liberdade. Passeio com conforto e segurança, parabéns toda equipe Renantur Viagens.','',5),
-('Maria da Glória Silva','Avaliação no Google',5,'Amei ir no Sampa Sky e no mercadão, já na praça da Liberdade achei muito cheio, mas matei minha curiosidade sobre esse bairro... viagem tranquila com atendimento nota 10, principalmente por parte da organização representada pelo Renan, sempre junto, muito atencioso e paciente.','',6),
-('Ana Andrade','Avaliação no Google',5,'Recomendo viagens e passeios. Já fiz vários com a Renantur. Hotéis e pousadas bem localizados, animação e diversão garantidos.','',7),
-('Katia Araújo','Avaliação no Google',4,'Minha experiência com a Renantur foi muito boa, mas o quarto que fiquei no hotel não foi bom, pequeno e tinha uma beliche em cima da cama de casal que o meu esposo bateu a testa e cortou, o restaurante também não me agradou, tinha até sobremesa azeda. Mas isso não depende do Renan, que é muito competente.','',8);
+-- Depoimentos: ver 0006_testimonials_real.sql (avaliações reais do Google,
+-- com fotos anexadas nas avaliações — depende da coluna `photos`
+-- adicionada em 0005_testimonial_photos.sql).
 
 -- Galeria ----------------------------------------------------
 insert into public.gallery_photos (url, size, sort) values

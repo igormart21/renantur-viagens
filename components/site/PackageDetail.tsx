@@ -35,10 +35,10 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_SETTINGS } from "@/lib/site-settings";
+import { TestimonialCard, type Testimonial } from "@/components/site/testimonial-card";
 
 type IconType = ComponentType<{ size?: number; className?: string }>;
 type Pkg = Record<string, unknown>;
-type Testimonial = { name: string; city: string; stars: number; text: string; photo: string };
 type Day = { day?: string; title?: string; place?: string; description?: string };
 type Faq = { q?: string; a?: string };
 
@@ -110,10 +110,12 @@ export function PackageDetail({
   pkg,
   testimonials,
   whatsapp,
+  googleReviewsUrl,
 }: {
   pkg: Pkg;
   testimonials: Testimonial[];
   whatsapp?: string;
+  googleReviewsUrl?: string;
 }) {
   const name = s(pkg.name);
   const slug = s(pkg.slug);
@@ -560,25 +562,23 @@ export function PackageDetail({
               <h2 className="text-3xl md:text-4xl font-bold text-primary">O que nossos viajantes têm a dizer</h2>
             </div>
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {testimonials.slice(0, 3).map((t, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 shadow-card">
-                  <div className="flex items-center gap-3 mb-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={t.photo} alt={t.name} className="h-12 w-12 rounded-full object-cover" />
-                    <div>
-                      <p className="font-bold text-primary text-sm">{t.name}</p>
-                      <p className="text-primary/40 text-xs">{t.city}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-0.5 mb-3">
-                    {Array.from({ length: t.stars || 5 }).map((_, k) => (
-                      <Star key={k} size={14} className="text-accent" fill="#FF6B57" />
-                    ))}
-                  </div>
-                  <p className="text-primary/60 text-sm leading-relaxed">{t.text}</p>
-                </div>
+              {testimonials.slice(0, 6).map((t, i) => (
+                <TestimonialCard key={i} t={t} />
               ))}
             </div>
+            {googleReviewsUrl && (
+              <div className="mt-10 text-center">
+                <a
+                  href={googleReviewsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-primary/10 px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-accent/40 hover:text-accent"
+                >
+                  <Star size={16} className="text-accent" fill="#FF6B57" />
+                  Ver todas as avaliações no Google
+                </a>
+              </div>
+            )}
           </div>
         </section>
       )}

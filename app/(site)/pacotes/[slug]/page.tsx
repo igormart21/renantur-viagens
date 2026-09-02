@@ -21,7 +21,17 @@ export default async function PacoteDetalhePage({
     stars: Number((t as Record<string, unknown>).stars ?? 5),
     text: String((t as Record<string, unknown>).text ?? ""),
     photo: String((t as Record<string, unknown>).photo ?? ""),
+    photos: Array.isArray((t as Record<string, unknown>).photos)
+      ? ((t as Record<string, unknown>).photos as unknown[]).map(String)
+      : [],
   }));
 
-  return <PackageDetail pkg={pkg} testimonials={testimonials} whatsapp={settings.whatsapp} />;
+  return (
+    <PackageDetail
+      pkg={pkg}
+      testimonials={testimonials}
+      whatsapp={settings.whatsapp}
+      googleReviewsUrl={settings.google_reviews_url}
+    />
+  );
 }

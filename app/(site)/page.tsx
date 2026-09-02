@@ -35,6 +35,9 @@ export default async function HomePage() {
     stars: Number((t as Record<string, unknown>).stars ?? 5),
     text: String((t as Record<string, unknown>).text ?? ""),
     photo: String((t as Record<string, unknown>).photo ?? ""),
+    photos: Array.isArray((t as Record<string, unknown>).photos)
+      ? ((t as Record<string, unknown>).photos as unknown[]).map(String)
+      : [],
   }));
   const photos = (galleryRows ?? []).map((g) => String((g as Record<string, unknown>).url ?? ""));
 
@@ -44,7 +47,7 @@ export default async function HomePage() {
       <Categorias />
       {packages.length > 0 && <ProximasViagens items={packages} />}
       <Embarques />
-      <Depoimentos items={testimonials} />
+      <Depoimentos items={testimonials} googleUrl={settings.google_reviews_url} />
       <InstagramRow photos={photos} url={settings.instagram} />
       <CtaFinal settings={settings} />
     </PageFade>
