@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_SETTINGS } from "@/lib/site-settings";
-import { TestimonialCard, type Testimonial } from "@/components/site/testimonial-card";
+import { TestimonialsWidget, type Testimonial } from "@/components/site/testimonials-widget";
 
 type IconType = ComponentType<{ size?: number; className?: string }>;
 type Pkg = Record<string, unknown>;
@@ -561,24 +561,9 @@ export function PackageDetail({
               <p className="editorial-label text-accent mb-3">Depoimentos</p>
               <h2 className="text-3xl md:text-4xl font-bold text-primary">O que nossos viajantes têm a dizer</h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {testimonials.slice(0, 6).map((t, i) => (
-                <TestimonialCard key={i} t={t} />
-              ))}
+            <div className="max-w-5xl mx-auto">
+              <TestimonialsWidget items={testimonials} googleUrl={googleReviewsUrl} rating="5,0" count={78} />
             </div>
-            {googleReviewsUrl && (
-              <div className="mt-10 text-center">
-                <a
-                  href={googleReviewsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-primary/10 px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-accent/40 hover:text-accent"
-                >
-                  <Star size={16} className="text-accent" fill="#FF6B57" />
-                  Ver todas as avaliações no Google
-                </a>
-              </div>
-            )}
           </div>
         </section>
       )}

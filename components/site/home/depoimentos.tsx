@@ -1,6 +1,5 @@
-import { Star } from "lucide-react";
 import { Reveal } from "./reveal";
-import { TestimonialCard, type Testimonial } from "@/components/site/testimonial-card";
+import { TestimonialsWidget, type Testimonial } from "@/components/site/testimonials-widget";
 
 export const Depoimentos = ({
   items,
@@ -18,27 +17,9 @@ export const Depoimentos = ({
           Histórias reais de quem <span className="text-accent">viaja com a gente!</span>
         </h2>
       </div>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {items.slice(0, 8).map((t, i) => (
-          <Reveal key={i} delay={i * 0.06}>
-            <TestimonialCard t={t} />
-          </Reveal>
-        ))}
-      </div>
-      {googleUrl && (
-        <div className="mt-10 text-center">
-          <a
-            href={googleUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-black/10 px-5 py-2.5 text-sm font-semibold text-primary shadow-sm transition-colors hover:border-accent/40 hover:text-accent"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            <Star size={16} className="text-accent" fill="#F7941D" />
-            Ver todas as avaliações no Google
-          </a>
-        </div>
-      )}
+      <Reveal>
+        <TestimonialsWidget items={items} googleUrl={googleUrl} rating="5,0" count={78} />
+      </Reveal>
     </section>
   );
 };
