@@ -4,7 +4,6 @@ import { ProximasViagens } from "@/components/site/home/proximas-viagens";
 import { Embarques } from "@/components/site/home/embarques";
 import { Depoimentos } from "@/components/site/home/depoimentos";
 import { InstagramRow } from "@/components/site/home/instagram";
-import { CtaFinal } from "@/components/site/home/cta-final";
 import { PageFade } from "@/components/site/page-fade";
 import {
   getPackages,
@@ -49,7 +48,6 @@ export default async function HomePage() {
       <Embarques />
       <Depoimentos items={testimonials} googleUrl={settings.google_reviews_url} />
       <InstagramRow photos={photos} url={settings.instagram} />
-      <CtaFinal settings={settings} />
     </PageFade>
   );
 }
