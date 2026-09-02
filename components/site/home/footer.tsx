@@ -80,8 +80,8 @@ export const Footer = ({ settings = DEFAULT_SETTINGS }: { settings?: SiteSetting
         <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-5 py-5 text-xs text-white/40 sm:flex-row xl:px-10">
           <p>© 2026 {settings.brand_name} Viagens. Todos os direitos reservados.</p>
           <div className="flex gap-5">
-            <a href="#" className="transition-colors hover:text-white/70">Política de Privacidade</a>
-            <a href="#" className="transition-colors hover:text-white/70">Termos de Uso</a>
+            <Link to="/politica-de-privacidade" className="transition-colors hover:text-white/70">Política de Privacidade</Link>
+            <Link to="/termos-de-uso" className="transition-colors hover:text-white/70">Termos de Uso</Link>
           </div>
         </div>
       </div>
