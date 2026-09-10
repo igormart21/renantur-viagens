@@ -24,10 +24,12 @@ import {
   CheckCircle2,
   Printer,
   Download,
+  ZoomIn,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_SETTINGS } from "@/lib/site-settings";
 import { TestimonialsWidget, type Testimonial } from "@/components/site/testimonials-widget";
+import { ImageLightbox } from "@/components/site/image-lightbox";
 
 type IconType = ComponentType<{ size?: number; className?: string }>;
 type Pkg = Record<string, unknown>;
@@ -123,6 +125,8 @@ export function PackageDetail({
     }, 5000);
     return () => clearInterval(timer);
   }, [heroImages.length]);
+
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const [form, setForm] = useState({ nome: "", email: "", telefone: "", quando: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
@@ -445,13 +449,35 @@ export function PackageDetail({
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {gallery.map((url, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={url} alt="" className="h-56 w-full rounded-2xl object-cover shadow-card" />
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setLightboxIndex(i)}
+                  aria-label={`Ampliar imagem ${i + 1}`}
+                  className="group relative block h-56 w-full overflow-hidden rounded-2xl shadow-card"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt=""
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center bg-primary/0 text-white opacity-0 transition-all duration-300 group-hover:bg-primary/30 group-hover:opacity-100">
+                    <ZoomIn size={26} />
+                  </span>
+                </button>
               ))}
             </div>
           </div>
         </section>
       )}
+
+      <ImageLightbox
+        images={gallery}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
+      />
 
       {/* ════════ DEPOIMENTOS ════════ */}
       {testimonials.length > 0 && (
