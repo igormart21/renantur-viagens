@@ -12,12 +12,12 @@ import {
   Briefcase,
   Building2,
   Sparkles,
-  PhoneCall,
   ChevronLeft,
   ChevronRight,
   Bus,
   Snowflake,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 import { DEFAULT_SETTINGS } from "@/lib/site-settings";
 
 type IconType = ComponentType<{ size?: number; className?: string }>;
@@ -219,10 +219,6 @@ export function TransferView({
     whatsapp,
     "Olá! Gostaria de um orçamento de transporte com a Renantur Viagens.",
   );
-  const busHref = waLink(
-    whatsapp,
-    "Olá! Gostaria de um orçamento para aluguel de ônibus / van / micro-ônibus com a Renantur Viagens.",
-  );
 
   return (
     <motion.div
@@ -261,18 +257,6 @@ export function TransferView({
           galleryBadge={{ big: "100%", small: "Segurança & Conforto" }}
         />
 
-        <div className="mb-16 text-center">
-          <a
-            href={busHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-bold text-white shadow-xl shadow-primary/20 transition-transform hover:scale-105"
-          >
-            <Bus size={20} />
-            Solicitar orçamento de fretamento
-          </a>
-        </div>
-
         {/* ═══ SERVIÇOS ═══ */}
         <div className="mb-32 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {svcList.map((service, i) => {
@@ -297,26 +281,35 @@ export function TransferView({
         </div>
 
         {/* ═══ CTA ═══ */}
-        <div className="relative overflow-hidden rounded-[4rem] bg-primary p-12 text-center text-white md:p-24">
-          <div className="relative z-10 mx-auto max-w-3xl">
-            <h2 className="mb-10 text-4xl font-bold md:text-5xl">
-              Precisa de um orçamento personalizado?
-            </h2>
-            <p className="mb-12 text-lg italic text-white/60">
-              Fale diretamente com nossa central de reservas e garanta seu transporte com
-              exclusividade.
-            </p>
+        <div className="relative overflow-hidden rounded-3xl bg-primary p-10 md:p-16">
+          <div className="relative z-10 flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+            <div>
+              <h2
+                className="mb-3 text-3xl font-bold text-white md:text-4xl"
+                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+              >
+                Precisa de um orçamento personalizado?
+              </h2>
+              <p className="max-w-md text-sm leading-relaxed text-white/50">
+                Fale diretamente com nossa central de reservas e garanta seu transporte com
+                exclusividade.
+              </p>
+            </div>
             <a
               href={ctaHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="mx-auto flex w-fit items-center gap-3 rounded-full bg-success px-12 py-6 text-xl font-bold text-white shadow-2xl shadow-success/30 transition-transform hover:scale-105"
+              className="inline-flex shrink-0 items-center gap-2.5 rounded-full bg-[#00a88c] py-1.5 pl-1.5 pr-5 text-sm font-semibold text-white shadow-md transition-all hover:bg-[#008878] hover:shadow-lg"
+              style={{ fontFamily: "var(--font-display)" }}
             >
-              <PhoneCall size={24} />
+              <span className="flex size-8 items-center justify-center rounded-full bg-white">
+                <WhatsAppIcon size={18} className="text-[#00a88c]" />
+              </span>
               Falar no WhatsApp
             </a>
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-transparent to-transparent" />
+          <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/[0.04]" />
+          <div className="absolute -bottom-8 -right-4 h-60 w-60 rounded-full bg-accent/[0.08]" />
         </div>
       </div>
     </motion.div>
