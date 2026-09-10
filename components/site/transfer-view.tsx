@@ -12,7 +12,6 @@ import {
   Briefcase,
   Building2,
   Sparkles,
-  MessageSquare,
   PhoneCall,
   ChevronLeft,
   ChevronRight,
@@ -175,23 +174,12 @@ export function TransferView({
               Transfer <br />
               <span className="font-medium italic text-accent">Executivo.</span>
             </h1>
-            <p className="mb-10 text-xl leading-relaxed text-primary/60">
+            <p className="mb-8 text-xl leading-relaxed text-primary/60">
               Segurança, pontualidade e discrição. Oferecemos soluções completas de transporte
               terrestre com veículos de alto padrão e motoristas especializados.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <a
-                href={reservarHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-2xl bg-primary px-10 py-5 font-bold text-white shadow-xl shadow-primary/20 transition-transform hover:scale-105"
-              >
-                <MessageSquare size={20} />
-                Reservar agora
-              </a>
-            </div>
 
-            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-primary/70">
+            <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-primary/70">
               <span className="flex items-center gap-2">
                 <Shield size={16} className="text-accent" /> Motoristas verificados
               </span>
