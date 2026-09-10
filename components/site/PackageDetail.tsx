@@ -6,10 +6,7 @@ import {
   Check,
   MapPin,
   Star,
-  ChevronDown,
   ShieldCheck,
-  MousePointerClick,
-  MessageCircle,
   Plane,
   Bus,
   Ship,
@@ -23,9 +20,7 @@ import {
   UtensilsCrossed,
   PartyPopper,
   Footprints,
-  Quote,
   Lock,
-  Users,
   CheckCircle2,
   Printer,
   Download,
@@ -37,7 +32,6 @@ import { TestimonialsWidget, type Testimonial } from "@/components/site/testimon
 type IconType = ComponentType<{ size?: number; className?: string }>;
 type Pkg = Record<string, unknown>;
 type Day = { day?: string; title?: string; place?: string; description?: string };
-type Faq = { q?: string; a?: string };
 
 function s(v: unknown): string {
   return v == null ? "" : String(v);
@@ -81,21 +75,6 @@ const CATEGORY_LABEL: Record<string, string> = {
   Internacional: "Pacote Internacional",
 };
 
-const DEFAULT_FAQ: Faq[] = [
-  { q: "Como faço para reservar minha vaga?", a: "Preencha o formulário de orçamento nesta página. Em seguida, um especialista da Renantur entra em contato para finalizar a reserva." },
-  { q: "Como funciona o pagamento?", a: "Trabalhamos com entrada + parcelamento em até 12x no cartão, além de outras formas de pagamento. Fale com um especialista para as condições atualizadas." },
-  { q: "O que está incluso no pacote?", a: "Os itens inclusos estão listados na seção “O que está incluso”. Passeios e serviços opcionais podem ser contratados à parte." },
-  { q: "Há acompanhamento durante toda a viagem?", a: "Sim. Você conta com suporte da equipe Renantur e guias locais durante todo o roteiro." },
-  { q: "É possível personalizar o roteiro?", a: "Sim! Montamos roteiros sob medida de acordo com o seu perfil e suas datas." },
-  { q: "A Renantur é uma agência segura?", a: "Somos especialistas em turismo no Sul Fluminense, com atendimento humano do início ao fim da sua viagem." },
-];
-
-const PASSOS = [
-  { icon: MousePointerClick, title: "Escolha seu pacote", desc: "Encontre a experiência perfeita para você e sua família." },
-  { icon: MessageCircle, title: "Solicite seu orçamento", desc: "Preencha o formulário e receba roteiro e valores exclusivos." },
-  { icon: Plane, title: "Faça as malas", desc: "Deixe o resto com a gente e aproveite cada momento." },
-];
-
 export function PackageDetail({
   pkg,
   testimonials,
@@ -117,8 +96,6 @@ export function PackageDetail({
           .map((x) => x.trim())
           .filter(Boolean);
   const itinerary = (Array.isArray(pkg.itinerary) ? pkg.itinerary : []) as Day[];
-  const faqRaw = (Array.isArray(pkg.faq) ? pkg.faq : []) as Faq[];
-  const faq = faqRaw.length > 0 ? faqRaw : DEFAULT_FAQ;
   const gallery = arr(pkg.gallery);
   const heroImages = Array.from(new Set([s(pkg.img), ...gallery].filter(Boolean)));
   const categoryLabel = CATEGORY_LABEL[s(pkg.category)] ?? "Pacote";
@@ -458,28 +435,6 @@ export function PackageDetail({
         </div>
       </section>
 
-      {/* ════════ FAIXA CINEMATOGRÁFICA ════════ */}
-      <section className="relative overflow-hidden">
-        <div className="relative h-[42vh] min-h-[320px] w-full">
-          {s(pkg.img) && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={s(pkg.img)} alt={name} className="h-full w-full object-cover" />
-          )}
-          <div className="absolute inset-0 bg-primary/60" />
-          <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-            <div className="max-w-2xl">
-              <Quote className="mx-auto mb-4 text-accent" size={34} />
-              <p className="text-2xl md:text-3xl font-bold text-white leading-snug">
-                {s(pkg.subtitle) || `Descubra ${local} com a Renantur`}
-              </p>
-              <a href="#orcamento" className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-success px-8 py-3.5 text-[13px] font-bold uppercase tracking-wide text-white shadow-2xl shadow-success/30 transition-transform hover:scale-105">
-                Solicitar orçamento
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ════════ GALERIA ════════ */}
       {gallery.length > 0 && (
         <section className="py-20">
@@ -498,28 +453,6 @@ export function PackageDetail({
         </section>
       )}
 
-      {/* ════════ COMO FUNCIONA ════════ */}
-      <section className="py-20 bg-primary/[0.04]">
-        <div className="container mx-auto px-6 xl:px-12">
-          <div className="text-center mb-12">
-            <p className="editorial-label text-accent mb-3">Simples assim</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">A experiência Renantur</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {PASSOS.map((p, i) => (
-              <div key={p.title} className="relative rounded-3xl border border-primary/10 bg-white p-7 text-center shadow-card">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-white text-xs font-bold">{i + 1}</span>
-                <div className="mx-auto mb-4 mt-2 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <p.icon size={26} />
-                </div>
-                <h3 className="font-bold text-primary mb-1">{p.title}</h3>
-                <p className="text-primary/55 text-sm leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ════════ DEPOIMENTOS ════════ */}
       {testimonials.length > 0 && (
         <section className="py-20">
@@ -534,66 +467,6 @@ export function PackageDetail({
           </div>
         </section>
       )}
-
-      {/* ════════ ESPECIALISTA ════════ */}
-      <section className="bg-primary py-20">
-        <div className="container mx-auto px-6 xl:px-12 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-white">
-            <p className="editorial-label text-accent mb-3">Especialistas</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-5">
-              Viaje com quem é especialista em <span className="italic font-medium text-white/70">turismo</span>
-            </h2>
-            <p className="text-white/65 leading-relaxed">
-              A Renantur Viagens é especialista em experiências de viagem com atendimento humano e
-              roteiros sob medida. Com curadoria de hotéis, passeios e serviços, oferecemos conforto
-              e segurança do primeiro contato ao retorno — conectando o Sul Fluminense aos destinos
-              mais deslumbrantes.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-8">
-              {[
-                { icon: Users, n: "12 mil+", l: "viajantes" },
-                { icon: Star, n: "4,9", l: "avaliação" },
-                { icon: ShieldCheck, n: "100%", l: "seguro" },
-              ].map((x) => (
-                <div key={x.l} className="flex items-center gap-3">
-                  <x.icon size={28} className="text-accent" />
-                  <div>
-                    <p className="text-2xl font-bold leading-none">{x.n}</p>
-                    <p className="text-white/50 text-xs uppercase tracking-wide">{x.l}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={gallery[0] || s(pkg.img)}
-            alt={name}
-            className="h-80 w-full rounded-3xl object-cover shadow-2xl shadow-black/30"
-          />
-        </div>
-      </section>
-
-      {/* ════════ FAQ ════════ */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 xl:px-12 max-w-5xl">
-          <div className="text-center mb-12">
-            <p className="editorial-label text-accent mb-3">Tire suas dúvidas</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">Dúvidas frequentes</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-3">
-            {faq.map((f, i) => (
-              <details key={i} className="group rounded-2xl border border-primary/10 bg-white p-5">
-                <summary className="flex cursor-pointer items-center justify-between gap-3 font-bold text-primary list-none">
-                  {f.q}
-                  <ChevronDown size={18} className="shrink-0 text-accent transition-transform group-open:rotate-180" />
-                </summary>
-                <p className="mt-3 text-primary/60 leading-relaxed">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ════════ CTA FINAL ════════ */}
       <section className="pb-24 pt-4">
