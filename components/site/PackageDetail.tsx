@@ -8,9 +8,6 @@ import {
   Star,
   ChevronDown,
   ShieldCheck,
-  Heart,
-  CreditCard,
-  Sparkles,
   MousePointerClick,
   MessageCircle,
   Plane,
@@ -91,13 +88,6 @@ const DEFAULT_FAQ: Faq[] = [
   { q: "Há acompanhamento durante toda a viagem?", a: "Sim. Você conta com suporte da equipe Renantur e guias locais durante todo o roteiro." },
   { q: "É possível personalizar o roteiro?", a: "Sim! Montamos roteiros sob medida de acordo com o seu perfil e suas datas." },
   { q: "A Renantur é uma agência segura?", a: "Somos especialistas em turismo no Sul Fluminense, com atendimento humano do início ao fim da sua viagem." },
-];
-
-const DIFERENCIAIS = [
-  { icon: ShieldCheck, title: "Tudo organizado", desc: "Do embarque ao retorno, cuidamos de cada detalhe da sua viagem." },
-  { icon: Heart, title: "Atendimento humano", desc: "Pessoas reais acompanhando você em cada etapa da jornada." },
-  { icon: CreditCard, title: "Parcele em até 12x", desc: "Condições facilitadas no cartão para você viajar sem aperto." },
-  { icon: Sparkles, title: "Roteiros sob medida", desc: "Curadoria de destinos e experiências pensadas para você." },
 ];
 
 const PASSOS = [
@@ -416,29 +406,6 @@ export function PackageDetail({
             <a href="#orcamento" className={`mt-7 ${ctaCls}`}>
               Quero meu roteiro e valores
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ DIFERENCIAIS ════════ */}
-      <section className="py-16 bg-primary/[0.04]">
-        <div className="container mx-auto px-6 xl:px-12">
-          <div className="text-center mb-12">
-            <p className="editorial-label text-accent mb-3">Por que a Renantur</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">
-              Viaje com quem é <span className="italic font-medium text-primary/60">especialista</span>
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {DIFERENCIAIS.map((d) => (
-              <div key={d.title} className="rounded-3xl bg-white p-6 text-center shadow-card">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <d.icon size={26} />
-                </div>
-                <h3 className="font-bold text-primary mb-1">{d.title}</h3>
-                <p className="text-primary/55 text-sm leading-relaxed">{d.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
