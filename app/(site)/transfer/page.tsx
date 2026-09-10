@@ -1,4 +1,9 @@
-import { getTransferServices, getTransferGallery, getSettings } from "@/lib/queries";
+import {
+  getTransferServices,
+  getTransferGallery,
+  getBusGallery,
+  getSettings,
+} from "@/lib/queries";
 import { mergeSettings } from "@/lib/site-settings";
 import {
   TransferView,
@@ -7,9 +12,10 @@ import {
 } from "@/components/site/transfer-view";
 
 export default async function TransferPage() {
-  const [serviceRows, galleryRows, settingsRow] = await Promise.all([
+  const [serviceRows, galleryRows, busRows, settingsRow] = await Promise.all([
     getTransferServices(),
     getTransferGallery(),
+    getBusGallery(),
     getSettings(),
   ]);
   const settings = mergeSettings(settingsRow);
@@ -18,6 +24,7 @@ export default async function TransferPage() {
     <TransferView
       services={(serviceRows ?? undefined) as unknown as TransferService[] | undefined}
       gallery={(galleryRows ?? undefined) as unknown as TransferPhoto[] | undefined}
+      busGallery={(busRows ?? undefined) as unknown as TransferPhoto[] | undefined}
       whatsapp={settings.whatsapp}
     />
   );

@@ -34,6 +34,7 @@ export const getGallery = () => fetchActive("gallery_photos");
 export const getCategories = () => fetchActive("categories");
 export const getTransferServices = () => fetchActive("transfer_services");
 export const getTransferGallery = () => fetchActive("transfer_gallery");
+export const getBusGallery = () => fetchActive("bus_gallery");
 export const getHeroSlides = () => fetchActive("hero_slides");
 export const getDestinations = () => fetchActive("destinations");
 export const getCities = () => fetchActive("cities");

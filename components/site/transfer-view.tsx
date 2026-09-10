@@ -15,6 +15,8 @@ import {
   PhoneCall,
   ChevronLeft,
   ChevronRight,
+  Bus,
+  Snowflake,
 } from "lucide-react";
 import { DEFAULT_SETTINGS } from "@/lib/site-settings";
 
@@ -32,6 +34,7 @@ const ICONS: Record<string, IconType> = {
   Ship,
   Briefcase,
   Building2,
+  Bus,
 };
 
 function s(v: unknown) {
@@ -51,6 +54,14 @@ const DEFAULT_GALLERY: TransferPhoto[] = [
   { url: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=1200", caption: "Viagens executivas" },
 ];
 
+const DEFAULT_BUS_GALLERY: TransferPhoto[] = [
+  { url: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=1200", caption: "Ônibus executivo" },
+  { url: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=1200", caption: "Micro-ônibus" },
+  { url: "https://images.unsplash.com/photo-1556122071-e404eaedb77f?auto=format&fit=crop&q=80&w=1200", caption: "Van executiva" },
+];
+
+type GalleryBadge = { big: string; small: string };
+
 function waLink(whatsapp: string, message: string) {
   const base = whatsapp || DEFAULT_SETTINGS.whatsapp;
   const sep = base.includes("?") ? "&" : "?";
@@ -58,7 +69,7 @@ function waLink(whatsapp: string, message: string) {
 }
 
 /** Galeria em carrossel: passa sozinha e tem setas + indicadores, como nas outras seções. */
-function Gallery({ photos }: { photos: TransferPhoto[] }) {
+function Gallery({ photos, badge }: { photos: TransferPhoto[]; badge?: GalleryBadge }) {
   const [index, setIndex] = useState(0);
   const total = photos.length;
 
@@ -78,7 +89,7 @@ function Gallery({ photos }: { photos: TransferPhoto[] }) {
           <motion.img
             key={s(current.url) || index}
             src={s(current.url)}
-            alt={s(current.caption) || "Transfer Renantur"}
+            alt={s(current.caption) || "Renantur"}
             initial={{ opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
@@ -129,12 +140,62 @@ function Gallery({ photos }: { photos: TransferPhoto[] }) {
         )}
       </div>
 
-      <div className="absolute -bottom-8 -left-6 hidden rounded-[2rem] border border-primary/5 bg-white p-8 shadow-2xl md:block">
-        <div className="mb-1 text-4xl font-bold italic text-accent">100%</div>
-        <div className="text-[10px] font-bold uppercase leading-none tracking-widest text-primary/40">
-          Segurança &amp; Conforto
+      {badge && (
+        <div className="absolute -bottom-8 -left-6 hidden rounded-[2rem] border border-primary/5 bg-white p-8 shadow-2xl md:block">
+          <div className="mb-1 text-4xl font-bold italic text-accent">{badge.big}</div>
+          <div className="text-[10px] font-bold uppercase leading-none tracking-widest text-primary/40">
+            {badge.small}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type SectionBadge = { icon: IconType; label: string };
+
+/** Bloco "texto + carrossel ao lado" reutilizável nas duas seções. */
+function IntroSection({
+  headingTag: HeadingTag = "h2",
+  eyebrow,
+  titleTop,
+  titleBottom,
+  description,
+  badges,
+  photos,
+  galleryBadge,
+}: {
+  headingTag?: "h1" | "h2";
+  eyebrow: string;
+  titleTop: string;
+  titleBottom: string;
+  description: string;
+  badges: SectionBadge[];
+  photos: TransferPhoto[];
+  galleryBadge?: GalleryBadge;
+}) {
+  return (
+    <div className="mb-32 grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
+      <div>
+        <span className="mb-6 block text-xs font-bold uppercase tracking-[0.3em] text-accent">
+          {eyebrow}
+        </span>
+        <HeadingTag className="mb-8 text-5xl font-bold tracking-tight text-primary md:text-7xl">
+          {titleTop} <br />
+          <span className="font-medium italic text-accent">{titleBottom}</span>
+        </HeadingTag>
+        <p className="mb-8 text-xl leading-relaxed text-primary/60">{description}</p>
+
+        <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-primary/70">
+          {badges.map((b) => (
+            <span key={b.label} className="flex items-center gap-2">
+              <b.icon size={16} className="text-accent" /> {b.label}
+            </span>
+          ))}
         </div>
       </div>
+
+      <Gallery photos={photos} badge={galleryBadge} />
     </div>
   );
 }
@@ -142,18 +203,25 @@ function Gallery({ photos }: { photos: TransferPhoto[] }) {
 export function TransferView({
   services,
   gallery,
+  busGallery,
   whatsapp = DEFAULT_SETTINGS.whatsapp,
 }: {
   services?: TransferService[];
   gallery?: TransferPhoto[];
+  busGallery?: TransferPhoto[];
   whatsapp?: string;
 }) {
   const svcList = services?.length ? services : DEFAULT_SERVICES;
-  const photos = (gallery?.length ? gallery : DEFAULT_GALLERY).filter((p) => s(p.url));
+  const transferPhotos = (gallery?.length ? gallery : DEFAULT_GALLERY).filter((p) => s(p.url));
+  const busPhotos = (busGallery?.length ? busGallery : DEFAULT_BUS_GALLERY).filter((p) => s(p.url));
 
-  const reservarHref = waLink(
+  const ctaHref = waLink(
     whatsapp,
-    "Olá! Gostaria de reservar um transfer executivo com a Renantur Viagens.",
+    "Olá! Gostaria de um orçamento de transporte com a Renantur Viagens.",
+  );
+  const busHref = waLink(
+    whatsapp,
+    "Olá! Gostaria de um orçamento para aluguel de ônibus / van / micro-ônibus com a Renantur Viagens.",
   );
 
   return (
@@ -164,33 +232,45 @@ export function TransferView({
       className="min-h-screen bg-background pb-20 pt-32"
     >
       <div className="container mx-auto px-6 md:px-12">
-        {/* ═══ HERO ═══ */}
-        <div className="mb-32 grid grid-cols-1 items-center gap-20 lg:grid-cols-2">
-          <div>
-            <span className="mb-6 block text-xs font-bold uppercase tracking-[0.3em] text-accent">
-              Mobilidade Premium
-            </span>
-            <h1 className="mb-8 text-5xl font-bold tracking-tight text-primary md:text-7xl">
-              Transfer <br />
-              <span className="font-medium italic text-accent">Executivo.</span>
-            </h1>
-            <p className="mb-8 text-xl leading-relaxed text-primary/60">
-              Segurança, pontualidade e discrição. Oferecemos soluções completas de transporte
-              terrestre com veículos de alto padrão e motoristas especializados.
-            </p>
+        {/* ═══ SEÇÃO 1 — TRANSFER EXECUTIVO ═══ */}
+        <IntroSection
+          headingTag="h1"
+          eyebrow="Mobilidade Premium"
+          titleTop="Transfer"
+          titleBottom="Executivo."
+          description="Segurança, pontualidade e discrição. Oferecemos soluções completas de transporte terrestre com veículos de alto padrão e motoristas especializados."
+          badges={[
+            { icon: Shield, label: "Motoristas verificados" },
+            { icon: Sparkles, label: "Veículos de alto padrão" },
+          ]}
+          photos={transferPhotos}
+          galleryBadge={{ big: "100%", small: "Segurança & Conforto" }}
+        />
 
-            <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-primary/70">
-              <span className="flex items-center gap-2">
-                <Shield size={16} className="text-accent" /> Motoristas verificados
-              </span>
-              <span className="flex items-center gap-2">
-                <Sparkles size={16} className="text-accent" /> Veículos de alto padrão
-              </span>
-            </div>
-          </div>
+        {/* ═══ SEÇÃO 2 — ALUGUEL DE ÔNIBUS, VAN E MICRO-ÔNIBUS ═══ */}
+        <IntroSection
+          eyebrow="Frota para Grupos"
+          titleTop="Aluguel de Ônibus,"
+          titleBottom="Van & Micro-ônibus."
+          description="Fretamento para excursões, eventos corporativos, escolas e grupos. Ônibus, micro-ônibus e vans com ar-condicionado, motorista e documentação sempre em dia."
+          badges={[
+            { icon: Users, label: "Grupos de todos os tamanhos" },
+            { icon: Snowflake, label: "Ar-condicionado" },
+          ]}
+          photos={busPhotos}
+          galleryBadge={{ big: "100%", small: "Segurança & Conforto" }}
+        />
 
-          {/* galeria no lugar da imagem única */}
-          <Gallery photos={photos} />
+        <div className="mb-16 text-center">
+          <a
+            href={busHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-bold text-white shadow-xl shadow-primary/20 transition-transform hover:scale-105"
+          >
+            <Bus size={20} />
+            Solicitar orçamento de fretamento
+          </a>
         </div>
 
         {/* ═══ SERVIÇOS ═══ */}
@@ -227,7 +307,7 @@ export function TransferView({
               exclusividade.
             </p>
             <a
-              href={reservarHref}
+              href={ctaHref}
               target="_blank"
               rel="noopener noreferrer"
               className="mx-auto flex w-fit items-center gap-3 rounded-full bg-success px-12 py-6 text-xl font-bold text-white shadow-2xl shadow-success/30 transition-transform hover:scale-105"
