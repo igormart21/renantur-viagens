@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect, type ComponentType } from "react";
 import {
   Car,
@@ -84,19 +84,18 @@ function Gallery({ photos, badge }: { photos: TransferPhoto[]; badge?: GalleryBa
 
   return (
     <div className="relative">
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] shadow-2xl">
-        <AnimatePresence mode="sync">
-          <motion.img
-            key={s(current.url) || index}
-            src={s(current.url)}
-            alt={s(current.caption) || "Renantur"}
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ opacity: { duration: 0.9 }, scale: { duration: 6, ease: "linear" } }}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] bg-primary/5 shadow-2xl">
+        {photos.map((p, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={s(p.url) || i}
+            src={s(p.url)}
+            alt={s(p.caption) || "Renantur"}
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
+              i === index ? "opacity-100" : "opacity-0"
+            }`}
           />
-        </AnimatePresence>
+        ))}
 
         {s(current.caption) && (
           <span className="absolute left-4 top-4 z-10 rounded-full bg-black/50 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
