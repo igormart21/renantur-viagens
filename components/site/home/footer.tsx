@@ -5,7 +5,7 @@ import { DEFAULT_SETTINGS, type SiteSettings } from "@/lib/site-settings";
 
 const RAPIDOS = [
   { label: "Início", href: "/" },
-  { label: "Pacotes", href: "/pacotes" },
+  { label: "Excursões", href: "/pacotes" },
   { label: "Excursões", href: "/pacotes?categoria=Rodoviários" },
   { label: "Internacionais", href: "/pacotes" },
   { label: "Cruzeiros", href: "/pacotes" },

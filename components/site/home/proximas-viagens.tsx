@@ -44,7 +44,7 @@ export function ProximasViagens({ items }: { items: Pkg[] }) {
             className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Ver mais pacotes <ArrowRight size={16} />
+            Ver mais excursões <ArrowRight size={16} />
           </Link>
         </div>
       )}

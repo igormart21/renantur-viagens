@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, MapPin, ArrowRight, Phone, Bus, Plane, Ship, Globe } from "lucide-react";
+import { Clock, MapPin, ArrowRight, Bus, Plane, Ship, Globe } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { slugify } from "@/components/site/package-card";
@@ -65,9 +65,9 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
           className="text-5xl md:text-7xl font-bold text-primary leading-tight mb-4"
           style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
         >
-          Nossos
+          Nossas
           <br />
-          <em className="text-primary/50 font-semibold">Pacotes.</em>
+          <em className="text-primary/50 font-semibold">Excursões.</em>
         </h1>
         <p className="text-foreground/50 text-base md:text-lg max-w-xl leading-relaxed">
           Aéreos, rodoviários, cruzeiros e internacionais — encontre o roteiro perfeito para você e sua família.
@@ -204,35 +204,6 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
         </motion.div>
       </div>
 
-      {/* CTA Banner */}
-      <div className="container mx-auto px-6 xl:px-12 pb-24">
-        <div className="bg-primary rounded-3xl p-10 md:p-16 relative overflow-hidden">
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div>
-              <h2
-                className="text-3xl md:text-4xl font-bold text-white mb-3"
-                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-              >
-                Não encontrou o roteiro ideal?
-              </h2>
-              <p className="text-white/50 text-sm leading-relaxed max-w-md">
-                Criamos roteiros personalizados sob medida. Fale com nosso especialista e monte o seu.
-              </p>
-            </div>
-            <a
-              href="https://wa.me/5524981266819"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 flex items-center gap-2 bg-accent text-white px-8 py-4 rounded-full font-bold text-sm shadow-xl shadow-accent/20 hover:scale-105 transition-transform"
-            >
-              <Phone size={16} />
-              Falar com especialista
-            </a>
-          </div>
-          <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/4 rounded-full" />
-          <div className="absolute -bottom-8 -right-4 w-60 h-60 bg-accent/8 rounded-full" />
-        </div>
-      </div>
     </motion.div>
   );
 };
