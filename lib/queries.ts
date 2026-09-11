@@ -28,7 +28,6 @@ async function fetchActive(
 }
 
 export const getPackages = () => fetchActive("packages");
-export const getCircuits = () => fetchActive("circuits");
 export const getTestimonials = () => fetchActive("testimonials");
 export const getGallery = () => fetchActive("gallery_photos");
 export const getCategories = () => fetchActive("categories");

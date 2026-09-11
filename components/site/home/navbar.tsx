@@ -10,7 +10,7 @@ import { DEFAULT_SETTINGS, type SiteSettings } from "@/lib/site-settings";
 const LINKS = [
   { label: "Início", href: "/" },
   { label: "Pacotes", href: "/pacotes" },
-  { label: "Excursões", href: "/circuitos" },
+  { label: "Excursões", href: "/pacotes?categoria=Rodoviários" },
   { label: "Internacionais", href: "/pacotes?categoria=Internacional" },
   { label: "Cruzeiros", href: "/pacotes?categoria=Cruzeiros" },
   { label: "Aluguel de Ônibus", href: "/transfer" },
