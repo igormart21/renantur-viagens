@@ -4,18 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Clock, MapPin, ArrowRight, Phone, Bus, Plane, Ship, Globe } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { slugify } from "@/components/site/package-card";
 
 type Cat = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
-
-function pkgSlug(pkg: { slug?: string; name?: string }): string {
-  if (pkg.slug) return pkg.slug;
-  return String(pkg.name ?? "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 const defaultPackages = [
   { id: 1,  name: "Circuito Andino",             flag: "🇦🇷🇨🇱🇧🇴", location: "Argentina · Chile · Bolívia", subtitle: "Aventura pela Cordilheira",           includes: "Ônibus + Hotel + Passeios + Guia local + Transfer", duration: "12 dias",   type: "Turismo de aventura",    entry: "100,00", installments: 12, monthly: "188", total: "2.360", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000", category: "Rodoviários" as Cat,   tag: "Mais vendido" },
@@ -107,14 +98,15 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
         <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           <AnimatePresence mode="popLayout">
             {filtered.map((pkg, i) => (
-              <motion.article
+              <motion.a
+                href={`/pacotes/${slugify(pkg)}`}
                 layout
                 key={pkg.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="rounded-2xl overflow-hidden shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-400 cursor-pointer group flex flex-col"
+                className="rounded-2xl overflow-hidden shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-400 cursor-pointer group flex flex-col bg-white border border-black/5"
               >
                 {/* Image */}
                 <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
@@ -132,8 +124,8 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
                     </span>
                   </div>
 
-                  {/* Gradient to dark */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent" />
+                  {/* Gradient to dark (só na imagem, pra legibilidade das pills) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
                   {/* Duration + type pills */}
                   <div className="absolute bottom-3 left-3 flex gap-1.5 flex-wrap">
@@ -151,65 +143,62 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
                   </div>
                 </div>
 
-                {/* Dark info panel */}
-                <div className="bg-primary flex-1 p-6 flex flex-col gap-3">
+                {/* Info panel — corpo branco */}
+                <div className="bg-white flex-1 p-6 flex flex-col gap-3">
                   {/* Destination */}
                   <div>
                     <h3
-                      className="text-white font-bold text-2xl leading-tight"
+                      className="text-primary font-bold text-2xl leading-tight"
                       style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
                     >
                       {pkg.name} <span className="text-lg">{pkg.flag}</span>
                     </h3>
-                    <p className="text-white/55 text-sm font-medium mt-0.5">{pkg.subtitle}</p>
+                    <p className="text-primary/50 text-sm font-medium mt-0.5">{pkg.subtitle}</p>
                   </div>
 
                   {/* Location */}
-                  <div className="flex items-center gap-1.5 text-white/40 text-xs font-medium">
+                  <div className="flex items-center gap-1.5 text-primary/40 text-xs font-medium">
                     <MapPin size={11} className="text-accent" />
                     {pkg.location}
                   </div>
 
                   {/* Includes */}
-                  <p className="text-white/40 text-xs leading-relaxed border-t border-white/10 pt-3">
+                  <p className="text-primary/45 text-xs leading-relaxed border-t border-black/5 pt-3">
                     {pkg.includes}
                   </p>
 
                   {/* Pricing */}
                   <div className="mt-auto pt-2">
-                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-2">A partir de</p>
+                    <p className="text-primary/40 text-[10px] font-bold uppercase tracking-widest mb-2">A partir de</p>
 
-                    <div className="inline-flex items-center bg-accent/20 border border-accent/40 rounded-full px-3 py-1.5 mb-3">
+                    <div className="inline-flex items-center bg-accent/10 border border-accent/30 rounded-full px-3 py-1.5 mb-3">
                       <span className="text-accent text-xs font-bold">
                         Entrada de R$ {pkg.entry} mais
                       </span>
                     </div>
 
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-white/60 text-base font-bold">{pkg.installments}x de</span>
+                      <span className="text-primary/60 text-base font-bold">{pkg.installments}x de</span>
                       <span
-                        className="text-white font-bold"
+                        className="text-primary font-bold"
                         style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "2.2rem", lineHeight: 1 }}
                       >
                         R$ {pkg.monthly}
                       </span>
                     </div>
 
-                    <p className="text-white/35 text-xs mt-1.5">
+                    <p className="text-primary/40 text-xs mt-1.5">
                       Ou R$ {pkg.total} à vista
                     </p>
                   </div>
 
                   {/* CTA */}
-                  <a
-                    href={`/pacotes/${pkgSlug(pkg)}`}
-                    className="mt-2 w-full flex items-center justify-center gap-2 bg-accent text-white text-sm font-bold py-3 rounded-xl hover:bg-accent/90 transition-colors"
-                  >
+                  <span className="mt-2 w-full flex items-center justify-center gap-2 bg-accent text-white text-sm font-bold py-3 rounded-xl group-hover:bg-accent/90 transition-colors">
                     Ver detalhes
                     <ArrowRight size={14} />
-                  </a>
+                  </span>
                 </div>
-              </motion.article>
+              </motion.a>
             ))}
           </AnimatePresence>
         </motion.div>
