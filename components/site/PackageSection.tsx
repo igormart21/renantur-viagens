@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
+import { PackagePrice } from "./package-price";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, MapPin, ArrowRight, Bus, Plane, Ship, Globe } from "lucide-react";
 
@@ -294,30 +296,7 @@ export const PackageSection = ({ items }: { items?: typeof defaultPackages }) =>
 
                   {/* Pricing */}
                   <div className="mt-auto pt-2">
-                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-2">A partir de</p>
-
-                    {/* Entry pill */}
-                    <div className="inline-flex items-center bg-accent/20 border border-accent/40 rounded-full px-3 py-1.5 mb-2">
-                      <span className="text-accent text-xs font-bold">
-                        Entrada de R$ {pkg.entry} mais
-                      </span>
-                    </div>
-
-                    {/* Installments */}
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-white/60 text-base font-bold">{pkg.installments}x de</span>
-                      <span
-                        className="text-white font-bold leading-none"
-                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "2.2rem" }}
-                      >
-                        R$ {pkg.monthly}
-                      </span>
-                    </div>
-
-                    {/* À vista */}
-                    <p className="text-white/35 text-xs mt-1">
-                      Ou R$ {pkg.total} à vista
-                    </p>
+                    <PackagePrice pkg={pkg} dark />
                   </div>
 
                   {/* CTA */}
@@ -341,13 +320,13 @@ export const PackageSection = ({ items }: { items?: typeof defaultPackages }) =>
           viewport={{ once: true }}
           className="text-center mt-14"
         >
-          <a
+          <Link
             href="/pacotes"
             className="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-full font-bold text-sm tracking-wide hover:bg-primary/90 hover:scale-105 transition-all shadow-xl shadow-primary/20"
           >
             Ver todos os pacotes
             <ArrowRight size={16} />
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

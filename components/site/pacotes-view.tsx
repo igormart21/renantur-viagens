@@ -1,5 +1,6 @@
 "use client";
 
+import { PackagePrice } from "./package-price";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, MapPin, ArrowRight, Bus, Plane, Ship, Globe } from "lucide-react";
 import { useState } from "react";
@@ -169,27 +170,7 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
 
                   {/* Pricing */}
                   <div className="mt-auto pt-2">
-                    <p className="text-primary/40 text-[10px] font-bold uppercase tracking-widest mb-2">A partir de</p>
-
-                    <div className="inline-flex items-center bg-accent/10 border border-accent/30 rounded-full px-3 py-1.5 mb-3">
-                      <span className="text-accent text-xs font-bold">
-                        Entrada de R$ {pkg.entry} mais
-                      </span>
-                    </div>
-
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-primary/60 text-base font-bold">{pkg.installments}x de</span>
-                      <span
-                        className="text-primary font-bold"
-                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "2.2rem", lineHeight: 1 }}
-                      >
-                        R$ {pkg.monthly}
-                      </span>
-                    </div>
-
-                    <p className="text-primary/40 text-xs mt-1.5">
-                      Ou R$ {pkg.total} à vista
-                    </p>
+                    <PackagePrice pkg={pkg} />
                   </div>
 
                   {/* CTA */}

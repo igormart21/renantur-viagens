@@ -1,5 +1,6 @@
 "use server";
 
+import { validatePackage } from "./package-validation";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
@@ -19,6 +20,7 @@ function buildRow(entity: EntityConfig, formData: FormData) {
         row[field.key] = Number.isNaN(n as number) ? null : n;
         break;
       }
+      case "gallery":
       case "array": {
         const text = (raw as string) ?? "";
         row[field.key] = text
@@ -27,13 +29,13 @@ function buildRow(entity: EntityConfig, formData: FormData) {
           .filter(Boolean);
         break;
       }
+      case "structured":
       case "json": {
         const text = ((raw as string) ?? "").trim();
         try {
           row[field.key] = text ? JSON.parse(text) : [];
         } catch {
-          // JSON inválido: mantém como lista vazia para não quebrar o salvamento
-          row[field.key] = [];
+          throw new Error(`Preencha corretamente o campo ${field.label}.`);
         }
         break;
       }
@@ -51,19 +53,22 @@ export async function saveEntityRow(entityKey: string, formData: FormData) {
   const entity = getEntity(entityKey);
   if (!entity) throw new Error("Entidade desconhecida");
 
-  const supabase = await createClient();
-  const id = formData.get("id");
-  const row = buildRow(entity, formData);
-
-  if (id) {
-    const { error } = await supabase
-      .from(entity.table)
-      .update(row)
-      .eq("id", id);
-    if (error) throw new Error(error.message);
-  } else {
-    const { error } = await supabase.from(entity.table).insert(row);
-    if (error) throw new Error(error.message);
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Sua sessão expirou. Entre novamente para salvar." };
+    const id = formData.get("id");
+    const row = buildRow(entity, formData);
+    if (entityKey === "pacotes") validatePackage(row);
+    const { error } = id
+      ? await supabase.from(entity.table).update(row).eq("id", id)
+      : await supabase.from(entity.table).insert(row);
+    if (error) {
+      if (entityKey === "pacotes" && ["PGRST204", "42703"].includes(error.code)) return { error: "O cadastro precisa ser atualizado pela equipe técnica antes de salvar as novas informações do pacote." };
+      return { error: entityKey === "pacotes" && error.code === "23505" ? "Essa URL já está em uso. Escolha outra URL para o pacote." : error.message };
+    }
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Não foi possível salvar. Tente novamente." };
   }
 
   revalidatePath(`/admin/${entityKey}`);

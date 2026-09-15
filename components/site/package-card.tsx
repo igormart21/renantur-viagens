@@ -1,3 +1,4 @@
+import { PackagePrice } from "./package-price";
 import { Clock, Bus } from "lucide-react";
 import { Link } from "@/components/site/router-shim";
 
@@ -66,10 +67,7 @@ export function PackageCard({ pkg }: { pkg: Pkg }) {
         </div>
 
         <div className="mt-4 border-t border-black/5 pt-3">
-          <p className="text-[11px] text-[#9aa3af]">A partir de</p>
-          <p className="font-display text-xl font-extrabold text-[#00a88c]">
-            {s(pkg.installments)}x R$ {s(pkg.monthly)}
-          </p>
+          <PackagePrice pkg={pkg} />
         </div>
 
         <span className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg bg-accent py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-accent/90" style={{ fontFamily: "var(--font-display)" }}>

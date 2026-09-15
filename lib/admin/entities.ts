@@ -13,7 +13,9 @@ export type FieldType =
   | "select"
   | "array"
   | "json"
-  | "date";
+  | "date"
+  | "gallery"
+  | "structured";
 
 export interface FieldConfig {
   key: string;
@@ -22,6 +24,9 @@ export interface FieldConfig {
   options?: string[];
   required?: boolean;
   help?: string;
+  columns?: { key: string; label: string; multiline?: boolean }[];
+  itemLabel?: string;
+  section?: string;
 }
 
 export interface EntityConfig {
@@ -58,32 +63,27 @@ export const ENTITIES: EntityConfig[] = [
     listColumns: ["name", "category", "location", "total", "active"],
     defaultSort: "sort",
     fields: [
-      { key: "name", label: "Nome", type: "text", required: true },
-      { key: "slug", label: "Slug (URL da página)", type: "text", help: "Ex.: deserto-atacama" },
+      { key: "name", label: "Nome do pacote", type: "text", required: true, section: "1. Destino e apresentação" },
+      { key: "slug", label: "URL da página", type: "text", help: "Ex.: porto-de-galinhas. Se vazio, será gerada a partir do nome." },
+      { key: "location", label: "Destino / localização", type: "text" },
       { key: "flag", label: "Bandeiras (emoji)", type: "text" },
-      { key: "location", label: "Localização", type: "text" },
       { key: "subtitle", label: "Subtítulo", type: "text" },
-      { key: "includes", label: "Inclui", type: "textarea" },
-      { key: "duration", label: "Duração", type: "text", help: "Ex.: 12 dias" },
-      { key: "type", label: "Tipo", type: "text" },
-      {
-        key: "category",
-        label: "Categoria",
-        type: "select",
-        options: ["Aéreos", "Rodoviários", "Cruzeiros", "Internacional"],
-        required: true,
-      },
-      { key: "tag", label: "Tag/Selo", type: "text" },
-      { key: "entry", label: "Entrada (R$)", type: "text", help: "Ex.: 100,00" },
+      { key: "type", label: "Tipo de viagem", type: "text" },
+      { key: "category", label: "Categoria", type: "select", options: ["Aéreos", "Rodoviários", "Cruzeiros", "Internacional"], required: true },
+      { key: "tag", label: "Tag / selo", type: "text" },
+      { key: "description_long", label: "Introdução da viagem", type: "textarea", help: "Conte um pouco sobre o destino e a experiência da viagem." },
+      { key: "includes", label: "Resumo dos itens inclusos (vitrine)", type: "textarea", section: "2. O que o pacote oferece", help: "Ex.: Aéreo + Hotel + Passeios. Se vazio, será preenchido com a lista abaixo." },
+      { key: "highlights", label: "O que está incluso", type: "array", help: "Descreva todos os serviços inclusos, um item por linha." },
+      { key: "exclusions", label: "O que não está incluso", type: "array", help: "Um item por linha." },
+      { key: "duration", label: "Duração", type: "text" },
+      { key: "itinerary", label: "Roteiro dia a dia", type: "structured", section: "3. Dias, noites e roteiro", itemLabel: "Dia", columns: [{ key: "day", label: "Dia (ex.: 1º DIA)" }, { key: "title", label: "Título (ex.: City tour)" }, { key: "place", label: "Destino / local (ex.: hotel, parte sul)" }, { key: "description", label: "Descrição completa do dia", multiline: true }] },
+      { key: "img", label: "Imagem de capa", type: "image", section: "4. Fotos da viagem" },
+      { key: "gallery", label: "Galeria da viagem", type: "gallery", help: "Fotos dos pontos turísticos e da hospedagem." },
+      { key: "entry", label: "Entrada (R$)", type: "text", section: "5. Valores e pagamento" },
       { key: "installments", label: "Parcelas", type: "number" },
       { key: "monthly", label: "Valor da parcela (R$)", type: "text" },
-      { key: "total", label: "Total (R$)", type: "text" },
-      { key: "img", label: "Imagem", type: "image" },
-      { key: "description_long", label: "Descrição completa (página dedicada)", type: "textarea", help: "Texto de apresentação exibido na página do pacote" },
-      { key: "highlights", label: "O que inclui (checklist)", type: "array", help: "Um item por linha. Se vazio, usa o campo 'Inclui'." },
-      { key: "gallery", label: "Galeria (pontos turísticos / hospedagem)", type: "array", help: "Uma URL de imagem por linha" },
-      { key: "itinerary", label: "Roteiro (dias)", type: "json", help: 'Lista JSON: [{"day":"1º DIA","title":"Chegada","description":"..."}]' },
-      { key: "faq", label: "Dúvidas frequentes", type: "json", help: 'Lista JSON: [{"q":"Pergunta?","a":"Resposta"}]' },
+      { key: "total", label: "Valor à vista (R$)", type: "text" },
+      { key: "faq", label: "Dúvidas frequentes", type: "structured", section: "6. Informações adicionais e publicação", itemLabel: "Pergunta", columns: [{ key: "q", label: "Pergunta" }, { key: "a", label: "Resposta", multiline: true }] },
       activeField,
       sortField,
     ],

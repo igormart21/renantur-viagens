@@ -40,6 +40,9 @@ export interface ItineraryPdfData {
     location: string;
     duration: string;
     includes: string;
+    description_long?: string;
+    highlights?: string[];
+    exclusions?: string[];
     entry: string;
     installments: string;
     monthly: string;
@@ -57,7 +60,7 @@ export interface ItineraryPdfData {
 }
 
 export function ItineraryPdf({ pkg, itinerary, settings }: ItineraryPdfData) {
-  const includesList = pkg.includes
+  const includesList = pkg.highlights?.length ? pkg.highlights : pkg.includes
     .split(/\s*\+\s*/)
     .map((x) => x.trim())
     .filter(Boolean);
@@ -77,13 +80,15 @@ export function ItineraryPdf({ pkg, itinerary, settings }: ItineraryPdfData) {
           {pkg.duration ? `${pkg.duration} · ` : ""}{pkg.location || pkg.name}
         </Text>
 
+        {pkg.description_long && <View style={styles.section}><Text>{pkg.description_long}</Text></View>}
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Resumo do pacote</Text>
           <View style={styles.row}><Text style={styles.label}>Destino</Text><Text style={styles.value}>{pkg.location || "—"}</Text></View>
           <View style={styles.row}><Text style={styles.label}>Duração</Text><Text style={styles.value}>{pkg.duration || "—"}</Text></View>
           {pkg.entry ? (
             <View style={styles.row}><Text style={styles.label}>Entrada</Text><Text style={styles.value}>R$ {pkg.entry}</Text></View>
-          ) : null}
+          ) : pkg.monthly ? <View style={styles.row}><Text style={styles.label}>Entrada</Text><Text style={styles.value}>Sem entrada</Text></View> : null}
           {pkg.monthly ? (
             <View style={styles.row}><Text style={styles.label}>Parcelas</Text><Text style={styles.value}>{pkg.installments}x de R$ {pkg.monthly}</Text></View>
           ) : null}
@@ -100,6 +105,11 @@ export function ItineraryPdf({ pkg, itinerary, settings }: ItineraryPdfData) {
             ))}
           </View>
         )}
+
+        {!!pkg.exclusions?.length && <View style={styles.section}>
+          <Text style={styles.sectionTitle}>O que não está incluso</Text>
+          {pkg.exclusions.map((item, i) => <Text key={i} style={styles.includeChip}>• {item}</Text>)}
+        </View>}
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Dia a dia</Text>

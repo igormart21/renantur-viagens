@@ -43,12 +43,9 @@ function arr(v: unknown): string[] {
 }
 
 /** Ícone do selo de categoria. */
-function categoryIcon(category: string): IconType {
-  if (category === "Rodoviários") return Bus;
-  if (category === "Cruzeiros") return Ship;
-  if (category === "Internacional") return Globe;
-  return Plane;
-}
+const CATEGORY_ICONS: Record<string, IconType> = {
+  Rodoviários: Bus, Cruzeiros: Ship, Internacional: Globe, Aéreos: Plane,
+};
 
 /** Ícone de cada item incluso, conforme o texto. */
 function includeIcon(text: string): IconType {
@@ -88,6 +85,8 @@ export function PackageDetail({
   whatsapp?: string;
   googleReviewsUrl?: string;
 }) {
+  const financed = Number(pkg.installments) > 0 && Boolean(pkg.monthly);
+  const hasEntry = Number(s(pkg.entry).replace(/\./g, "").replace(",", ".")) > 0;
   const name = s(pkg.name);
   const slug = s(pkg.slug);
   const includesList =
@@ -99,9 +98,10 @@ export function PackageDetail({
           .filter(Boolean);
   const itinerary = (Array.isArray(pkg.itinerary) ? pkg.itinerary : []) as Day[];
   const gallery = arr(pkg.gallery);
+  const exclusions = arr(pkg.exclusions);
   const heroImages = Array.from(new Set([s(pkg.img), ...gallery].filter(Boolean)));
   const categoryLabel = CATEGORY_LABEL[s(pkg.category)] ?? "Pacote";
-  const CatIcon = categoryIcon(s(pkg.category));
+  const CatIcon = CATEGORY_ICONS[s(pkg.category)] ?? Plane;
   const composition = includesList.slice(0, 3).join(" + ").toUpperCase();
   const local = s(pkg.location) || name;
   const description =
@@ -221,7 +221,7 @@ export function PackageDetail({
               Descubra <span className="text-accent">{name}</span>{" "}
               <span className="text-white/75 font-bold">de um jeito único</span>
             </h1>
-            <p className="mt-6 max-w-lg text-lg text-white/85 leading-relaxed">{description}</p>
+            <p className="mt-6 max-w-lg text-lg text-white/85 leading-relaxed whitespace-pre-line">{description}</p>
 
             {heroImages.length > 1 && (
               <div className="mt-8 flex items-center gap-2">
@@ -268,7 +268,7 @@ export function PackageDetail({
 
             {/* preço */}
             <div className="mt-5 flex flex-col items-center gap-2.5">
-              {s(pkg.entry) && (
+              {financed && hasEntry && (
                 <>
                   <span className="rounded-md bg-accent px-3 py-1 text-[13px] font-bold">
                     Entrada de R$ {s(pkg.entry)} mais
@@ -278,12 +278,13 @@ export function PackageDetail({
                   </span>
                 </>
               )}
-              <div className="flex items-end gap-2">
+              {financed && !hasEntry && <span className="rounded-md bg-accent px-3 py-1 text-sm font-bold">Sem entrada</span>}
+              {financed && <div className="flex flex-wrap items-end justify-center gap-2">
                 <span className="mb-1 text-sm font-semibold text-white/70">{s(pkg.installments)}x de</span>
                 <span className="text-xl font-bold">R$</span>
                 <span className="text-5xl font-extrabold leading-none">{s(pkg.monthly)}</span>
                 <span className="mb-2 rounded-md bg-accent px-2 py-0.5 text-[11px] font-bold">sem juros</span>
-              </div>
+              </div>}
               {s(pkg.total) && (
                 <span className="rounded-md bg-white/15 px-3 py-1 text-[11px] font-bold tracking-wide">
                   R$ {s(pkg.total)} À VISTA
@@ -380,6 +381,14 @@ export function PackageDetail({
                 );
               })}
             </ul>
+            {exclusions.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-lg font-bold text-primary">O que não está incluso</h3>
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-primary/70">
+                  {exclusions.map((item, i) => <li key={i}>{item}</li>)}
+                </ul>
+              </div>
+            )}
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-primary/70">
               <span className="flex items-center gap-2"><Star size={16} className="text-accent" fill="#FF6B57" />Mais de 12.000 viajantes</span>
               <span className="flex items-center gap-2"><Lock size={16} className="text-success" />Seus dados protegidos</span>
@@ -432,7 +441,7 @@ export function PackageDetail({
                     <MapPin size={13} className="text-accent" />{d.place}
                   </p>
                 )}
-                {d.description && <p className="text-white/60 leading-relaxed">{d.description}</p>}
+                {d.description && <p className="text-white/60 leading-relaxed whitespace-pre-line">{d.description}</p>}
               </div>
             ))}
           </div>
@@ -460,6 +469,8 @@ export function PackageDetail({
                   <img
                     src={url}
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <span className="absolute inset-0 flex items-center justify-center bg-primary/0 text-white opacity-0 transition-all duration-300 group-hover:bg-primary/30 group-hover:opacity-100">
