@@ -8,8 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FadeIn } from "@/components/admin/fade-in";
 import { LucideIcon } from "@/components/admin/lucide-icon";
+import { ImageUpload } from "@/components/admin/image-upload";
+import { DEFAULT_CONTRACT_TERMS } from "@/lib/contract-terms";
 
-type Field = { key: string; label: string; placeholder?: string; type?: "textarea" };
+type Field = { key: string; label: string; placeholder?: string; help?: string; type?: "textarea" | "image" };
 
 const SECTIONS: { title: string; icon: string; desc: string; full?: boolean; fields: Field[] }[] = [
   {
@@ -43,6 +45,16 @@ const SECTIONS: { title: string; icon: string; desc: string; full?: boolean; fie
       { key: "instagram", label: "Instagram (URL)", placeholder: "https://instagram.com/..." },
       { key: "facebook", label: "Facebook (URL)", placeholder: "https://facebook.com/..." },
       { key: "google_reviews_url", label: "Avaliações Google (URL)", placeholder: "https://..." },
+    ],
+  },
+  {
+    title: "Documentos (voucher e contrato)",
+    icon: "FileSignature",
+    desc: "Logo e cláusulas usadas nos PDFs de voucher e contrato.",
+    full: true,
+    fields: [
+      { key: "logo_url", label: "Logo", type: "image", help: "PNG ou JPG. Se vazio, usa a logo padrão da Renantur." },
+      { key: "contract_terms", label: "Cláusulas do contrato", type: "textarea", help: "Uma cláusula por parágrafo. A numeração é feita automaticamente; as observações da venda entram como última cláusula." },
     ],
   },
   {
@@ -113,11 +125,19 @@ export default async function ConfiguracoesPage() {
                       className={`space-y-1.5 ${f.type === "textarea" ? "sm:col-span-2" : ""}`}
                     >
                       <Label htmlFor={f.key}>{f.label}</Label>
-                      {f.type === "textarea" ? (
-                        <Textarea id={f.key} name={f.key} rows={6} defaultValue={val(f.key)} />
+                      {f.type === "image" ? (
+                        <ImageUpload name={f.key} defaultValue={val(f.key)} pdfSafe />
+                      ) : f.type === "textarea" ? (
+                        <Textarea
+                          id={f.key}
+                          name={f.key}
+                          rows={f.key === "contract_terms" ? 12 : 6}
+                          defaultValue={val(f.key) || (f.key === "contract_terms" ? DEFAULT_CONTRACT_TERMS : "")}
+                        />
                       ) : (
                         <Input id={f.key} name={f.key} placeholder={f.placeholder} defaultValue={val(f.key)} />
                       )}
+                      {f.help && <p className="text-xs text-muted-foreground">{f.help}</p>}
                     </div>
                   ))}
                 </div>

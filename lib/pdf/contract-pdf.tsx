@@ -1,15 +1,18 @@
 import {
   Document,
+  Image,
   Page,
   Text,
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
+import { contractClauses } from "@/lib/contract-terms";
 
 const styles = StyleSheet.create({
   page: { padding: 48, fontSize: 11, fontFamily: "Helvetica", color: "#2B2B2B", lineHeight: 1.5 },
-  header: { borderBottom: "2 solid #0a2d57", paddingBottom: 12, marginBottom: 20 },
-  brand: { fontSize: 20, fontFamily: "Helvetica-Bold", color: "#0a2d57" },
+  header: { borderBottom: "2 solid #0a2d57", paddingBottom: 12, marginBottom: 20, flexDirection: "row", alignItems: "center", gap: 14 },
+  logo: { width: 90 },
+  brand: { fontSize: 20, fontFamily: "Helvetica-Bold", color: "#0a2d57", lineHeight: 1.2, marginBottom: 4 },
   tagline: { fontSize: 9, color: "#666" },
   title: { fontSize: 15, fontFamily: "Helvetica-Bold", marginBottom: 4 },
   sub: { fontSize: 9, color: "#888", marginBottom: 16 },
@@ -44,7 +47,9 @@ export interface ContractPdfData {
     email: string;
     phone: string;
     location: string;
+    contract_terms?: string;
   };
+  logoUrl: string;
 }
 
 function brl(v: number) {
@@ -55,15 +60,19 @@ function date(d: string | null) {
   return new Date(d + "T00:00:00").toLocaleDateString("pt-BR");
 }
 
-export function ContractPdf({ contract, client, pkg, settings }: ContractPdfData) {
+export function ContractPdf({ contract, client, pkg, settings, logoUrl }: ContractPdfData) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.brand}>{settings.brand_name || "Renantur"}</Text>
-          <Text style={styles.tagline}>
-            {settings.brand_tagline} · {settings.email} · {settings.phone} · {settings.location}
-          </Text>
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <Image src={logoUrl} style={styles.logo} />
+          <View>
+            <Text style={styles.brand}>{settings.brand_name || "Renantur"}</Text>
+            <Text style={styles.tagline}>
+              {[settings.brand_tagline, settings.email, settings.phone, settings.location].filter(Boolean).join(" · ")}
+            </Text>
+          </View>
         </View>
 
         <Text style={styles.title}>Contrato de Prestação de Serviços de Viagem</Text>
@@ -96,18 +105,9 @@ export function ContractPdf({ contract, client, pkg, settings }: ContractPdfData
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Cláusulas</Text>
-          <Text style={styles.paragraph}>
-            1. A CONTRATADA compromete-se a prestar os serviços de turismo descritos neste
-            instrumento, conforme o pacote e roteiro acima, observadas as condições comerciais
-            pactuadas.
-          </Text>
-          <Text style={styles.paragraph}>
-            2. O CONTRATANTE declara estar ciente das condições de pagamento, prazos e políticas
-            de cancelamento e remarcação informadas pela CONTRATADA.
-          </Text>
-          {contract.notes ? (
-            <Text style={styles.paragraph}>3. Observações: {contract.notes}</Text>
-          ) : null}
+          {[...contractClauses(settings.contract_terms), ...(contract.notes ? [`Observações: ${contract.notes}`] : [])].map((clause, i) => (
+            <Text key={i} style={styles.paragraph}>{i + 1}. {clause}</Text>
+          ))}
         </View>
 
         <View style={styles.signRow}>

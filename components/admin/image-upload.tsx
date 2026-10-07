@@ -11,11 +11,14 @@ export function ImageUpload({
   defaultValue = "",
   required,
   onChange,
+  pdfSafe,
 }: {
   name: string
   defaultValue?: string
   required?: boolean
   onChange?: (url: string) => void
+  /** Aceita só PNG/JPG e envia sem converter, para uso em PDFs. */
+  pdfSafe?: boolean
 }) {
   const [url, setUrl] = useState(defaultValue)
   function updateUrl(value: string) {
@@ -30,7 +33,9 @@ export function ImageUpload({
     setUploading(true)
     setError(null)
     try {
-      updateUrl(await uploadImage(file, name))
+      if (pdfSafe && !["image/png", "image/jpeg"].includes(file.type))
+        throw new Error("Use uma imagem PNG ou JPG.")
+      updateUrl(await uploadImage(file, name, !pdfSafe))
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falha no upload")
     } finally {
@@ -75,7 +80,7 @@ export function ImageUpload({
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept={pdfSafe ? "image/png,image/jpeg" : "image/*"}
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0]

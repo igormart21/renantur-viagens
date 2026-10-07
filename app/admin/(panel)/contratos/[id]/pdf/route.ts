@@ -6,7 +6,7 @@ import { ContractPdf, type ContractPdfData } from "@/lib/pdf/contract-pdf";
 export const runtime = "nodejs";
 
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
@@ -24,12 +24,12 @@ export async function GET(
 
   const [{ data: client }, { data: pkg }, { data: settings }] = await Promise.all([
     contract.client_id
-      ? supabase.from("clients").select("name, email, phone, doc, address").eq("id", contract.client_id).single()
+      ? supabase.from("clients").select("name, email, phone, doc, address, street, number, complement, district, city, uf, cep").eq("id", contract.client_id).single()
       : Promise.resolve({ data: null }),
     contract.package_id
       ? supabase.from("packages").select("name, location, duration, includes").eq("id", contract.package_id).single()
       : Promise.resolve({ data: null }),
-    supabase.from("site_settings").select("brand_name, brand_tagline, email, phone, location").eq("id", 1).single(),
+    supabase.from("site_settings").select("brand_name, brand_tagline, email, phone, location, logo_url, contract_terms").eq("id", 1).single(),
   ]);
 
   const data: ContractPdfData = {
@@ -44,7 +44,20 @@ export async function GET(
       signed_at: contract.signed_at ?? null,
       notes: contract.notes ?? "",
     },
-    client: client as ContractPdfData["client"],
+    client: client
+      ? {
+          ...(client as ContractPdfData["client"] & Record<string, string>),
+          address:
+            [
+              [client.street, client.number, client.complement].filter(Boolean).join(", "),
+              client.district,
+              [client.city, client.uf].filter(Boolean).join("/"),
+              client.cep && `CEP ${client.cep}`,
+            ]
+              .filter(Boolean)
+              .join(" - ") || client.address,
+        }
+      : null,
     pkg: pkg as ContractPdfData["pkg"],
     settings: (settings as ContractPdfData["settings"]) ?? {
       brand_name: "Renantur",
@@ -53,6 +66,7 @@ export async function GET(
       phone: "",
       location: "",
     },
+    logoUrl: settings?.logo_url || `${new URL(req.url).origin}/assets/renantur-logo.png`,
   };
 
   const buffer = await renderToBuffer(ContractPdf(data));

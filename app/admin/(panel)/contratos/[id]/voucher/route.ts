@@ -24,7 +24,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   const buffer = await renderToBuffer(
     VoucherPdf({
-      logoUrl: `${new URL(req.url).origin}/assets/renantur-logo.png`,
+      logoUrl: s?.logo_url || `${new URL(req.url).origin}/assets/renantur-logo.png`,
       company: {
         name: `${s?.brand_name || "Renantur"} ${s?.brand_tagline || "Viagens e Turismo"}`,
         address: String(s?.address || s?.location || ""),

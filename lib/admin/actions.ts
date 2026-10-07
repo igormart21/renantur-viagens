@@ -106,6 +106,8 @@ const SETTINGS_FIELDS = [
   "cnpj",
   "address",
   "website",
+  "logo_url",
+  "contract_terms",
 ];
 
 export async function saveSettings(formData: FormData) {
