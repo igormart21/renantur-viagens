@@ -93,7 +93,7 @@ export function AdminNav({ novasCotacoes = 0 }: { novasCotacoes?: number }) {
       <div className="space-y-0.5">
         <NavLink href="/admin/cotacoes" icon={<Inbox className="size-[18px]" />} label="Cotações" active={isActive("/admin/cotacoes")} badge={novasCotacoes} />
         <NavLink href="/admin/clientes" icon={<Users className="size-[18px]" />} label="Clientes" active={isActive("/admin/clientes")} />
-        <NavLink href="/admin/contratos" icon={<FileText className="size-[18px]" />} label="Contratos" active={isActive("/admin/contratos")} />
+        <NavLink href="/admin/contratos" icon={<FileText className="size-[18px]" />} label="Vendas de pacotes" active={isActive("/admin/contratos")} />
         <NavLink href="/admin/relatorios" icon={<BarChart3 className="size-[18px]" />} label="Relatórios" active={isActive("/admin/relatorios")} />
         <NavLink href="/admin/configuracoes" icon={<Settings className="size-[18px]" />} label="Configurações" active={isActive("/admin/configuracoes")} />
       </div>

@@ -85,7 +85,7 @@ export default async function DashboardPage() {
     { label: "Destinos", value: destinos, icon: "MapPin", href: "/admin/destinos", color: "bg-primary/10 text-primary" },
     { label: "Depoimentos", value: depoimentos, icon: "MessageSquareQuote", href: "/admin/depoimentos", color: "bg-primary/10 text-primary" },
     { label: "Clientes", value: clientes, icon: "Users", href: "/admin/clientes", color: "bg-primary/10 text-primary" },
-    { label: "Contratos", value: contratos, icon: "FileText", href: "/admin/contratos", color: "bg-primary/10 text-primary" },
+    { label: "Vendas", value: contratos, icon: "FileText", href: "/admin/contratos", color: "bg-primary/10 text-primary" },
   ];
 
   return (
@@ -167,14 +167,14 @@ export default async function DashboardPage() {
         <FadeIn delay={0.15}>
           <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Contratos recentes</CardTitle>
+              <CardTitle className="text-base">Vendas recentes</CardTitle>
               <Link href="/admin/contratos" className="text-xs font-medium text-primary hover:underline">
                 Ver todos
               </Link>
             </CardHeader>
             <CardContent className="space-y-1">
               {(recentContracts ?? []).length === 0 ? (
-                <p className="py-6 text-center text-sm text-muted-foreground">Nenhum contrato ainda.</p>
+                <p className="py-6 text-center text-sm text-muted-foreground">Nenhuma venda ainda.</p>
               ) : (
                 (recentContracts ?? []).map((c) => {
                   const client = c.clients as { name?: string } | null;

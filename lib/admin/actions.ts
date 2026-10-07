@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { getEntity, type EntityConfig } from "./entities";
+import { syncSeatsUsed, validateSeats } from "./sales";
+import type { Passenger } from "@/components/admin/contract-form";
 
 /** Converte os valores do FormData conforme o tipo de cada campo. */
 function buildRow(entity: EntityConfig, formData: FormData) {
@@ -30,6 +32,7 @@ function buildRow(entity: EntityConfig, formData: FormData) {
         break;
       }
       case "structured":
+      case "dependents":
       case "json": {
         const text = ((raw as string) ?? "").trim();
         try {
@@ -100,6 +103,9 @@ const SETTINGS_FIELDS = [
   "google_reviews_url",
   "about_title",
   "about_text",
+  "cnpj",
+  "address",
+  "website",
 ];
 
 export async function saveSettings(formData: FormData) {
@@ -118,53 +124,87 @@ export async function saveSettings(formData: FormData) {
   redirect("/admin/configuracoes");
 }
 
-const CONTRACT_FIELDS = [
-  "client_id",
-  "package_id",
-  "title",
-  "total_value",
-  "entry_value",
-  "installments",
-  "status",
-  "travel_date",
-  "signed_at",
-  "notes",
-];
-
 export async function saveContract(formData: FormData) {
-  const supabase = await createClient();
-  const id = formData.get("id");
-  const row: Record<string, unknown> = {};
-  for (const key of CONTRACT_FIELDS) {
-    const raw = formData.get(key);
-    if (key === "client_id" || key === "package_id" || key === "installments") {
-      row[key] = raw && raw !== "" ? Number(raw) : null;
-    } else if (key === "total_value" || key === "entry_value") {
-      row[key] = raw && raw !== "" ? Number(raw) : 0;
-    } else if (key === "travel_date" || key === "signed_at") {
-      row[key] = raw && raw !== "" ? raw : null;
-    } else {
-      row[key] = String(raw ?? "");
-    }
-  }
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Sua sessão expirou. Entre novamente para salvar." };
+    const id = formData.get("id") ? String(formData.get("id")) : null;
+    const num = (key: string) => {
+      const raw = formData.get(key);
+      return raw && raw !== "" ? Number(raw) : null;
+    };
+    const clientId = num("client_id");
+    const packageId = num("package_id");
+    if (!clientId) return { error: "Selecione o responsável financeiro." };
+    if (!packageId) return { error: "Selecione o pacote." };
+    const status = String(formData.get("status") || "rascunho");
+    const passengers: Passenger[] = (JSON.parse(String(formData.get("passengers") || "[]")) as Passenger[]).map((p) => ({
+      name: String(p.name ?? "").trim(),
+      doc: String(p.doc ?? ""),
+      birthdate: String(p.birthdate ?? ""),
+      seat: p.lap || !p.seat ? null : Number(p.seat),
+      lap: Boolean(p.lap),
+      boarding: String(p.boarding ?? ""),
+      price: Number(p.price) || 0,
+    }));
 
-  if (id) {
-    const { error } = await supabase.from("contracts").update(row).eq("id", id);
-    if (error) throw new Error(error.message);
-  } else {
-    const { error } = await supabase.from("contracts").insert(row);
-    if (error) throw new Error(error.message);
+    let othersQuery = supabase.from("contracts").select("passengers").eq("package_id", packageId).neq("status", "cancelado");
+    if (id) othersQuery = othersQuery.neq("id", id);
+    const [{ data: pkg }, { data: client }, { data: others }, { data: previous }] = await Promise.all([
+      supabase.from("packages").select("name, seats").eq("id", packageId).single(),
+      supabase.from("clients").select("name").eq("id", clientId).single(),
+      othersQuery,
+      id ? supabase.from("contracts").select("package_id").eq("id", id).single() : Promise.resolve({ data: null }),
+    ]);
+    if (!pkg || !client) return { error: "Pacote ou cliente não encontrado." };
+
+    // ponytail: validação sem lock — duas vendas simultâneas podem disputar o mesmo assento; trocar por constraint/RPC se o volume crescer.
+    const seatError = validateSeats(
+      passengers,
+      Number(pkg.seats ?? 64),
+      (others ?? []).map((o) => (Array.isArray(o.passengers) ? o.passengers : [])),
+      status !== "cancelado",
+    );
+    if (seatError) return { error: seatError };
+
+    const row = {
+      client_id: clientId,
+      package_id: packageId,
+      title: `${pkg.name} — ${client.name}`,
+      passengers,
+      total_value: passengers.reduce((sum, p) => sum + p.price, 0),
+      entry_value: num("entry_value") ?? 0,
+      installments: num("installments") ?? 1,
+      status,
+      travel_date: formData.get("travel_date") || null,
+      signed_at: formData.get("signed_at") || null,
+      how_heard: String(formData.get("how_heard") ?? ""),
+      payment_method: String(formData.get("payment_method") ?? ""),
+      notes: String(formData.get("notes") ?? ""),
+    };
+    const { error } = id
+      ? await supabase.from("contracts").update(row).eq("id", id)
+      : await supabase.from("contracts").insert(row);
+    if (error) return { error: error.message };
+    await syncSeatsUsed(supabase, [packageId, previous?.package_id]);
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Não foi possível salvar. Tente novamente." };
   }
 
   revalidatePath("/admin/contratos");
+  revalidatePath("/", "layout"); // vagas no site
   redirect("/admin/contratos");
 }
 
 export async function deleteContract(id: number) {
   const supabase = await createClient();
+  const { data } = await supabase.from("contracts").select("package_id").eq("id", id).single();
   const { error } = await supabase.from("contracts").delete().eq("id", id);
   if (error) throw new Error(error.message);
+  await syncSeatsUsed(supabase, [data?.package_id]);
   revalidatePath("/admin/contratos");
+  revalidatePath("/", "layout");
 }
 
 export async function deleteQuote(id: number) {

@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_SETTINGS } from "@/lib/site-settings";
+import { seatsLeft } from "@/lib/seats";
 import { TestimonialsWidget, type Testimonial } from "@/components/site/testimonials-widget";
 import { ImageLightbox } from "@/components/site/image-lightbox";
 
@@ -89,6 +90,12 @@ export function PackageDetail({
   const hasEntry = Number(s(pkg.entry).replace(/\./g, "").replace(",", ".")) > 0;
   const name = s(pkg.name);
   const slug = s(pkg.slug);
+  const left = seatsLeft(pkg);
+  const waitlistHref = (() => {
+    const base = whatsapp || DEFAULT_SETTINGS.whatsapp;
+    const text = `Olá! O pacote *${name}* está esgotado e quero entrar na lista de espera.`;
+    return `${base}${base.includes("?") ? "&" : "?"}text=${encodeURIComponent(text)}`;
+  })();
   const includesList =
     arr(pkg.highlights).length > 0
       ? arr(pkg.highlights)
@@ -266,6 +273,12 @@ export function PackageDetail({
               </p>
             )}
 
+            {left !== null && left <= 10 && (
+              <p className={`mt-4 rounded-xl py-2 text-center text-sm font-extrabold uppercase tracking-wide ${left === 0 ? "bg-white/15" : "bg-accent"}`}>
+                {left === 0 ? "Esgotado" : `Últimas ${left} ${left === 1 ? "vaga" : "vagas"}!`}
+              </p>
+            )}
+
             {/* preço */}
             <div className="mt-5 flex flex-col items-center gap-2.5">
               {financed && hasEntry && (
@@ -310,7 +323,22 @@ export function PackageDetail({
             )}
 
             {/* formulário */}
-            {status === "ok" ? (
+            {left === 0 ? (
+              <div className="mt-6 rounded-2xl bg-white/10 p-6 text-center">
+                <p className="text-lg font-bold">Vagas esgotadas</p>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">
+                  Entre na lista de espera e avisamos você se abrir uma vaga.
+                </p>
+                <a
+                  href={waitlistHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center justify-center rounded-full bg-success px-6 py-3 text-[13px] font-bold uppercase tracking-wide text-white transition-transform hover:scale-105"
+                >
+                  Entrar na lista de espera
+                </a>
+              </div>
+            ) : status === "ok" ? (
               <div className="mt-6 rounded-2xl bg-white/10 p-6 text-center">
                 <CheckCircle2 className="mx-auto mb-3 text-success" size={40} />
                 <p className="text-lg font-bold">Solicitação enviada! 🎉</p>

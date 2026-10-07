@@ -11,6 +11,8 @@ import { PackagePayment } from "./package-payment"
 import { StructuredList } from "./structured-list"
 import { GalleryUpload } from "./gallery-upload"
 import { ImageUpload } from "./image-upload"
+import { DependentsField } from "./dependents-field"
+import { fetchCep } from "@/lib/cep"
 
 type Row = Record<string, unknown> | null
 
@@ -96,6 +98,7 @@ export function EntityForm({
               "image",
               "structured",
               "gallery",
+              "dependents",
             ].includes(field.type)
             return (
               <Fragment key={field.key}>
@@ -141,8 +144,39 @@ export function EntityForm({
                       name={field.key}
                       type="number"
                       step="any"
-                      defaultValue={val(record, field.key)}
+                      max={field.key === "seats" ? 64 : undefined}
+                      defaultValue={
+                        val(record, field.key) ||
+                        (field.key === "seats" ? "64" : "")
+                      }
                       required={field.required}
+                    />
+                  )}
+
+                  {field.type === "cep" && (
+                    <Input
+                      id={id}
+                      name={field.key}
+                      inputMode="numeric"
+                      placeholder="00000-000"
+                      defaultValue={val(record, field.key)}
+                      onBlur={async (e) => {
+                        const form = e.currentTarget.form
+                        const address = await fetchCep(e.currentTarget.value)
+                        if (!form || !address) return
+                        for (const [key, value] of Object.entries(address)) {
+                          const input = form.elements.namedItem(key)
+                          if (input instanceof HTMLInputElement)
+                            input.value = value
+                        }
+                      }}
+                    />
+                  )}
+
+                  {field.type === "dependents" && (
+                    <DependentsField
+                      name={field.key}
+                      value={record?.[field.key]}
                     />
                   )}
 

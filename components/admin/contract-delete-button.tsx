@@ -15,11 +15,11 @@ export function ContractDeleteButton({ id }: { id: number }) {
       size="icon"
       disabled={pending}
       onClick={() => {
-        if (!confirm("Excluir este contrato?")) return;
+        if (!confirm("Excluir esta venda? As vagas voltam para o pacote.")) return;
         startTransition(async () => {
           try {
             await deleteContract(id);
-            toast.success("Contrato excluído");
+            toast.success("Venda excluída");
           } catch (e) {
             toast.error(e instanceof Error ? e.message : "Erro ao excluir");
           }

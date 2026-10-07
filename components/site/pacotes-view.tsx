@@ -6,6 +6,7 @@ import { Clock, MapPin, ArrowRight, Bus, Plane, Ship, Globe } from "lucide-react
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { slugify } from "@/components/site/package-card";
+import { seatsLeft } from "@/lib/seats";
 
 type Cat = "Todos" | "Aéreos" | "Rodoviários" | "Cruzeiros" | "Internacional";
 
@@ -40,6 +41,15 @@ const TransportIcon = ({ category }: { category: string }) => {
   if (category === "Cruzeiros") return <Ship size={24} className={cls} />;
   return <Globe size={24} className={cls} />;
 };
+
+function SeatsBadge({ left }: { left: number | null }) {
+  if (left === null || left > 10) return null;
+  return (
+    <span className={`self-start rounded-full px-3 py-1 text-xs font-bold text-white ${left === 0 ? "bg-primary/60" : "bg-accent"}`}>
+      {left === 0 ? "Esgotado · lista de espera" : `Últimas ${left} ${left === 1 ? "vaga" : "vagas"}!`}
+    </span>
+  );
+}
 
 export type PackageItem = (typeof defaultPackages)[number];
 
@@ -167,6 +177,8 @@ export function PacotesView({ items }: { items?: PackageItem[] }) {
                   <p className="text-primary/45 text-xs leading-relaxed border-t border-black/5 pt-3">
                     {pkg.includes}
                   </p>
+
+                  <SeatsBadge left={seatsLeft(pkg as unknown as Record<string, unknown>)} />
 
                   {/* Pricing */}
                   <div className="mt-auto pt-2">

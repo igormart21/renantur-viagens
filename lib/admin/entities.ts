@@ -15,7 +15,9 @@ export type FieldType =
   | "json"
   | "date"
   | "gallery"
-  | "structured";
+  | "structured"
+  | "cep"
+  | "dependents";
 
 export interface FieldConfig {
   key: string;
@@ -83,7 +85,10 @@ export const ENTITIES: EntityConfig[] = [
       { key: "installments", label: "Parcelas", type: "number" },
       { key: "monthly", label: "Valor da parcela (R$)", type: "text" },
       { key: "total", label: "Valor à vista (R$)", type: "text" },
-      { key: "faq", label: "Dúvidas frequentes", type: "structured", section: "6. Informações adicionais e publicação", itemLabel: "Pergunta", columns: [{ key: "q", label: "Pergunta" }, { key: "a", label: "Resposta", multiline: true }] },
+      { key: "seats", label: "Total de vagas", type: "number", required: true, section: "6. Vagas e embarque", help: "Máximo de 64 lugares. Com 10 vagas ou menos o site mostra \"Últimas vagas\"; com 0, \"Esgotado\"." },
+      { key: "departure", label: "Data de saída", type: "date" },
+      { key: "boarding_points", label: "Locais de embarque", type: "structured", itemLabel: "Local", columns: [{ key: "place", label: "Local (ex.: Volta Redonda - Umuarama)" }, { key: "time", label: "Horário (ex.: 11:00)" }] },
+      { key: "faq", label: "Dúvidas frequentes", type: "structured", section: "7. Informações adicionais e publicação", itemLabel: "Pergunta", columns: [{ key: "q", label: "Pergunta" }, { key: "a", label: "Resposta", multiline: true }] },
       activeField,
       sortField,
     ],
@@ -267,13 +272,22 @@ export const ENTITIES: EntityConfig[] = [
     listColumns: ["name", "email", "phone", "doc"],
     defaultSort: "name",
     fields: [
-      { key: "name", label: "Nome", type: "text", required: true },
+      { key: "name", label: "Nome completo", type: "text", required: true, section: "Titular (responsável pela compra)" },
       { key: "email", label: "E-mail", type: "text" },
-      { key: "phone", label: "Telefone", type: "text" },
+      { key: "phone", label: "Telefone / WhatsApp", type: "text" },
       { key: "doc", label: "CPF/CNPJ", type: "text" },
+      { key: "rg", label: "RG", type: "text" },
+      { key: "rg_issuer", label: "Órgão emissor", type: "text" },
       { key: "birthdate", label: "Nascimento", type: "date" },
-      { key: "address", label: "Endereço", type: "textarea" },
-      { key: "notes", label: "Observações", type: "textarea" },
+      { key: "cep", label: "CEP", type: "cep", section: "Endereço", help: "O endereço é preenchido automaticamente." },
+      { key: "street", label: "Rua", type: "text" },
+      { key: "number", label: "Número", type: "text" },
+      { key: "complement", label: "Complemento", type: "text" },
+      { key: "district", label: "Bairro", type: "text" },
+      { key: "city", label: "Cidade", type: "text" },
+      { key: "uf", label: "UF", type: "text" },
+      { key: "dependents", label: "Dependentes", type: "dependents", section: "Dependentes" },
+      { key: "notes", label: "Observações", type: "textarea", section: "Observações" },
     ],
   },
 ];

@@ -30,6 +30,9 @@ const SECTIONS: { title: string; icon: string; desc: string; full?: boolean; fie
       { key: "phone", label: "Telefone", placeholder: "(24) 99999-9999" },
       { key: "email", label: "E-mail", placeholder: "contato@renantur.com.br" },
       { key: "location", label: "Localização", placeholder: "Sul Fluminense, RJ" },
+      { key: "address", label: "Endereço (voucher)", placeholder: "Av. Amaral Peixoto nº445 Sala 602 - Centro - Volta Redonda RJ" },
+      { key: "cnpj", label: "CNPJ (voucher)", placeholder: "10.493.380/0001-05" },
+      { key: "website", label: "Site (voucher)", placeholder: "www.renantur.com.br" },
     ],
   },
   {

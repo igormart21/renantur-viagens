@@ -47,7 +47,9 @@ export function validatePackage(row: Record<string, unknown>) {
   }
   if (!row.monthly && !row.total)
     throw new Error("Informe o valor à vista ou o parcelamento.")
-  for (const key of ["itinerary", "faq"]) {
+  if (!Number.isInteger(row.seats) || Number(row.seats) < 1 || Number(row.seats) > 64)
+    throw new Error("O total de vagas deve ser entre 1 e 64.")
+  for (const key of ["itinerary", "faq", "boarding_points"]) {
     if (
       !Array.isArray(row[key]) ||
       row[key].some(
@@ -59,7 +61,7 @@ export function validatePackage(row: Record<string, unknown>) {
       )
     )
       throw new Error(
-        `Preencha corretamente ${key === "itinerary" ? "o roteiro" : "as dúvidas frequentes"}.`
+        `Preencha corretamente ${key === "itinerary" ? "o roteiro" : key === "faq" ? "as dúvidas frequentes" : "os locais de embarque"}.`
       )
   }
   if (!String(row.includes ?? "").trim() && Array.isArray(row.highlights))

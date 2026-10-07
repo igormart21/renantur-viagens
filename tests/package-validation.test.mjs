@@ -10,7 +10,7 @@ const { outputText } = ts.transpileModule(source, { compilerOptions: { module: t
 const exports = {};
 runInNewContext(outputText, { exports });
 const { validatePackage, moneyValue } = exports;
-const base = () => ({ name: "São Luís", slug: "", total: "2.500,00", monthly: "", entry: "", installments: 0, itinerary: [], faq: [], highlights: ["Hotel", "City tour"] });
+const base = () => ({ name: "São Luís", slug: "", total: "2.500,00", monthly: "", entry: "", installments: 0, seats: 64, boarding_points: [], itinerary: [], faq: [], highlights: ["Hotel", "City tour"] });
 
 test("cadastro à vista gera URL e resumo, sem parcelas vazias", () => {
   const row = validatePackage(base());

@@ -27,7 +27,7 @@ export function MonthlyContractsChart({
         <XAxis dataKey="month" fontSize={12} />
         <YAxis allowDecimals={false} fontSize={12} />
         <Tooltip />
-        <Bar dataKey="contratos" fill="#0a2d57" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="contratos" name="Vendas" fill="#0a2d57" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

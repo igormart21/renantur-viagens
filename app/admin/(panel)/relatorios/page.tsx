@@ -67,7 +67,7 @@ export default async function RelatoriosPage() {
   const cards = [
     { label: "Receita (paga + emitida)", value: brl(revenue) },
     { label: "Receita confirmada (paga)", value: brl(paidRevenue) },
-    { label: "Total de contratos", value: String(list.length) },
+    { label: "Total de vendas", value: String(list.length) },
     { label: "Total de clientes", value: String(clientsCount ?? 0) },
   ];
 
@@ -91,13 +91,13 @@ export default async function RelatoriosPage() {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
-          <CardHeader><CardTitle className="text-base">Contratos por mês</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Vendas por mês</CardTitle></CardHeader>
           <CardContent>
             <MonthlyContractsChart data={months.map(({ month, contratos }) => ({ month, contratos }))} />
           </CardContent>
         </Card>
         <Card>
-          <CardHeader><CardTitle className="text-base">Contratos por status</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Vendas por status</CardTitle></CardHeader>
           <CardContent>
             {statusData.length ? (
               <StatusPieChart data={statusData} />
