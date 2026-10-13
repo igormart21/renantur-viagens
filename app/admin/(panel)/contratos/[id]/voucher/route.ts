@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { createClient } from "@/lib/supabase/server";
 import { VoucherPdf } from "@/lib/pdf/voucher-pdf";
+import { registerBrandFonts } from "@/lib/pdf/brand";
 import type { Passenger } from "@/components/admin/contract-form";
 
 export const runtime = "nodejs";
@@ -11,7 +12,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const supabase = await createClient();
   const { data: sale } = await supabase
     .from("contracts")
-    .select("travel_date, passengers, clients(name), packages(name, location, highlights, includes, departure)")
+    .select("id, travel_date, passengers, clients(name), packages(name, location, highlights, includes, departure, duration)")
     .eq("id", id)
     .single();
   if (!sale) return new NextResponse("Venda não encontrada", { status: 404 });
@@ -22,9 +23,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const highlights = Array.isArray(pkg?.highlights) ? (pkg.highlights as string[]) : [];
   const whatsapp = String(s?.whatsapp ?? "").replace(/^https?:\/\/wa\.me\/(55)?/, "").replace(/\?.*$/, "");
 
+  const origin = new URL(req.url).origin;
+  registerBrandFonts(origin);
   const buffer = await renderToBuffer(
     VoucherPdf({
-      logoUrl: s?.logo_url || `${new URL(req.url).origin}/assets/renantur-logo.png`,
+      logoUrl: s?.logo_url || `${origin}/assets/renantur-logo.png`,
       company: {
         name: `${s?.brand_name || "Renantur"} ${s?.brand_tagline || "Viagens e Turismo"}`,
         address: String(s?.address || s?.location || ""),
@@ -33,11 +36,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         website: String(s?.website ?? ""),
         cnpj: String(s?.cnpj ?? ""),
       },
+      saleId: sale.id,
+      duration: String(pkg?.duration ?? ""),
       responsible: client?.name ?? "—",
       destination: String(pkg?.name ?? "—"),
       departure: (sale.travel_date as string | null) ?? (pkg?.departure as string | null) ?? null,
       passengers: (Array.isArray(sale.passengers) ? sale.passengers : []) as Passenger[],
-      includes: highlights.length ? highlights.join(", ") : String(pkg?.includes ?? ""),
+      includes: highlights.length
+        ? highlights
+        : String(pkg?.includes ?? "")
+            .split(/\s*[+,]\s*/)
+            .filter(Boolean),
     }),
   );
 

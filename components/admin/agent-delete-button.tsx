@@ -13,6 +13,7 @@ export function AgentDeleteButton({ userId }: { userId: string }) {
       type="button"
       variant="ghost"
       size="icon"
+      title="Remover da equipe"
       className="size-8"
       disabled={pending}
       onClick={() => {

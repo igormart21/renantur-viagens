@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { createClient } from "@/lib/supabase/server";
 import { ContractPdf, type ContractPdfData } from "@/lib/pdf/contract-pdf";
+import { registerBrandFonts } from "@/lib/pdf/brand";
 
 export const runtime = "nodejs";
 
@@ -29,7 +30,7 @@ export async function GET(
     contract.package_id
       ? supabase.from("packages").select("name, location, duration, includes").eq("id", contract.package_id).single()
       : Promise.resolve({ data: null }),
-    supabase.from("site_settings").select("brand_name, brand_tagline, email, phone, location, logo_url, contract_terms").eq("id", 1).single(),
+    supabase.from("site_settings").select("*").eq("id", 1).single(),
   ]);
 
   const data: ContractPdfData = {
@@ -69,6 +70,7 @@ export async function GET(
     logoUrl: settings?.logo_url || `${new URL(req.url).origin}/assets/renantur-logo.png`,
   };
 
+  registerBrandFonts(new URL(req.url).origin);
   const buffer = await renderToBuffer(ContractPdf(data));
 
   return new NextResponse(buffer as unknown as BodyInit, {

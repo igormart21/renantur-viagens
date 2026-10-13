@@ -141,7 +141,7 @@ export function StructuredList({
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={`Mover ${itemLabel} ${index + 1} para cima`}
+              title={`Mover ${itemLabel} ${index + 1} para cima`}
               disabled={index === 0}
               onClick={() => move(index, -1)}
             >
@@ -151,7 +151,7 @@ export function StructuredList({
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={`Mover ${itemLabel} ${index + 1} para baixo`}
+              title={`Mover ${itemLabel} ${index + 1} para baixo`}
               disabled={index === items.length - 1}
               onClick={() => move(index, 1)}
             >
@@ -161,7 +161,7 @@ export function StructuredList({
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={`Remover ${itemLabel} ${index + 1}`}
+              title={`Remover ${itemLabel} ${index + 1}`}
               onClick={() => {
                 setItems(items.filter((_, i) => i !== index))
                 setDayCount(items.length - 1)

@@ -41,6 +41,7 @@ export function QuoteRowActions({ id, status }: { id: number; status: string }) 
         type="button"
         variant="ghost"
         size="icon"
+        title="Excluir cotação"
         disabled={pending}
         onClick={() => {
           if (!confirm("Excluir esta cotação?")) return;

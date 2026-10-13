@@ -124,7 +124,7 @@ export default async function ContratosPage() {
                             <FileDown className="size-4" />
                           </a>
                         </Button>
-                        <Button asChild variant="ghost" size="icon">
+                        <Button asChild variant="ghost" size="icon" title="Editar venda">
                           <Link href={`/admin/contratos/${row.id}/edit`}>
                             <Pencil className="size-4" />
                           </Link>

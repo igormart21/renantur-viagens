@@ -22,6 +22,7 @@ export function DeleteButton({
       type="button"
       variant="ghost"
       size="icon"
+      title="Excluir"
       disabled={pending}
       onClick={() => {
         if (!confirm(`Excluir ${label}? Esta ação não pode ser desfeita.`)) return;

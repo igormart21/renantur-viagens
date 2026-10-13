@@ -13,6 +13,7 @@ export function ContractDeleteButton({ id }: { id: number }) {
       type="button"
       variant="ghost"
       size="icon"
+      title="Excluir venda"
       disabled={pending}
       onClick={() => {
         if (!confirm("Excluir esta venda? As vagas voltam para o pacote.")) return;

@@ -134,7 +134,7 @@ export function DataTable({
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
                     {entityKey === "pacotes" && <DuplicateButton id={Number(row.id)} />}
-                    <Button asChild variant="ghost" size="icon" className="size-8">
+                    <Button asChild variant="ghost" size="icon" className="size-8" title="Editar">
                       <Link href={`/admin/${entityKey}/${row.id}/edit`}>
                         <Pencil className="size-4" />
                       </Link>

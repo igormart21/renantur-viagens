@@ -54,7 +54,7 @@ const SECTIONS: { title: string; icon: string; desc: string; full?: boolean; fie
     full: true,
     fields: [
       { key: "logo_url", label: "Logo", type: "image", help: "PNG ou JPG. Se vazio, usa a logo padrão da Renantur." },
-      { key: "contract_terms", label: "Cláusulas do contrato", type: "textarea", help: "Uma cláusula por parágrafo. A numeração é feita automaticamente; as observações da venda entram como última cláusula." },
+      { key: "contract_terms", label: "Cláusulas do contrato", type: "textarea", help: "Uma linha por parágrafo. Títulos em maiúsculas começando com número viram título (ex.: 1. OBJETO). Para tabela, separe as colunas com | . Apague todo o texto e salve para voltar ao contrato padrão." },
     ],
   },
   {
@@ -131,7 +131,7 @@ export default async function ConfiguracoesPage() {
                         <Textarea
                           id={f.key}
                           name={f.key}
-                          rows={f.key === "contract_terms" ? 12 : 6}
+                          rows={f.key === "contract_terms" ? 24 : 6}
                           defaultValue={val(f.key) || (f.key === "contract_terms" ? DEFAULT_CONTRACT_TERMS : "")}
                         />
                       ) : (

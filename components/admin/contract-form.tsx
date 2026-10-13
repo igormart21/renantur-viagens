@@ -421,7 +421,7 @@ export function ContractForm({
                         type="button"
                         variant="ghost"
                         size="icon"
-                        aria-label={`Remover ${p.name}`}
+                        title={`Remover ${p.name}`}
                         onClick={() => setPassengers(passengers.filter((_, j) => j !== i))}
                       >
                         <Trash2 className="size-4 text-destructive" />
@@ -512,7 +512,7 @@ export function ContractForm({
                       variant="ghost"
                       size="icon"
                       className="size-7"
-                      aria-label={`Remover quarto ${i + 1}`}
+                      title={`Remover quarto ${i + 1}`}
                       onClick={() => {
                         setRooms(rooms.filter((x) => x.id !== r.id));
                         setPassengers(passengers.map((p) => (p.room === r.id ? { ...p, room: undefined } : p)));
