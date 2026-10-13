@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, BarChart3, Settings, LogOut, Inbox, Users, UserCog, UsersRound } from "lucide-react";
+import { LayoutDashboard, FileText, BarChart3, Settings, LogOut, Inbox, Users, UserCog, UsersRound, BedDouble } from "lucide-react";
 import { ENTITIES, CONTENT_ENTITY_KEYS } from "@/lib/admin/entities";
 import { LucideIcon } from "./lucide-icon";
 import { signOut } from "@/lib/admin/actions";
@@ -94,6 +94,7 @@ export function AdminNav({ novasCotacoes = 0 }: { novasCotacoes?: number }) {
         <NavLink href="/admin/cotacoes" icon={<Inbox className="size-[18px]" />} label="Cotações" active={isActive("/admin/cotacoes")} badge={novasCotacoes} />
         <NavLink href="/admin/clientes" icon={<Users className="size-[18px]" />} label="Clientes" active={isActive("/admin/clientes")} />
         <NavLink href="/admin/contratos" icon={<FileText className="size-[18px]" />} label="Vendas de pacotes" active={isActive("/admin/contratos")} />
+        <NavLink href="/admin/viagens" icon={<BedDouble className="size-[18px]" />} label="Viagens (rooming / embarque)" active={isActive("/admin/viagens")} />
         <NavLink href="/admin/relatorios" icon={<BarChart3 className="size-[18px]" />} label="Relatórios" active={isActive("/admin/relatorios")} />
         <NavLink href="/admin/configuracoes" icon={<Settings className="size-[18px]" />} label="Configurações" active={isActive("/admin/configuracoes")} />
       </div>

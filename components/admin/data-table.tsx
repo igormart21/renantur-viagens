@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { DuplicateButton } from "@/components/admin/duplicate-button";
 
 export type Column = { key: string; label: string };
 
@@ -132,6 +133,7 @@ export function DataTable({
                 ))}
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
+                    {entityKey === "pacotes" && <DuplicateButton id={Number(row.id)} />}
                     <Button asChild variant="ghost" size="icon" className="size-8">
                       <Link href={`/admin/${entityKey}/${row.id}/edit`}>
                         <Pencil className="size-4" />

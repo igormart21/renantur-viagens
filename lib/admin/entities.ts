@@ -277,7 +277,7 @@ export const ENTITIES: EntityConfig[] = [
       { key: "phone", label: "Telefone / WhatsApp", type: "text" },
       { key: "doc", label: "CPF/CNPJ", type: "text" },
       { key: "rg", label: "RG", type: "text" },
-      { key: "rg_issuer", label: "Órgão emissor", type: "text" },
+      { key: "rg_issuer", label: "Órgão emissor / UF", type: "text" },
       { key: "birthdate", label: "Nascimento", type: "date" },
       { key: "cep", label: "CEP", type: "cep", section: "Endereço", help: "O endereço é preenchido automaticamente." },
       { key: "street", label: "Rua", type: "text" },

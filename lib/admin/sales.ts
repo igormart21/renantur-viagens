@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Passenger, SaleClient, SalePackage } from "@/components/admin/contract-form";
+import type { OtherSale, Passenger, SaleClient, SalePackage } from "@/components/admin/contract-form";
 
 /** "1.880,00" → 1880 */
 function money(text: unknown): number {
@@ -17,10 +17,10 @@ export const seatsOf = (passengers: unknown) =>
 
 /** Dados para o formulário de venda (exclui a própria venda das ocupadas). */
 export async function loadSaleOptions(supabase: SupabaseClient, excludeId?: string) {
-  let othersQuery = supabase.from("contracts").select("package_id, passengers").neq("status", "cancelado");
+  let othersQuery = supabase.from("contracts").select("id, package_id, passengers, rooms").neq("status", "cancelado");
   if (excludeId) othersQuery = othersQuery.neq("id", excludeId);
   const [{ data: clients }, { data: packages }, { data: others }] = await Promise.all([
-    supabase.from("clients").select("id, name, doc, birthdate, dependents").order("name"),
+    supabase.from("clients").select("id, name, doc, rg, rg_issuer, phone, birthdate, dependents").order("name"),
     supabase
       .from("packages")
       .select("id, name, seats, departure, boarding_points, total, entry, installments, monthly")
@@ -32,6 +32,9 @@ export async function loadSaleOptions(supabase: SupabaseClient, excludeId?: stri
       id: c.id,
       name: c.name ?? "",
       doc: c.doc ?? "",
+      rg: c.rg ?? "",
+      rg_issuer: c.rg_issuer ?? "",
+      phone: c.phone ?? "",
       birthdate: c.birthdate ?? "",
       dependents: Array.isArray(c.dependents) ? c.dependents : [],
     })) as SaleClient[],
@@ -44,9 +47,11 @@ export async function loadSaleOptions(supabase: SupabaseClient, excludeId?: stri
       price: packagePrice(p),
     })) as SalePackage[],
     others: (others ?? []).map((o) => ({
+      id: Number(o.id),
       package_id: Number(o.package_id),
       passengers: (Array.isArray(o.passengers) ? o.passengers : []) as Passenger[],
-    })),
+      rooms: Array.isArray(o.rooms) ? o.rooms : [],
+    })) as OtherSale[],
   };
 }
 

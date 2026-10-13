@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { getEntity, type EntityConfig } from "./entities";
 import { syncSeatsUsed, validateSeats } from "./sales";
+import { isRoomType, overCapacity, roomInfo, type Room } from "@/lib/rooms";
 import type { Passenger } from "@/components/admin/contract-form";
 
 /** Converte os valores do FormData conforme o tipo de cada campo. */
@@ -91,6 +92,30 @@ export async function deleteEntityRow(entityKey: string, id: number) {
   revalidatePath("/", "layout");
 }
 
+/** Copia o pacote (fotos, roteiro, valores…) como inativo, para só ajustar as datas. */
+export async function duplicatePackage(id: number) {
+  const supabase = await createClient();
+  const { data: pkg, error } = await supabase.from("packages").select("*").eq("id", id).single();
+  if (error || !pkg) throw new Error("Pacote não encontrado.");
+  const rest = { ...pkg };
+  for (const key of ["id", "created_at", "updated_at"]) delete rest[key];
+  const { data: copy, error: insertError } = await supabase
+    .from("packages")
+    .insert({
+      ...rest,
+      name: `${pkg.name} (cópia)`,
+      slug: `${pkg.slug || "pacote"}-copia-${Date.now().toString(36)}`,
+      active: false,
+      seats_used: 0,
+      departure: null,
+    })
+    .select("id")
+    .single();
+  if (insertError || !copy) throw new Error(insertError?.message ?? "Não foi possível duplicar.");
+  revalidatePath("/admin/pacotes");
+  redirect(`/admin/pacotes/${copy.id}/edit`);
+}
+
 const SETTINGS_FIELDS = [
   "brand_name",
   "brand_tagline",
@@ -149,9 +174,17 @@ export async function saveContract(formData: FormData) {
       lap: Boolean(p.lap),
       boarding: String(p.boarding ?? ""),
       price: Number(p.price) || 0,
+      rg: String(p.rg ?? ""),
+      rg_issuer: String(p.rg_issuer ?? ""),
+      phone: String(p.phone ?? ""),
+      contact: String(p.contact ?? ""),
+      room: p.room ? String(p.room) : undefined,
     }));
+    const rooms: Room[] = (JSON.parse(String(formData.get("rooms") || "[]")) as Room[])
+      .filter((r) => r?.id && isRoomType(r.type))
+      .map((r) => ({ id: String(r.id), type: r.type, apto: String(r.apto ?? ""), notes: String(r.notes ?? "") }));
 
-    let othersQuery = supabase.from("contracts").select("passengers").eq("package_id", packageId).neq("status", "cancelado");
+    let othersQuery = supabase.from("contracts").select("passengers, rooms").eq("package_id", packageId).neq("status", "cancelado");
     if (id) othersQuery = othersQuery.neq("id", id);
     const [{ data: pkg }, { data: client }, { data: others }, { data: previous }] = await Promise.all([
       supabase.from("packages").select("name, seats").eq("id", packageId).single(),
@@ -169,12 +202,21 @@ export async function saveContract(formData: FormData) {
       status !== "cancelado",
     );
     if (seatError) return { error: seatError };
+    if (status !== "cancelado") {
+      const otherRooms = (others ?? []).flatMap((o) => (Array.isArray(o.rooms) ? (o.rooms as Room[]) : []));
+      const otherGuests = (others ?? []).flatMap((o) => (Array.isArray(o.passengers) ? (o.passengers as Passenger[]) : []));
+      const known = new Set([...rooms, ...otherRooms].map((r) => r.id));
+      for (const p of passengers) if (p.room && !known.has(p.room)) p.room = undefined;
+      const full = overCapacity([...rooms, ...otherRooms], [...passengers, ...otherGuests]);
+      if (full) return { error: `O quarto ${full.type} está acima da capacidade (${roomInfo(full.type).capacity} pessoas). Ajuste a acomodação.` };
+    }
 
     const row = {
       client_id: clientId,
       package_id: packageId,
       title: `${pkg.name} — ${client.name}`,
       passengers,
+      rooms,
       total_value: passengers.reduce((sum, p) => sum + p.price, 0),
       entry_value: num("entry_value") ?? 0,
       installments: num("installments") ?? 1,
@@ -207,6 +249,92 @@ export async function deleteContract(id: number) {
   await syncSeatsUsed(supabase, [data?.package_id]);
   revalidatePath("/admin/contratos");
   revalidatePath("/", "layout");
+}
+
+// ───── Rooming list (encaixe entre vendas da mesma saída) ─────
+type SaleRooms = { id: number; package_id: number; passengers: Passenger[]; rooms: Room[] };
+
+/** Carrega todas as vendas ativas da saída da venda informada. */
+async function loadTripSales(saleId: number) {
+  const supabase = await createClient();
+  const { data: sale } = await supabase.from("contracts").select("package_id").eq("id", saleId).single();
+  if (!sale) throw new Error("Venda não encontrada. Atualize a página.");
+  const { data } = await supabase
+    .from("contracts")
+    .select("id, package_id, passengers, rooms")
+    .eq("package_id", sale.package_id)
+    .neq("status", "cancelado");
+  const sales = (data ?? []).map((s) => ({
+    ...s,
+    passengers: Array.isArray(s.passengers) ? s.passengers : [],
+    rooms: Array.isArray(s.rooms) ? s.rooms : [],
+  })) as SaleRooms[];
+  return { supabase, packageId: sale.package_id, sales };
+}
+
+async function saveTripSales(
+  { supabase, packageId, sales }: Awaited<ReturnType<typeof loadTripSales>>,
+  changed: Set<number>,
+) {
+  const full = overCapacity(sales.flatMap((s) => s.rooms), sales.flatMap((s) => s.passengers));
+  if (full) throw new Error(`O quarto ${full.type} ficaria acima da capacidade (${roomInfo(full.type).capacity} pessoas).`);
+  // ponytail: grava venda a venda sem transação; duas pessoas editando o mesmo rooming ao mesmo tempo podem sobrescrever uma à outra.
+  for (const s of sales.filter((s) => changed.has(s.id))) {
+    const { error } = await supabase.from("contracts").update({ passengers: s.passengers, rooms: s.rooms }).eq("id", s.id);
+    if (error) throw new Error(error.message);
+  }
+  revalidatePath(`/admin/viagens/${packageId}`);
+}
+
+/** Move um passageiro para um quarto da saída, para um quarto novo ("new:<tipo>") ou para os pendentes (""). */
+export async function movePassenger(saleId: number, index: number, target: string) {
+  const trip = await loadTripSales(saleId);
+  const sale = trip.sales.find((s) => s.id === saleId);
+  if (!sale?.passengers[index]) throw new Error("Passageiro não encontrado. Atualize a página.");
+  let room: string | undefined = target || undefined;
+  if (target.startsWith("new:")) {
+    const type = target.slice(4);
+    if (!isRoomType(type)) throw new Error("Tipo de quarto inválido.");
+    room = crypto.randomUUID();
+    sale.rooms.push({ id: room, type });
+  } else if (room && !trip.sales.some((s) => s.rooms.some((r) => r.id === room))) {
+    throw new Error("Quarto não encontrado nesta saída. Atualize a página.");
+  }
+  sale.passengers[index] = { ...sale.passengers[index], room };
+  await saveTripSales(trip, new Set([saleId]));
+}
+
+/** Altera configuração, nº do apartamento ou observações. Bloqueia reduzir abaixo dos ocupantes. */
+export async function updateRoom(saleId: number, roomId: string, patch: Partial<Pick<Room, "type" | "apto" | "notes">>) {
+  if (patch.type !== undefined && !isRoomType(patch.type)) throw new Error("Tipo de quarto inválido.");
+  const trip = await loadTripSales(saleId);
+  const sale = trip.sales.find((s) => s.id === saleId);
+  if (!sale) throw new Error("Venda não encontrada.");
+  sale.rooms = sale.rooms.map((r) => (r.id === roomId ? { ...r, ...patch } : r));
+  try {
+    await saveTripSales(trip, new Set([saleId]));
+  } catch (e) {
+    if (patch.type) throw new Error("Há mais ocupantes do que essa configuração comporta. Retire ou transfira alguém antes.");
+    throw e;
+  }
+}
+
+/** Exclui o quarto; quem estava nele (de qualquer venda) volta aos pendentes. */
+export async function deleteRoom(saleId: number, roomId: string) {
+  const trip = await loadTripSales(saleId);
+  const changed = new Set<number>();
+  for (const s of trip.sales) {
+    if (s.rooms.some((r) => r.id === roomId)) {
+      s.rooms = s.rooms.filter((r) => r.id !== roomId);
+      changed.add(s.id);
+    }
+    s.passengers = s.passengers.map((p) => {
+      if (p.room !== roomId) return p;
+      changed.add(s.id);
+      return { ...p, room: undefined };
+    });
+  }
+  await saveTripSales(trip, changed);
 }
 
 export async function deleteQuote(id: number) {

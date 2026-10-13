@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { Trash2, UserPlus, Users } from "lucide-react";
+import { BedDouble, Plus, Trash2, UserPlus, Users, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { age } from "@/lib/age";
+import { ROOM_TYPES, newRoomId, roomInfo, suggestRoomTypes, type Room } from "@/lib/rooms";
 
 type Row = Record<string, unknown> | null;
-type Dependent = { name?: string; doc?: string; birthdate?: string };
-export type SaleClient = { id: number; name: string; doc: string; birthdate: string; dependents: Dependent[] };
+type Dependent = { name?: string; doc?: string; rg?: string; rg_issuer?: string; phone?: string; birthdate?: string };
+export type SaleClient = Required<Omit<Dependent, "name">> & { id: number; name: string; dependents: Dependent[] };
 export type SalePackage = {
   id: number;
   name: string;
@@ -28,7 +29,16 @@ export type Passenger = {
   lap: boolean;
   boarding: string;
   price: number;
+  rg?: string;
+  rg_issuer?: string;
+  phone?: string;
+  /** Quem atende o telefone, quando não é do próprio passageiro. */
+  contact?: string;
+  /** id do quarto (Room.id) — pode ser de outra venda, após encaixe no rooming list. */
+  room?: string;
 };
+type Person = Pick<Passenger, "name" | "doc" | "birthdate" | "rg" | "rg_issuer" | "phone" | "contact">;
+export type OtherSale = { id: number; package_id: number; passengers: Passenger[]; rooms: Room[] };
 
 const STATUS = ["rascunho", "emitido", "pago", "cancelado"];
 const HOW_HEARD = ["Instagram", "Facebook", "Google", "WhatsApp", "Indicação", "Já é cliente", "Outro"];
@@ -40,6 +50,25 @@ function v(record: Row, key: string): string {
   const x = record?.[key];
   return x == null ? "" : String(x);
 }
+
+const titular = (c: SaleClient): Person => ({
+  name: c.name,
+  doc: c.doc,
+  rg: c.rg,
+  rg_issuer: c.rg_issuer,
+  birthdate: c.birthdate,
+  phone: c.phone,
+});
+// Dependente sem telefone próprio usa o do titular, identificado como responsável pelo contato.
+const dependent = (d: Dependent, c: SaleClient): Person => ({
+  name: d.name ?? "",
+  doc: d.doc ?? "",
+  rg: d.rg ?? "",
+  rg_issuer: d.rg_issuer ?? "",
+  birthdate: d.birthdate ?? "",
+  phone: d.phone || c.phone,
+  contact: d.phone ? "" : c.name,
+});
 
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -53,7 +82,7 @@ export function ContractForm({
   clients: SaleClient[];
   packages: SalePackage[];
   /** Passageiros das outras vendas não canceladas, por pacote. */
-  others: { package_id: number; passengers: Passenger[] }[];
+  others: OtherSale[];
   record: Row;
   action: (formData: FormData) => Promise<{ error: string } | void>;
 }) {
@@ -65,6 +94,7 @@ export function ContractForm({
   const [passengers, setPassengers] = useState<Passenger[]>(
     Array.isArray(record?.passengers) ? (record.passengers as Passenger[]) : [],
   );
+  const [rooms, setRooms] = useState<Room[]>(Array.isArray(record?.rooms) ? (record.rooms as Room[]) : []);
   const [selected, setSelected] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -92,20 +122,15 @@ export function ContractForm({
       [...clients]
         .sort((a, b) => (String(a.id) === clientId ? -1 : String(b.id) === clientId ? 1 : 0))
         .flatMap((c) => [
-          { label: `${c.name} (titular)`, name: c.name, doc: c.doc, birthdate: c.birthdate },
+          { label: `${c.name} (titular)`, ...titular(c) },
           ...c.dependents
             .filter((d) => d.name)
-            .map((d) => ({
-              label: `${d.name} (dependente de ${c.name})`,
-              name: d.name ?? "",
-              doc: d.doc ?? "",
-              birthdate: d.birthdate ?? "",
-            })),
+            .map((d) => ({ label: `${d.name} (dependente de ${c.name})`, ...dependent(d, c) })),
         ]),
     [clients, clientId],
   );
 
-  function add(list: { name: string; doc: string; birthdate: string }[]) {
+  function add(list: Person[]) {
     const boarding = pkg?.boarding_points[0];
     setPassengers((current) => [
       ...current,
@@ -113,6 +138,10 @@ export function ContractForm({
         name: p.name,
         doc: p.doc,
         birthdate: p.birthdate,
+        rg: p.rg ?? "",
+        rg_issuer: p.rg_issuer ?? "",
+        phone: p.phone ?? "",
+        contact: p.contact ?? "",
         seat: null,
         lap: false,
         boarding: boarding ? [boarding.place, boarding.time].filter(Boolean).join(" às ") : "",
@@ -124,6 +153,45 @@ export function ContractForm({
   function set(index: number, patch: Partial<Passenger>) {
     setPassengers((current) => current.map((p, i) => (i === index ? { ...p, ...patch } : p)));
   }
+
+  /** Monta os quartos pela quantidade de passageiros (crianças de colo ficam no 1º quarto). */
+  function autoRooms() {
+    const adults = passengers.filter((p) => !p.lap).length;
+    const next = suggestRoomTypes(adults).map((type) => ({ id: newRoomId(), type }));
+    let room = 0;
+    let filled = 0;
+    setRooms(next);
+    setPassengers(
+      passengers.map((p) => {
+        if (!next.length) return { ...p, room: undefined };
+        if (p.lap) return { ...p, room: next[0].id };
+        if (filled >= roomInfo(next[room].type).capacity) {
+          room++;
+          filled = 0;
+        }
+        filled++;
+        return { ...p, room: next[room].id };
+      }),
+    );
+  }
+
+  // Quartos de outras vendas da mesma saída com cama livre ("quarto existente").
+  const openRooms = useMemo(() => {
+    const sales = others.filter((o) => String(o.package_id) === packageId);
+    const guests = sales.flatMap((o) => o.passengers);
+    return sales.flatMap((o) =>
+      o.rooms
+        .map((r) => ({ ...r, saleId: o.id, free: roomInfo(r.type).capacity - guests.filter((g) => g.room === r.id && !g.lap).length }))
+        .filter((r) => r.free > 0 || passengers.some((p) => p.room === r.id)),
+    );
+  }, [others, packageId, passengers]);
+
+  const roomLabel = (id: string) => {
+    const i = rooms.findIndex((r) => r.id === id);
+    if (i >= 0) return `Quarto ${i + 1} — ${rooms[i].type}`;
+    const other = openRooms.find((r) => r.id === id);
+    return other ? `Quarto existente — ${other.type} (venda nº ${other.saleId})` : "Quarto de outra venda";
+  };
 
   function pickSeat(seat: number) {
     const owner = passengers.findIndex((p) => p.seat === seat);
@@ -150,6 +218,7 @@ export function ContractForm({
     >
       {record?.id != null && <input type="hidden" name="id" value={String(record.id)} />}
       <input type="hidden" name="passengers" value={JSON.stringify(passengers)} />
+      <input type="hidden" name="rooms" value={JSON.stringify(rooms)} />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <div className="space-y-1.5">
@@ -254,10 +323,7 @@ export function ContractForm({
               type="button"
               variant="outline"
               onClick={() =>
-                add([
-                  { name: client.name, doc: client.doc, birthdate: client.birthdate },
-                  ...client.dependents.filter((d) => d.name).map((d) => ({ name: d.name ?? "", doc: d.doc ?? "", birthdate: d.birthdate ?? "" })),
-                ])
+                add([titular(client), ...client.dependents.filter((d) => d.name).map((d) => dependent(d, client))])
               }
             >
               <Users className="size-4" /> Responsável + dependentes
@@ -274,6 +340,7 @@ export function ContractForm({
                   <th className="p-2">Idade</th>
                   <th className="p-2">Embarque</th>
                   <th className="p-2 w-20">Assento</th>
+                  <th className="p-2">Quarto</th>
                   <th className="p-2">Colo</th>
                   <th className="p-2 w-28">Valor (R$)</th>
                   <th className="p-2" />
@@ -312,6 +379,24 @@ export function ContractForm({
                         value={p.seat ?? ""}
                         onChange={(e) => set(i, { seat: e.target.value ? Number(e.target.value) : null })}
                       />
+                    </td>
+                    <td className="p-2">
+                      <select
+                        className={selectCls}
+                        value={p.room ?? ""}
+                        onChange={(e) => set(i, { room: e.target.value || undefined })}
+                      >
+                        <option value="">Sem quarto</option>
+                        {rooms.map((r) => (
+                          <option key={r.id} value={r.id}>{roomLabel(r.id)}</option>
+                        ))}
+                        {openRooms.map((r) => (
+                          <option key={r.id} value={r.id}>{roomLabel(r.id)}</option>
+                        ))}
+                        {p.room && !rooms.some((r) => r.id === p.room) && !openRooms.some((r) => r.id === p.room) && (
+                          <option value={p.room}>{roomLabel(p.room)}</option>
+                        )}
+                      </select>
                     </td>
                     <td className="p-2 text-center">
                       <input
@@ -390,6 +475,73 @@ export function ContractForm({
               Branco: livre · Azul: desta venda · Cinza: vendido
             </p>
           </div>
+        )}
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="border-b pb-3 text-lg font-semibold">Hospedagem (rooming list)</h2>
+        <p className="text-sm text-muted-foreground">
+          Monte os quartos desta venda e escolha o quarto de cada passageiro na tabela acima, ou coloque-o em
+          um quarto existente de outra venda da mesma saída. Quem ficar &quot;Sem quarto&quot; entra nos pendentes do
+          <strong> rooming list</strong> (menu Viagens), para ser acomodado depois.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" disabled={passengers.length === 0} onClick={autoRooms}>
+            <Wand2 className="size-4" /> Montar automaticamente
+          </Button>
+          <Button type="button" variant="outline" onClick={() => setRooms([...rooms, { id: newRoomId(), type: "Duplo casal" }])}>
+            <Plus className="size-4" /> Adicionar quarto
+          </Button>
+        </div>
+        {rooms.length > 0 && (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {rooms.map((r, i) => {
+              const info = roomInfo(r.type);
+              const guests = passengers.filter((p) => p.room === r.id);
+              const adults = guests.filter((p) => !p.lap).length;
+              return (
+                <div key={r.id} className="space-y-2 rounded-xl border bg-muted/20 p-3">
+                  <div className="flex items-center gap-2">
+                    <BedDouble className="size-4 text-primary" />
+                    <span className="text-sm font-semibold">Quarto {i + 1}</span>
+                    <span className={`ml-auto text-xs font-bold ${adults > info.capacity ? "text-destructive" : "text-muted-foreground"}`}>
+                      {adults}/{info.capacity}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="size-7"
+                      aria-label={`Remover quarto ${i + 1}`}
+                      onClick={() => {
+                        setRooms(rooms.filter((x) => x.id !== r.id));
+                        setPassengers(passengers.map((p) => (p.room === r.id ? { ...p, room: undefined } : p)));
+                      }}
+                    >
+                      <Trash2 className="size-4 text-destructive" />
+                    </Button>
+                  </div>
+                  <select
+                    className={selectCls}
+                    value={r.type}
+                    onChange={(e) => setRooms(rooms.map((x) => (x.id === r.id ? { ...x, type: e.target.value } : x)))}
+                  >
+                    {ROOM_TYPES.map((t) => (
+                      <option key={t.type} value={t.type}>{t.type} — {t.beds}</option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-muted-foreground">
+                    {guests.length ? guests.map((p) => p.name + (p.lap ? " (colo)" : "")).join(", ") : "Nenhum passageiro"}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {passengers.some((p) => !p.room) && rooms.length > 0 && (
+          <p className="text-sm text-amber-600">
+            {passengers.filter((p) => !p.room).length} passageiro(s) sem quarto.
+          </p>
         )}
       </section>
 

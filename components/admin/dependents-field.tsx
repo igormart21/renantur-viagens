@@ -11,7 +11,8 @@ const PERSON = [
   { key: "birthdate", label: "Data de nascimento", type: "date" },
   { key: "doc", label: "CPF" },
   { key: "rg", label: "RG" },
-  { key: "rg_issuer", label: "Órgão emissor" },
+  { key: "rg_issuer", label: "Órgão emissor / UF" },
+  { key: "phone", label: "Telefone / WhatsApp (se vazio, usa o do titular)" },
 ]
 const ADDRESS = [
   { key: "cep", label: "CEP" },
